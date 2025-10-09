@@ -1,43 +1,56 @@
 using UnityEngine;
 using System;
-
-// USED EXISTING CODE FROM SOME OF MY OLDER CODE FOR THIS MOVEMENT SCRIPT,
-// still took the time to code it the way i wanted it to work
+using EZCameraShake;
+using Unity.VisualScripting;
 
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
-    
-    [Header("Movement properties")]
-    [SerializeField] private float speed = 2000f;
+
+    [Header("Movement Properties")] [SerializeField]
+    private float speed = 1000f;
+
+    [SerializeField] private float sprintSpeed = 1750f; 
+
     [SerializeField] private float jumpForce = 300f;
     [SerializeField] private float groundDrag = 1;
     [SerializeField] private float airMultiplier = 0.6f;
     [SerializeField] private float playerHeight = 2f;
     [SerializeField] private LayerMask whatIsGround;
-    
+
     private bool readyToJump = true;
     private bool grounded;
-    
-    private bool wallRunning;
+
     private bool surfing;
-    private float jumpCooldown = 0.25f;
+    private const float jumpCooldown = 0.25f;
     private Vector3 normalVector;
-    private Vector3 wallNormalVector = Vector3.up;
-    private float maxSlopeAngle = 35f;
+    private const float maxSlopeAngle = 35f;
+    private float fallSpeed;
 
     [Header("Input")] 
     private float x;
     private float y;
     private bool jumping;
+    private bool sprinting;
     
     public Transform orientation;
     public Transform camTransform;
-    [Header("Mouse Look")]
-    public float sensitivity = 50f;
+    [Header("Mouse Look")] public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation = 0f;
     private float desiredX;
+
+    [Header("Effects")]
+    private float walkBobTimer = 0f;
+    private float bobSpeed = 8f;
+    private const float bobAmount = 0.8f;
+
+    public ParticleSystem ps;
+    private ParticleSystem.EmissionModule emission;
+
+    [Header("Stats thing")] public float staminaLoss = 5;
+    
+    private PlayerStatistics statistics;
 
     public static PlayerMovement Instance;
 
@@ -45,10 +58,10 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        
+
         if (orientation == null)
-            orientation = transform; 
-        
+            orientation = transform;
+
         if (Instance == null)
             Instance = this;
         else
@@ -63,13 +76,19 @@ public class PlayerMovement : MonoBehaviour
         desiredX = orientation.localEulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        emission = ps.emission;
+        statistics = PlayerStatistics.Instance;
     }
 
     private void Update()
     {
+        fallSpeed = rb.velocity.y;
+
         GetInput();
         HandleDrag();
         HandleLook();
+        WalkBob();
 
         if (readyToJump && grounded && jumping)
         {
@@ -84,18 +103,36 @@ public class PlayerMovement : MonoBehaviour
         Movement();
     }
 
+    private void WalkBob()
+    {
+        if (!grounded) return;
+
+        Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        float speed = horizontalVel.magnitude;
+
+        if (speed > 0.1f)
+        {
+            walkBobTimer += Time.deltaTime * bobSpeed;
+            float xBob = Mathf.Sin(walkBobTimer) * bobAmount;
+            float yBob = Mathf.Cos(walkBobTimer * 2f) * bobAmount;
+
+            if (PlayerCamera.Instance != null)
+                PlayerCamera.Instance.BobOnce(new Vector3(xBob, yBob, 0f));
+        }
+    }
+
     private void HandleLook()
     {
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * sensMultiplier;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * sensMultiplier;
-        
+
         desiredX += mouseX;
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         if (camTransform != null)
             camTransform.localRotation = Quaternion.Euler(xRotation, desiredX, 0f);
-        
+
         orientation.Rotate(Vector3.up * mouseX);
     }
 
@@ -109,20 +146,33 @@ public class PlayerMovement : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         jumping = Input.GetButton("Jump");
+        sprinting = Input.GetButton("Sprint") && statistics.stamina > 0;
     }
 
     private void Movement()
     {
-        rb.AddForce(Vector3.down * Time.deltaTime * 12.5f);
-        
+        rb.AddForce(Vector3.down * (Time.deltaTime * 12.5f));
+
         Vector2 mag = FindVelRelativeToLook();
         float xVelLook = mag.x;
         float yVelLook = mag.y;
-        
+
         CounterMovement(x, y, mag);
-        
-        float maxSpeed = 20f;
+
+        float maxSpeed = 25f;
         float moveSpeed = speed;
+
+        if (sprinting && statistics.stamina > 0)
+        {
+            moveSpeed = sprintSpeed;
+            statistics.stamina -= staminaLoss * Time.fixedDeltaTime;
+            statistics.stamina = Mathf.Max(statistics.stamina, 0f);
+        }
+        else
+        {
+            statistics.stamina += staminaLoss * 0.75f * Time.fixedDeltaTime;
+            statistics.stamina = Mathf.Min(statistics.stamina, 100f);
+        }
 
         if (x > 0f && xVelLook > maxSpeed) x = 0f;
         if (x < 0f && xVelLook < -maxSpeed) x = 0f;
@@ -132,60 +182,84 @@ public class PlayerMovement : MonoBehaviour
         float forwardMultiplier = grounded ? 1f : airMultiplier;
         float sideMultiplier = grounded ? 1f : airMultiplier;
 
-        if (wallRunning)
-        {
-            forwardMultiplier = 0.3f;
-            sideMultiplier = 0.3f;
-        }
         if (surfing)
         {
             forwardMultiplier = 0.7f;
             sideMultiplier = 0.3f;
         }
-        
+
         rb.AddForce(orientation.forward * (y * moveSpeed * Time.deltaTime * sideMultiplier * forwardMultiplier));
         rb.AddForce(orientation.right * (x * moveSpeed * Time.deltaTime * sideMultiplier));
+
+        SpeedLines();
     }
+
+
+    private void SpeedLines()
+    {
+        if (!sprinting) 
+        {
+            emission.rateOverTimeMultiplier = 0;
+            return;
+        }
+
+        float angle = Vector3.Angle(rb.velocity, PlayerCamera.Instance.transform.forward);
+        float angleFactor = Mathf.Max(angle, 0.1f);
+
+        float targetRate = rb.velocity.magnitude / angleFactor * 10f;
+        targetRate = Mathf.Min(targetRate, 30f); // cap at 30
+
+        emission.rateOverTimeMultiplier = Mathf.Lerp(
+            emission.rateOverTimeMultiplier,
+            targetRate,
+            Time.deltaTime * 2f
+        );
+    }
+
+
 
     private void Jump()
     {
-        if (grounded || wallRunning || surfing)
+        if (grounded || surfing)
         {
+            statistics.stamina -= staminaLoss * 0.5f;
+            
             Vector3 velocity = rb.velocity;
-            
-            rb.AddForce(Vector3.up * jumpForce * 1.5f);
-            rb.AddForce(normalVector * jumpForce * 0.5f);
-            
+
+            rb.AddForce(Vector3.up * (jumpForce * 1.5f));
+            rb.AddForce(normalVector * (jumpForce * 0.5f));
+
             if (rb.velocity.y < 0.5f)
                 rb.velocity = new Vector3(velocity.x, 0f, velocity.z);
             else if (rb.velocity.y > 0f)
                 rb.velocity = new Vector3(velocity.x, rb.velocity.y / 2f, velocity.z);
-
-            if (wallRunning)
-                rb.AddForce(wallNormalVector * jumpForce * 3f);
         }
     }
 
     private void ResetJump() => readyToJump = true;
 
+    
+    // used the help I got on the internet for this
     private void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!grounded || jumping) return;
 
-        float threshold = 0.09f;
-        float multiplier = 0.07f;
+        const float threshold = 0.09f;
+        const float multiplier = 0.07f;
         float moveSpeed = speed;
-        float runSpeed = 20f;
+        const float runSpeed = 20f;
 
-        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) || (mag.x > threshold && x < 0f))
-            rb.AddForce(moveSpeed * orientation.right * Time.deltaTime * -mag.x * multiplier);
+        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) ||
+            (mag.x > threshold && x < 0f))
+            rb.AddForce(orientation.right * (moveSpeed * Time.deltaTime * -mag.x * multiplier));
 
-        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) || (mag.y > threshold && y < 0f))
-            rb.AddForce(moveSpeed * orientation.forward * Time.deltaTime * -mag.y * multiplier);
+        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) ||
+            (mag.y > threshold && y < 0f))
+            rb.AddForce(orientation.forward * (moveSpeed * Time.deltaTime * -mag.y * multiplier));
 
         if (Mathf.Abs(x) < 0.05f && Mathf.Abs(y) < 0.05f)
         {
-            if (Mathf.Abs(rb.velocity.x) < threshold) rb.velocity = new Vector3(0, rb.velocity.y, rb.velocity.z);
+            if (Mathf.Abs(rb.velocity.x) < threshold) rb.velocity = new Vector3(0, rb.velocity.y, 0);
             if (Mathf.Abs(rb.velocity.z) < threshold) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
         }
 
@@ -197,6 +271,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // got this from forums, I know nothing about trigonometry :(
     public Vector2 FindVelRelativeToLook()
     {
         float currentY = orientation.eulerAngles.y;
@@ -213,6 +288,20 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsFloor(Vector3 v) => Vector3.Angle(Vector3.up, v) < maxSlopeAngle;
 
+    private void OnCollisionEnter(Collision other)
+    {
+        int layer = other.gameObject.layer;
+        Vector3 normal = other.contacts[0].normal;
+        if ((int)whatIsGround != ((int)whatIsGround | (1 << layer)))
+            return;
+
+        if (IsFloor(normal))
+        {
+            if (PlayerCamera.Instance != null)
+                PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
+        }
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         foreach (ContactPoint contact in collision.contacts)
@@ -226,5 +315,5 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision collision) => grounded = false;
+    private void OnCollisionExit() => grounded = false;
 }
