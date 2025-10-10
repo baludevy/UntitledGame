@@ -8,7 +8,7 @@ public class HeldItemManager : MonoBehaviour
 
     private void Update()
     {
-        ItemData item = PlayerInventory.Instance.GetActiveItem();
+        ItemInstance item = PlayerInventory.Instance.GetActiveItem();
 
         if (item == null)
         {
@@ -22,30 +22,31 @@ public class HeldItemManager : MonoBehaviour
         {
             UpdateHeldItem(item);
 
-            if (Input.GetMouseButtonDown(0) && item.Type == ItemType.weapon)
+            if (Input.GetMouseButtonDown(0) && item.data.Type == ItemType.weapon)
             {
                 item.OnUse();
             }
 
-            if (Input.GetButtonDown("Use") && item.Type == ItemType.consumable)
+            if (Input.GetButtonDown("Use") && item.data.Type == ItemType.consumable)
             {
-                item.OnUse();
+                PlayerInventory.Instance.UseActiveItem(1);
             }
         }
     }
 
 
-    private void UpdateHeldItem(ItemData item)
+    private void UpdateHeldItem(ItemInstance item)
     {
-        if (currentItemObject != null && currentItemObject.name == item.heldPrefab.name)
+        if (currentItemObject != null && currentItemObject.name.Contains(item.data.heldPrefab.name))
             return;
 
         if (currentItemObject != null)
             Destroy(currentItemObject);
 
-        if (item.heldPrefab != null)
+        if (item.data.heldPrefab != null)
         {
-            currentItemObject = Instantiate(item.heldPrefab, heldItemHolder);
+            currentItemObject = Instantiate(item.data.heldPrefab, heldItemHolder);
+            currentItemObject.layer = LayerMask.NameToLayer("HeldItem");
             currentItemObject.transform.localPosition = Vector3.zero;
             currentItemObject.transform.localRotation = Quaternion.identity;
             currentItemObject.transform.localScale = Vector3.one;

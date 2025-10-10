@@ -53,9 +53,8 @@ public class PlayerCamera : MonoBehaviour
         UpdateSpeedBob();
         UpdateWeaponSway();
 
-        Vector3 finalPos = startPos + bobOffset + speedBob + recoilOffset;
+        Vector3 finalPos = startPos + bobOffset; 
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);
-
         transform.position = target.position + bobOffset + minimalBobOffset;
     }
 
@@ -84,9 +83,8 @@ public class PlayerCamera : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X") * swayAmount;
         float mouseY = Input.GetAxis("Mouse Y") * swayAmount;
-        Vector3 targetPos = new Vector3(-mouseX, -mouseY, 0) + recoilOffset;
-        heldItemHolder.localPosition =
-            Vector3.Lerp(heldItemHolder.localPosition, targetPos, Time.deltaTime * swaySmooth);
+        Quaternion targetRot = Quaternion.Euler(mouseY, -mouseX, 0);
+        heldItemHolder.localRotation = Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);
     }
 
     private Vector3 ClampVector(Vector3 vec, float min, float max)

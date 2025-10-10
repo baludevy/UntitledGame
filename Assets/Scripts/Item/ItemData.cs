@@ -6,7 +6,9 @@ public class ItemData : ScriptableObject, IItem
     [SerializeField] string itemDescription;
     [SerializeField] Sprite icon;
     [SerializeField] ItemType itemType;
-    [SerializeField] public GameObject heldPrefab;
+    
+    public GameObject floorPrefab;
+    public GameObject heldPrefab;
     public string Name => itemName;
     public string Description => itemDescription;
     public Sprite Icon => icon;
