@@ -67,7 +67,7 @@ public class PlayerInventory : MonoBehaviour
     {
         int bottomRow = rows - 1;
 
-        int startSlot = activeHotbarSlot;
+        int startSlot = 0;
         int slot = startSlot;
 
         // was a bit hard to figure out, used AI for this :(
@@ -90,6 +90,8 @@ public class PlayerInventory : MonoBehaviour
                 if (items[r, c] == null)
                 {
                     PlaceItem(item, r, c);
+                    RefreshHotbar();
+                    RefreshInventory();
                     return;
                 }
             }
@@ -128,10 +130,51 @@ public class PlayerInventory : MonoBehaviour
 
         if (row == rows - 1 && column < UIManager.hotbarSlots.Count)
             UIManager.hotbarSlots[column].Clear();
+        
+        RefreshHotbar();
+        RefreshInventory();
     }
 
     public void RemoveHeldItem()
     {
         RemoveItem(rows - 1, activeHotbarSlot);
+    }
+
+    public void RefreshHotbar()
+    {
+        int row = rows - 1;
+        for (int col = 0; col < columns; col++)
+        {
+            if(col < UIManager.hotbarSlots.Count)
+                UIManager.hotbarSlots[col].SetItem(items[row, col]);
+        }
+    }
+    
+    public void RefreshInventory()
+    {
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                int index = r * columns + c;
+                if (index < UIManager.inventorySlots.Count)
+                    UIManager.inventorySlots[index].SetItem(items[r, c]);
+            }
+        }
+    }
+    
+    // ai
+    public void SwapItems(InventorySlot slotA, InventorySlot slotB)
+    {
+        int indexA = UIManager.inventorySlots.IndexOf(slotA);
+        int indexB = UIManager.inventorySlots.IndexOf(slotB);
+
+        int rowA = indexA / columns;
+        int colA = indexA % columns;
+
+        int rowB = indexB / columns;
+        int colB = indexB % columns;
+        
+        (items[rowA, colA], items[rowB, colB]) = (items[rowB, colB], items[rowA, colA]);
     }
 }
