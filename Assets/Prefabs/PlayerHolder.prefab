@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   staminaBar: {fileID: 0}
-  inventorySlots: []
+  healthText: {fileID: 0}
+  healthBar: {fileID: 0}
+  hotbarSlots: []
+  hotbarSlotsParent: {fileID: 0}
 --- !u!1 &1209828640305479606
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1407fec7f5b04a0ba39ee8b78d3031c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIManager: {fileID: 0}
+  rows: 3
+  columns: 6
+  UIManager: {fileID: 8353343775376777057}
 --- !u!1 &1866306766576689976
 GameObject:
   m_ObjectHideFlags: 0

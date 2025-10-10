@@ -14,7 +14,7 @@ public class HealItem : ItemData
     {
         base.OnUse();
         Debug.Log($"healing {healAmount}");
-        PlayerInventory.Instance.RemoveItem();
+        PlayerInventory.Instance.RemoveHeldItem();
         PlayerStatistics.Instance.health += healAmount;
     }
 }

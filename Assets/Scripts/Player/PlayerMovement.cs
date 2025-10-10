@@ -33,12 +33,18 @@ public class PlayerMovement : MonoBehaviour
     private bool jumping;
     private bool sprinting;
     
-    public Transform orientation;
-    public Transform camTransform;
-    [Header("Mouse Look")] public float sensitivity = 50f;
+    [Header("Mouse Look")]
+    public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation = 0f;
     private float desiredX;
+    public Transform orientation;
+    public Transform camTransform;
+    public bool canLook = true;
+    
+    [Header("Camera")]
+    public float defaultFOV = 85f;
+    public float sprintFOV = 95f;
 
     [Header("Effects")]
     private float walkBobTimer = 0f;
@@ -123,8 +129,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLook()
     {
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity * sensMultiplier;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * sensMultiplier;
+        float mouseX = 0f;
+        float mouseY = 0f;
+        
+        if (canLook)
+        {
+            mouseX = Input.GetAxis("Mouse X") * sensitivity * sensMultiplier;
+            mouseY = Input.GetAxis("Mouse Y") * sensitivity * sensMultiplier;
+        }
 
         desiredX += mouseX;
         xRotation -= mouseY;
@@ -192,8 +204,15 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(orientation.right * (x * moveSpeed * Time.deltaTime * sideMultiplier));
 
         SpeedLines();
+        FovEffect();
     }
 
+    private void FovEffect()
+    {
+        Camera cam = PlayerCamera.Instance.GetComponent<Camera>();
+        float targetFOV = sprinting ? sprintFOV : defaultFOV;
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, 5f * Time.deltaTime);
+    }
 
     private void SpeedLines()
     {
@@ -215,8 +234,6 @@ public class PlayerMovement : MonoBehaviour
             Time.deltaTime * 2f
         );
     }
-
-
 
     private void Jump()
     {

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour
 {
     public RawImage icon;
     public RawImage frame;
