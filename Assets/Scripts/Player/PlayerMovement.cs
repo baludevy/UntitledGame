@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
         HandleLook();
         WalkBob();
 
-        if (readyToJump && grounded && jumping)
+        if (readyToJump && grounded && jumping && statistics.stamina > staminaLoss)
         {
             readyToJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);

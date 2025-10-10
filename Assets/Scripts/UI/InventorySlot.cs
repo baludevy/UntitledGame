@@ -15,13 +15,14 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
 
     private GameObject dragIcon;
     private Canvas canvas;
+    
+    public ItemTooltip tooltip;
 
     private void Awake()
     {
         canvas = transform.parent.parent.parent.parent.GetComponent<Canvas>();
         Clear();
     }
-
     public void SetItem(ItemData newItem)
     {
         item = newItem;
@@ -56,6 +57,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
         dragIcon.transform.SetParent(canvas.transform);
         dragIcon.transform.SetAsLastSibling();
 
+        icon.gameObject.SetActive(false);
         RawImage image = dragIcon.AddComponent<RawImage>();
         image.texture = icon.texture;
         image.raycastTarget = false;
@@ -74,6 +76,10 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
             PlayerInventory.Instance.RefreshInventory();
             PlayerInventory.Instance.RefreshHotbar();
         }
+        else
+        {
+            icon.gameObject.SetActive(true);
+        }
     }
 
 
@@ -85,9 +91,12 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(item != null)
+            tooltip.Show(item, transform.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        tooltip.Hide();
     }
 }
