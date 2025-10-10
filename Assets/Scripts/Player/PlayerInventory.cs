@@ -30,7 +30,6 @@ public class PlayerInventory : MonoBehaviour
     {
         HandleInventoryInput();
         HandleHotBarInput();
-        HandleUseInput();
     }
 
     private void HandleInventoryInput()
@@ -54,13 +53,6 @@ public class PlayerInventory : MonoBehaviour
         for (int i = 1; i <= columns; i++)
             if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 SwitchToSlot(i);
-    }
-
-    private void HandleUseInput()
-    {
-        ItemData current = items[rows - 1, activeHotbarSlot];
-        if (current != null && Input.GetKeyDown(KeyCode.E))
-            current.OnUse();
     }
 
     public void AddItem(ItemData item)
@@ -176,5 +168,28 @@ public class PlayerInventory : MonoBehaviour
         int colB = indexB % columns;
         
         (items[rowA, colA], items[rowB, colB]) = (items[rowB, colB], items[rowA, colA]);
+    }
+
+    public ItemData GetItem(int row, int column)
+    {
+        if (row < 0 || row >= rows || column < 0 || column >= columns)
+        {
+            return null;
+        }
+        return items[row, column];
+    }
+
+    public ItemData GetActiveItem()
+    {
+        ItemData item = items[rows - 1, activeHotbarSlot];
+        
+        return item;
+    }
+
+    public InventorySlot GetInventorySlot(int row, int column)
+    {
+        if (activeHotbarSlot < 0 || activeHotbarSlot >= UIManager.hotbarSlots.Count)
+            return null;
+        return UIManager.inventorySlots[row * columns + column];
     }
 }

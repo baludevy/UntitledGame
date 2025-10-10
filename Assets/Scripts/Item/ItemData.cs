@@ -5,18 +5,17 @@ public class ItemData : ScriptableObject, IItem
     [SerializeField] string itemName;
     [SerializeField] string itemDescription;
     [SerializeField] Sprite icon;
-    
+    [SerializeField] ItemType itemType;
+    [SerializeField] public GameObject heldPrefab;
     public string Name => itemName;
     public string Description => itemDescription;
     public Sprite Icon => icon;
-
+    public ItemType Type => itemType;
+    
     public virtual void OnPickup()
     {
         Debug.Log($"picked up {itemName}");
     }
 
-    public virtual void OnUse()
-    {
-        Debug.Log($"used {itemName}");
-    }
+    public virtual void OnUse() {}
 }

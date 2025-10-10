@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody rb;
+    public Rigidbody rb;
 
     [Header("Movement Properties")] [SerializeField]
     private float speed = 1000f;
@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 300f;
     [SerializeField] private float groundDrag = 1;
     [SerializeField] private float airMultiplier = 0.6f;
-    [SerializeField] private float playerHeight = 2f;
+    [SerializeField] public float playerHeight = 2f;
     [SerializeField] private LayerMask whatIsGround;
 
     private bool readyToJump = true;
@@ -209,7 +209,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FovEffect()
     {
-        Camera cam = PlayerCamera.Instance.GetComponent<Camera>();
+        Camera cam = PlayerCamera.Instance.cam;
         float targetFOV = sprinting ? sprintFOV : defaultFOV;
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, 5f * Time.deltaTime);
     }
