@@ -2,24 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = System.Random;
 
 public class MineableObject : MonoBehaviour
 {
     public string mineableName;
-    public int health;
+    public int maxHealth;
+    [NonSerialized] public int currentHealth;
     public int minDropAmount;
     public int maxDropAmount;
     public GameObject dropPrefab;
     public ToolType canBeMinedWith;
 
+    private void Start()
+    {
+        currentHealth = maxHealth;
+    }
+
     public void Mine(int damage)
     {
-        health -= damage;
+        currentHealth -= damage;
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             Drop();
         }

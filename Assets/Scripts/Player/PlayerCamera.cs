@@ -45,6 +45,11 @@ public class PlayerCamera : MonoBehaviour
         rb = PlayerMovement.Instance.rb;
     }
 
+    private void Update()
+    {
+        UpdateObjectInfo();
+    }
+
     private void LateUpdate()
     {
         if (!target) return;
@@ -56,6 +61,31 @@ public class PlayerCamera : MonoBehaviour
         Vector3 finalPos = startPos + bobOffset; 
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);
         transform.position = target.position + bobOffset + minimalBobOffset;
+    }
+
+    public void UpdateObjectInfo()
+    {
+        if (Physics.Raycast(GetRay(), out RaycastHit hit, 3f))
+        {
+            if (hit.collider.CompareTag("Mineable"))
+            {
+                MineableObject obj =  hit.collider.GetComponent<MineableObject>();
+                ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
+
+                objInfo.SetState(true);
+                objInfo.SetObject(obj);
+            }
+            else
+            {
+                ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
+                objInfo.SetState(false);
+            }
+        }
+        else
+        {
+            ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
+            objInfo.SetState(false);
+        }
     }
 
     public void BobOnce(Vector3 bobDirection)

@@ -16,12 +16,12 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private Image staminaBar;
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
+    public ObjectInfo objectInfo;
     public List<HotbarSlot> hotbarSlots;
     [SerializeField] private Transform hotbarSlotsParent;
     
     [Header("Inventory")]
     [SerializeField] private Transform inventoryHolder;
-
     public List<InventorySlot> inventorySlots;
     
     public static PlayerUIManager Instance;
