@@ -47,7 +47,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        UpdateObjectInfo();
+        UpdateHudInfo();
     }
 
     private void LateUpdate()
@@ -58,33 +58,51 @@ public class PlayerCamera : MonoBehaviour
         UpdateSpeedBob();
         UpdateWeaponSway();
 
-        Vector3 finalPos = startPos + bobOffset; 
+        Vector3 finalPos = startPos + bobOffset;
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);
         transform.position = target.position + bobOffset + minimalBobOffset;
     }
 
-    public void UpdateObjectInfo()
+    private void UpdateHudInfo()
     {
-        if (Physics.Raycast(GetRay(), out RaycastHit hit, 3f))
+        LayerMask mask = LayerMask.GetMask("DroppedItem", "Mineable");
+        
+        if (Physics.Raycast(GetRay(), out RaycastHit hit, 5f, mask))
         {
             if (hit.collider.CompareTag("Mineable"))
             {
-                MineableObject obj =  hit.collider.GetComponent<MineableObject>();
+                MineableObject obj = hit.collider.GetComponent<MineableObject>();
                 ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
 
                 objInfo.SetState(true);
                 objInfo.SetObject(obj);
             }
+            else if (hit.collider.CompareTag("Item"))
+            {
+                Debug.Log(hit.collider.tag);
+                
+                DroppedItem item = hit.collider.GetComponent<DroppedItem>();
+                ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
+
+                itemInfo.SetState(true);
+                itemInfo.SetItem(item.itemInstance);
+            }
             else
             {
                 ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
                 objInfo.SetState(false);
+
+                ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
+                itemInfo.SetState(false);
             }
         }
         else
         {
             ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
             objInfo.SetState(false);
+
+            ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
+            itemInfo.SetState(false);
         }
     }
 
@@ -114,7 +132,8 @@ public class PlayerCamera : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * swayAmount;
         float mouseY = Input.GetAxis("Mouse Y") * swayAmount;
         Quaternion targetRot = Quaternion.Euler(mouseY, -mouseX, 0);
-        heldItemHolder.localRotation = Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);
+        heldItemHolder.localRotation =
+            Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);
     }
 
     private Vector3 ClampVector(Vector3 vec, float min, float max)

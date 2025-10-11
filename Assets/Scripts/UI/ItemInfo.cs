@@ -3,15 +3,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ObjectInfo : MonoBehaviour
+public class ItemInfo : MonoBehaviour
 {
     public TMP_Text itemName;
     public TMP_Text itemDescription;
+    public TMP_Text stackText;
     public Image itemIcon;
-    public Image healthBar;
-    
-    public bool isActive;
 
+    public bool isActive;
+    
     private MineableObject currentObject;
 
     private void Start()
@@ -21,7 +21,7 @@ public class ObjectInfo : MonoBehaviour
 
     public void SetState(bool active)
     {
-        if(PlayerUIManager.Instance.itemInfo.isActive) return; 
+        if(PlayerUIManager.Instance.objectInfo.isActive) return; 
         
         isActive = active;
         
@@ -33,14 +33,11 @@ public class ObjectInfo : MonoBehaviour
         }
     }
     
-    public void SetObject(MineableObject newObject)
+    public void SetItem(ItemInstance newItem)
     {
-        ItemData item = newObject.dropPrefab.GetComponent<DroppedItem>().itemData;
-        
-        itemName.text = item.Name;
-        itemDescription.text = item.Description;
-        itemIcon.sprite = item.Icon;
-        
-        healthBar.fillAmount = (float)newObject.currentHealth / (float)newObject.maxHealth;
+        itemName.text = newItem.data.Name;
+        itemDescription.text = newItem.data.Description;
+        itemIcon.sprite = newItem.data.Icon;
+        stackText.text = newItem.data.Stackable ? newItem.stack.ToString() : "";
     }
 }

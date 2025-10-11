@@ -17,6 +17,7 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
     public ObjectInfo objectInfo;
+    public ItemInfo itemInfo;
     public List<HotbarSlot> hotbarSlots;
     [SerializeField] private Transform hotbarSlotsParent;
     

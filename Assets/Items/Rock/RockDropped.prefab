@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2759606630885742951}
   m_Layer: 9
   m_Name: RockDropped
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 1774009020512720117}
   - component: {fileID: 7180533403669311114}
   - component: {fileID: 4041011715313116656}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock
   m_TagString: Mineable
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7602396250687702766}
   - component: {fileID: 8635669493199563417}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: FakeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
