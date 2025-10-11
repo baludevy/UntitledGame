@@ -12,7 +12,7 @@ public class PlayerInventory : MonoBehaviour
 
     private ItemInstance[,] items;
     private int activeHotbarSlot;
-    private bool inventoryOpen;
+    public bool inventoryOpen;
 
     private void Awake()
     {

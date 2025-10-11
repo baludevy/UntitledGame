@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 public class HeldItemManager : MonoBehaviour
@@ -10,6 +10,10 @@ public class HeldItemManager : MonoBehaviour
     private Tool currentTool;
 
     private float toolUseTimer;
+    private bool isSwinging = false;
+    private bool swingInProgress = false;
+    private float lastClickTime;
+    private const float HOLD_THRESHOLD = 0.2f;
 
     private void Update()
     {
@@ -17,24 +21,7 @@ public class HeldItemManager : MonoBehaviour
 
         if (item == null)
         {
-            if (currentItemObject != null)
-            {
-                if (currentTool != null && currentTool.toolAnimator != null)
-                {
-                    AnimatorStateInfo stateInfo = currentTool.toolAnimator.GetCurrentAnimatorStateInfo(0);
-                    bool isMidSwing = (stateInfo.IsName("Swing") || stateInfo.IsName("Swing 1")) && stateInfo.normalizedTime < 1f && !currentTool.toolAnimator.IsInTransition(0);
-                    if ((stateInfo.IsName("Swing") || stateInfo.IsName("Swing 1")) && !isMidSwing)
-                    {
-                        currentTool.toolAnimator.ResetTrigger("Swing");
-                        currentTool.toolAnimator.SetTrigger("Return");
-                    }
-                }
-                Destroy(currentItemObject);
-                currentItemObject = null;
-                currentTool = null;
-                lastItemData = null;
-                toolUseTimer = 0f;
-            }
+            ClearHeldItem();
         }
         else
         {
@@ -43,62 +30,138 @@ public class HeldItemManager : MonoBehaviour
             if (newItemEquipped)
             {
                 heldItemAnimator.SetTrigger("Equip");
-                
                 toolUseTimer = 0.33f;
-
-                if (currentTool != null && currentTool.toolAnimator != null)
-                {
-                    currentTool.toolAnimator.ResetTrigger("Swing");
-                    currentTool.toolAnimator.ResetTrigger("Return");
-                }
+                ResetToolAnimationState();
             }
 
-            bool isSwingingTool = Input.GetMouseButton(0) && item.data.Type == ItemType.tool;
-
-            if (isSwingingTool)
-            {
-                if (currentTool != null && toolUseTimer <= 0f)
-                {
-                    AnimatorStateInfo stateInfo = currentTool.toolAnimator.GetCurrentAnimatorStateInfo(0);
-                    bool isInSwing = stateInfo.IsName("Swing") || stateInfo.IsName("Swing 1");
-                    bool swingFinished = isInSwing && stateInfo.normalizedTime >= 1f && !currentTool.toolAnimator.IsInTransition(0);
-
-                    if (swingFinished || !isInSwing)
-                    {
-                        if (currentTool.data == null)
-                        {
-                            Debug.LogWarning("Tool data is null on " + item.data.name);
-                            return;
-                        }
-                        currentTool.Use();
-                        currentTool.toolAnimator.SetTrigger("Swing");
-                        toolUseTimer = Mathf.Max(currentTool.data.cooldown, 0.1f);
-                    }
-                }
-            }
-            else if (item.data.Type == ItemType.tool && toolUseTimer <= 0f)
-            {
-                if (currentTool != null && currentTool.toolAnimator != null)
-                {
-                    AnimatorStateInfo stateInfo = currentTool.toolAnimator.GetCurrentAnimatorStateInfo(0);
-                    bool isInSwing = stateInfo.IsName("Swing") || stateInfo.IsName("Swing 1");
-                    bool isMidSwing = isInSwing && stateInfo.normalizedTime < 1f && !currentTool.toolAnimator.IsInTransition(0);
-                    
-                    if (isInSwing && !isMidSwing)
-                    {
-                        currentTool.toolAnimator.ResetTrigger("Swing");
-                        currentTool.toolAnimator.SetTrigger("Return");
-                    }
-                }
-            }
-
-            // Separate input for consumables to avoid conflict with Mouse0
-            if (!isSwingingTool && Input.GetButtonDown("Use") && item.data.Type == ItemType.consumable)
-                PlayerInventory.Instance?.UseActiveItem(1);
-
+            HandleToolUsage(item);
+            HandleConsumableUsage(item);
+            
             if (toolUseTimer > 0f)
                 toolUseTimer -= Time.deltaTime;
         }
+    }
+
+    private void ClearHeldItem()
+    {
+        if (currentItemObject != null)
+        {
+            ResetToolAnimationState();
+            Destroy(currentItemObject);
+            currentItemObject = null;
+            currentTool = null;
+            lastItemData = null;
+            toolUseTimer = 0f;
+            isSwinging = false;
+            swingInProgress = false;
+        }
+    }
+
+    private void HandleToolUsage(ItemInstance item)
+    {
+        if (item.data.Type != ItemType.tool) 
+        {
+            if (isSwinging)
+            {
+                ResetToolAnimationState();
+            }
+            return;
+        }
+
+        bool mouseDown = Input.GetMouseButtonDown(0);
+        bool mouseHeld = Input.GetMouseButton(0);
+        bool canUseTool = !PlayerInventory.Instance.inventoryOpen;
+
+        if (mouseDown)
+        {
+            lastClickTime = Time.time;
+        }
+
+        bool isHolding = mouseHeld && (Time.time - lastClickTime >= HOLD_THRESHOLD);
+        bool quickClick = mouseDown && !isHolding;
+
+        if ((quickClick || isHolding) && toolUseTimer <= 0f && !swingInProgress && canUseTool)
+        {
+            if (currentTool != null)
+            {
+                StartToolSwing();
+            }
+        }
+        else if (!mouseHeld && isSwinging && !swingInProgress)
+        {
+            ReturnToolToIdle();
+        }
+
+        if (swingInProgress && currentTool != null && currentTool.toolAnimator != null)
+        {
+            AnimatorStateInfo stateInfo = currentTool.toolAnimator.GetCurrentAnimatorStateInfo(0);
+            bool isInSwingState = stateInfo.IsName("Swing") || stateInfo.IsName("Swing 1");
+            
+            if (isInSwingState && stateInfo.normalizedTime >= 1f)
+            {
+                SwingCompleted();
+            }
+        }
+    }
+
+    private void StartToolSwing()
+    {
+        if (currentTool.data == null) return;
+
+        swingInProgress = true;
+        isSwinging = true;
+        
+        currentTool.toolAnimator.ResetTrigger("Return");
+        currentTool.toolAnimator.SetTrigger("Swing");
+        
+        StartCoroutine(UseTool(currentTool));
+        toolUseTimer = Mathf.Max(currentTool.data.cooldown, 0.1f);
+    }
+
+    private void SwingCompleted()
+    {
+        swingInProgress = false;
+        
+        bool mouseStillHeld = Input.GetMouseButton(0) && !PlayerInventory.Instance.inventoryOpen;
+        
+        if (!mouseStillHeld)
+        {
+            ReturnToolToIdle();
+        }
+    }
+
+    private void ReturnToolToIdle()
+    {
+        if (currentTool != null && currentTool.toolAnimator != null)
+        {
+            isSwinging = false;
+            currentTool.toolAnimator.ResetTrigger("Swing");
+            currentTool.toolAnimator.SetTrigger("Return");
+        }
+    }
+
+    private void ResetToolAnimationState()
+    {
+        if (currentTool != null && currentTool.toolAnimator != null)
+        {
+            currentTool.toolAnimator.ResetTrigger("Swing");
+            currentTool.toolAnimator.ResetTrigger("Return");
+            currentTool.toolAnimator.Play("Idle", 0, 0f);
+        }
+        isSwinging = false;
+        swingInProgress = false;
+    }
+
+    private void HandleConsumableUsage(ItemInstance item)
+    {
+        if (!Input.GetButtonDown("Use") || item.data.Type != ItemType.consumable) return;
+        PlayerInventory.Instance?.UseActiveItem(1);
+    }
+
+    private IEnumerator UseTool(Tool tool)
+    {
+        yield return new WaitForSeconds(0.1f);
+        tool.Use();
     }
 
     private bool UpdateHeldItem(ItemInstance item)
@@ -118,16 +181,15 @@ public class HeldItemManager : MonoBehaviour
             currentItemObject.transform.localRotation = Quaternion.identity;
             currentItemObject.transform.localScale = Vector3.one;
 
-            // Cache Tool component
             currentTool = currentItemObject?.GetComponent<Tool>();
-            if (currentTool == null)
-                Debug.LogWarning("Tool component missing on prefab: " + item.data.name);
+
+            isSwinging = false;
+            swingInProgress = false;
 
             return true;
         }
         else
         {
-            Debug.LogWarning("HeldItemHolder has no children or prefab is null for: " + item.data.name);
             currentTool = null;
             return false;
         }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DroppedItem : MonoBehaviour
 {
@@ -7,11 +8,11 @@ public class DroppedItem : MonoBehaviour
     
     public ItemInstance itemInstance;
     
-    public bool placed;
+    [FormerlySerializedAs("placed")] public bool newItem;
 
     private void Start()
     {
-        if (itemInstance == null && placed)
+        if (itemInstance == null && newItem)
         {
             itemInstance = new ItemInstance(itemData, 1);
         }

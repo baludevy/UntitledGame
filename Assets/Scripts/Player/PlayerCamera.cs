@@ -95,4 +95,9 @@ public class PlayerCamera : MonoBehaviour
             Mathf.Clamp(vec.z, min, max)
         );
     }
+
+    public static Ray GetRay()
+    {
+        return new Ray(Instance.cam.transform.position, Instance.cam.transform.forward);
+    }
 }
