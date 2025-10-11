@@ -3,7 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Pickaxe")]
 public class Pickaxe : ItemData
 {
-    [SerializeField] int damage;
+    public int damage;
+    public float cooldown;
 
     public override void OnPickup()
     {
@@ -13,6 +14,5 @@ public class Pickaxe : ItemData
     public override void OnUse()
     {
         base.OnUse();
-        Debug.Log("TestWeapon");
     }
 }

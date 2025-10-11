@@ -55,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private ParticleSystem.EmissionModule emission;
 
     [Header("Stats thing")] public float staminaLoss = 5;
+    private bool canRegenStamina;
     
     private PlayerStatistics statistics;
 
@@ -95,6 +96,8 @@ public class PlayerMovement : MonoBehaviour
         HandleDrag();
         HandleLook();
         WalkBob();
+        
+        canRegenStamina = !sprinting;
 
         if (readyToJump && grounded && jumping && statistics.stamina > staminaLoss)
         {
@@ -174,15 +177,15 @@ public class PlayerMovement : MonoBehaviour
         float maxSpeed = 25f;
         float moveSpeed = speed;
 
-        if (sprinting && statistics.stamina > 0)
+        if (sprinting && statistics.stamina > staminaLoss * 0.75f * Time.deltaTime)
         {
             moveSpeed = sprintSpeed;
-            statistics.stamina -= staminaLoss * Time.fixedDeltaTime;
+            statistics.stamina -= staminaLoss * Time.deltaTime;
             statistics.stamina = Mathf.Max(statistics.stamina, 0f);
         }
-        else
+        else if (canRegenStamina)
         {
-            statistics.stamina += staminaLoss * 0.75f * Time.fixedDeltaTime;
+            statistics.stamina += staminaLoss * 0.75f * Time.deltaTime;
             statistics.stamina = Mathf.Min(statistics.stamina, 100f);
         }
 

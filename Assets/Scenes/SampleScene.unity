@@ -2996,7 +2996,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1432549343}
+  m_Father: {fileID: 1738005854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1287485127
 BoxCollider:
@@ -3553,7 +3553,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1432549343}
   - component: {fileID: 1432549344}
-  - component: {fileID: 1432549345}
   m_Layer: 7
   m_Name: HeldItemHolder
   m_TagString: Untagged
@@ -3574,8 +3573,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1287485126}
-  - {fileID: 1503271955}
+  - {fileID: 1738005854}
   m_Father: {fileID: 3281914706686260522}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1432549344
@@ -3591,34 +3589,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heldItemHolder: {fileID: 1432549343}
---- !u!95 &1432549345
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1432549342}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 55cb75f874ed4f546adebee89897f429, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  heldItemAnimator: {fileID: 1738005855}
 --- !u!1001 &1503271954
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1432549343}
+    m_TransformParent: {fileID: 1738005854}
     m_Modifications:
     - target: {fileID: 780641097796171759, guid: 9351aa5dd89b173468fedddafe22e020, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3663,6 +3641,14 @@ PrefabInstance:
     - target: {fileID: 2328842768290734269, guid: 9351aa5dd89b173468fedddafe22e020, type: 3}
       propertyPath: m_Name
       value: PickaxeHeld 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2328842768290734269, guid: 9351aa5dd89b173468fedddafe22e020, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842846246775957534, guid: 9351aa5dd89b173468fedddafe22e020, type: 3}
+      propertyPath: toolAnimator
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4111,6 +4097,61 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 876836307958296216, guid: cd7cb3d1dacff724b8b954e1ecd29b02, type: 3}
   m_PrefabInstance: {fileID: 1736214747}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1738005853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1738005854}
+  - component: {fileID: 1738005855}
+  m_Layer: 7
+  m_Name: equip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1738005854
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738005853}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1287485126}
+  - {fileID: 1503271955}
+  m_Father: {fileID: 1432549343}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1738005855
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738005853}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 55cb75f874ed4f546adebee89897f429, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1757096597
 PrefabInstance:
   m_ObjectHideFlags: 0
