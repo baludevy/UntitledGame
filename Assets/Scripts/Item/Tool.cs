@@ -4,6 +4,7 @@ public class Tool : MonoBehaviour
 {
     public Pickaxe data;
     public Animator toolAnimator;
+    public ToolType type;
 
     public void Use()
     {
@@ -14,6 +15,8 @@ public class Tool : MonoBehaviour
             if (hit.collider.CompareTag("Mineable"))
             {
                 MineableObject obj = hit.collider.GetComponent<MineableObject>();
+                
+                if(obj.canBeMinedWith != type) return; 
                 
                 obj.Mine(data.damage);
             }

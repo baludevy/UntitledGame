@@ -16,6 +16,8 @@ public class PlayerInventory : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 200;
+        
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         items = new ItemInstance[rows, columns];

@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Properties")] [SerializeField]
     private float speed = 1000f;
 
-    [SerializeField] private float sprintSpeed = 1750f; 
+    [SerializeField] private float sprintSpeed = 1750f;
 
     [SerializeField] private float jumpForce = 300f;
     [SerializeField] private float groundDrag = 1;
@@ -27,27 +27,23 @@ public class PlayerMovement : MonoBehaviour
     private const float maxSlopeAngle = 35f;
     private float fallSpeed;
 
-    [Header("Input")] 
-    private float x;
+    [Header("Input")] private float x;
     private float y;
     private bool jumping;
     private bool sprinting;
-    
-    [Header("Mouse Look")]
-    public float sensitivity = 50f;
+
+    [Header("Mouse Look")] public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation = 0f;
     private float desiredX;
     public Transform orientation;
     public Transform camTransform;
     public bool canLook = true;
-    
-    [Header("Camera")]
-    public float defaultFOV = 85f;
+
+    [Header("Camera")] public float defaultFOV = 85f;
     public float sprintFOV = 95f;
 
-    [Header("Effects")]
-    private float walkBobTimer = 0f;
+    [Header("Effects")] private float walkBobTimer = 0f;
     private float bobSpeed = 8f;
     private const float bobAmount = 0.8f;
 
@@ -55,8 +51,12 @@ public class PlayerMovement : MonoBehaviour
     private ParticleSystem.EmissionModule emission;
 
     [Header("Stats thing")] public float staminaLoss = 5;
+
+    private float staminaRegenDelay = 1.5f;
+    private float staminaRegenTimer = 0f;
     private bool canRegenStamina;
-    
+
+
     private PlayerStatistics statistics;
 
     public static PlayerMovement Instance;
@@ -96,10 +96,8 @@ public class PlayerMovement : MonoBehaviour
         HandleDrag();
         HandleLook();
         WalkBob();
-        
-        canRegenStamina = !sprinting;
 
-        if (readyToJump && grounded && jumping && statistics.stamina > staminaLoss)
+        if (readyToJump && grounded && jumping && statistics.stamina > staminaLoss * 0.5f)
         {
             readyToJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);
@@ -134,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float mouseX = 0f;
         float mouseY = 0f;
-        
+
         if (canLook)
         {
             mouseX = Input.GetAxis("Mouse X") * sensitivity * sensMultiplier;
@@ -161,7 +159,7 @@ public class PlayerMovement : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         jumping = Input.GetButton("Jump");
-        sprinting = Input.GetButton("Sprint") && statistics.stamina > 0;
+        sprinting = Input.GetButton("Sprint");
     }
 
     private void Movement()
@@ -177,16 +175,36 @@ public class PlayerMovement : MonoBehaviour
         float maxSpeed = 25f;
         float moveSpeed = speed;
 
-        if (sprinting && statistics.stamina > staminaLoss * 0.75f * Time.deltaTime)
+        if (sprinting)
+        {
+            staminaRegenTimer = staminaRegenDelay;
+        }
+        else if (staminaRegenTimer > 0)
+        {
+            staminaRegenTimer -= Time.deltaTime;
+        }
+
+        canRegenStamina = !sprinting && staminaRegenTimer <= 0;
+
+        if (sprinting && statistics.stamina > 0)
         {
             moveSpeed = sprintSpeed;
             statistics.stamina -= staminaLoss * Time.deltaTime;
             statistics.stamina = Mathf.Max(statistics.stamina, 0f);
+            
+            SpeedLines();
+            FovEffect();
         }
         else if (canRegenStamina)
         {
-            statistics.stamina += staminaLoss * 0.75f * Time.deltaTime;
+            statistics.stamina += staminaLoss * Time.deltaTime;
             statistics.stamina = Mathf.Min(statistics.stamina, 100f);
+            
+            ResetSprintingEffects();
+        }
+        else
+        {
+            ResetSprintingEffects();
         }
 
         if (x > 0f && xVelLook > maxSpeed) x = 0f;
@@ -205,31 +223,32 @@ public class PlayerMovement : MonoBehaviour
 
         rb.AddForce(orientation.forward * (y * moveSpeed * Time.deltaTime * sideMultiplier * forwardMultiplier));
         rb.AddForce(orientation.right * (x * moveSpeed * Time.deltaTime * sideMultiplier));
-
-        SpeedLines();
-        FovEffect();
+    }
+    
+    private void ResetSprintingEffects()
+    {
+        emission.rateOverTimeMultiplier = 0;
+        
+        if (!sprinting)
+        {
+            Camera cam = PlayerCamera.Instance.cam;
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, defaultFOV, 5f * Time.deltaTime);
+        }
     }
 
     private void FovEffect()
     {
         Camera cam = PlayerCamera.Instance.cam;
-        float targetFOV = sprinting ? sprintFOV : defaultFOV;
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, 5f * Time.deltaTime);
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, sprintFOV, 5f * Time.deltaTime);
     }
 
     private void SpeedLines()
     {
-        if (!sprinting) 
-        {
-            emission.rateOverTimeMultiplier = 0;
-            return;
-        }
-
         float angle = Vector3.Angle(rb.velocity, PlayerCamera.Instance.transform.forward);
         float angleFactor = Mathf.Max(angle, 0.1f);
 
         float targetRate = rb.velocity.magnitude / angleFactor * 10f;
-        targetRate = Mathf.Min(targetRate, 30f); // cap at 30
+        targetRate = Mathf.Min(targetRate, 30f);
 
         emission.rateOverTimeMultiplier = Mathf.Lerp(
             emission.rateOverTimeMultiplier,
@@ -243,7 +262,8 @@ public class PlayerMovement : MonoBehaviour
         if (grounded || surfing)
         {
             statistics.stamina -= staminaLoss * 0.5f;
-            
+            staminaRegenTimer = staminaRegenDelay;
+
             Vector3 velocity = rb.velocity;
 
             rb.AddForce(Vector3.up * (jumpForce * 1.5f));
@@ -258,7 +278,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ResetJump() => readyToJump = true;
 
-    
+
     // used the help I got on the internet for this
     private void CounterMovement(float x, float y, Vector2 mag)
     {

@@ -11,6 +11,7 @@ public class MineableObject : MonoBehaviour
     public int minDropAmount;
     public int maxDropAmount;
     public GameObject dropPrefab;
+    public ToolType canBeMinedWith;
 
     public void Mine(int damage)
     {
@@ -27,7 +28,7 @@ public class MineableObject : MonoBehaviour
     IEnumerator HitAnimation()
     {
         Vector3 start = transform.localScale;
-        Vector3 target = start * 0.85f;
+        Vector3 target = start * 0.9f;
 
         float t = 0f;
 
