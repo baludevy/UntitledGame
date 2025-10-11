@@ -79,8 +79,6 @@ public class PlayerCamera : MonoBehaviour
             }
             else if (hit.collider.CompareTag("Item"))
             {
-                Debug.Log(hit.collider.tag);
-                
                 DroppedItem item = hit.collider.GetComponent<DroppedItem>();
                 ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
 
