@@ -6,6 +6,8 @@ public class ItemData : ScriptableObject, IItem
     [SerializeField] string itemDescription;
     [SerializeField] Sprite icon;
     [SerializeField] ItemType itemType;
+    [SerializeField] int maxStack = 1;
+    [SerializeField] bool stackable = true;
     
     public GameObject floorPrefab;
     public GameObject heldPrefab;
@@ -13,6 +15,8 @@ public class ItemData : ScriptableObject, IItem
     public string Description => itemDescription;
     public Sprite Icon => icon;
     public ItemType Type => itemType;
+    public int MaxStack => maxStack;
+    public bool Stackable => stackable;
     
     public virtual void OnPickup()
     {

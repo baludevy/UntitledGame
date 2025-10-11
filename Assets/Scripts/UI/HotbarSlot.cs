@@ -23,11 +23,11 @@ public class HotbarSlot : MonoBehaviour
 
     public void SetItem(ItemInstance item)
     {
-        if(item != null)
+        if (item != null)
         {
             icon.gameObject.SetActive(true);
             icon.texture = item.data.Icon.texture;
-            stackText.text = item.stack.ToString();
+            stackText.text = item.data.Stackable ? item.stack.ToString() : "";
         }
         else
         {

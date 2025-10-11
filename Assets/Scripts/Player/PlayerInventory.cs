@@ -61,61 +61,47 @@ public class PlayerInventory : MonoBehaviour
 
     public void AddItem(ItemInstance newItem)
     {
-        int row = rows - 1;
-
-        // was a bit hard to figure out, used AI for this :(
-
-        for (int col = 0; col < columns; col++)
-        {
-            ItemInstance slot = items[row, col];
-            if (slot != null && slot.data == newItem.data)
-            {
-                slot.stack += newItem.stack;
-                RefreshHotbar();
-                RefreshInventory();
-                return;
-            }
-        }
+        // took some time to replace the AI generated code with code that works and thats mine
         
-        for (int r = 0; r < rows - 1; r++)
+        for (int pass = 0; pass < 2; pass++)
         {
-            for (int c = 0; c < columns; c++)
+            for (int row = rows - 1; row >= 0; row--)
             {
-                ItemInstance slot = items[r, c];
-                if (slot != null && slot.data == newItem.data)
+                for (int col = 0; col < columns; col++)
                 {
-                    slot.stack += newItem.stack;
-                    RefreshHotbar();
-                    RefreshInventory();
-                    return;
-                }
-            }
-        }
-        
-        for (int col = 0; col < columns; col++)
-        {
-            if (items[row, col] == null)
-            {
-                PlaceItem(newItem, row, col);
-                RefreshHotbar();
-                RefreshInventory();
-                return;
-            }
-        }
-        for (int r = 0; r < rows - 1; r++)
-        {
-            for (int c = 0; c < columns; c++)
-            {
-                if (items[r, c] == null)
-                {
-                    PlaceItem(newItem, r, c);
-                    RefreshHotbar();
-                    RefreshInventory();
-                    return;
+                    var slot = items[row, col];
+
+                    if (pass == 0)
+                    {
+                        if (slot != null && slot.data == newItem.data && slot.data.Stackable &&
+                            slot.stack < slot.data.MaxStack)
+                        {
+                            int canAdd = Mathf.Min(newItem.stack, slot.data.MaxStack - slot.stack);
+                            slot.stack += canAdd;
+                            newItem.stack -= canAdd;
+                            if (newItem.stack <= 0)
+                            {
+                                RefreshHotbar();
+                                RefreshInventory();
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (slot == null)
+                        {
+                            PlaceItem(newItem, row, col);
+                            RefreshHotbar();
+                            RefreshInventory();
+                            return;
+                        }
+                    }
                 }
             }
         }
     }
+
 
     private void PlaceItem(ItemInstance item, int row, int column)
     {
@@ -166,12 +152,12 @@ public class PlayerInventory : MonoBehaviour
             }
         }
     }
-    
+
     public void UseActiveItem(int amount = 1)
     {
         ItemInstance item = GetActiveItem();
         if (item == null) return;
-        
+
         item.stack -= amount;
         item.OnUse();
 
@@ -251,19 +237,7 @@ public class PlayerInventory : MonoBehaviour
 
     private void DropActiveItem()
     {
-        ItemInstance item = GetActiveItem();
-        if (item == null) return;
-
-        Transform o = PlayerMovement.Instance.orientation;
-        Vector3 dropFrom = o.position + o.forward * 2f;
-
-        GameObject dropped = Instantiate(item.data.floorPrefab, dropFrom, Quaternion.identity);
-
-        dropped.GetComponent<Rigidbody>().AddForce(o.forward * 4f + Vector3.up * 1.5f, ForceMode.Impulse);
-
-        dropped.GetComponent<DroppedItem>().Initialize(item);
-
-        RemoveHeldItem();
+        DropItem(GetActiveItem());
     }
 
     public void DropItem(ItemInstance item)
@@ -275,7 +249,7 @@ public class PlayerInventory : MonoBehaviour
 
         GameObject dropped = Instantiate(item.data.floorPrefab, dropFrom, Quaternion.identity);
 
-        dropped.GetComponent<Rigidbody>().AddForce(o.forward * 4f + Vector3.up * 1.5f, ForceMode.Impulse);
+        dropped.GetComponent<Rigidbody>().AddForce(o.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
 
         dropped.GetComponent<DroppedItem>().Initialize(item);
 

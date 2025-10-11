@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Healing Item")]
-public class TestWeapon : ItemData
+[CreateAssetMenu(menuName = "Items/Pickaxe")]
+public class Pickaxe : ItemData
 {
     [SerializeField] int damage;
 
