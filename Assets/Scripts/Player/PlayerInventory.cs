@@ -76,12 +76,12 @@ public class PlayerInventory : MonoBehaviour
                     if (pass == 0)
                     {
                         if (slot != null && slot.data == newItem.data && slot.data.Stackable &&
-                            slot.stack < slot.data.MaxStack)
+                            slot.stackAmount < slot.data.MaxStack)
                         {
-                            int canAdd = Mathf.Min(newItem.stack, slot.data.MaxStack - slot.stack);
-                            slot.stack += canAdd;
-                            newItem.stack -= canAdd;
-                            if (newItem.stack <= 0)
+                            int canAdd = Mathf.Min(newItem.stackAmount, slot.data.MaxStack - slot.stackAmount);
+                            slot.stackAmount += canAdd;
+                            newItem.stackAmount -= canAdd;
+                            if (newItem.stackAmount <= 0)
                             {
                                 RefreshHotbar();
                                 RefreshInventory();

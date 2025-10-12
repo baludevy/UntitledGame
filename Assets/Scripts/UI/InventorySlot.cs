@@ -33,7 +33,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
         {
             icon.gameObject.SetActive(true);
             icon.texture = item.data.Icon.texture;
-            stackText.text = newItem.data.Stackable ? newItem.stack.ToString() : "";
+            stackText.text = newItem.data.Stackable ? newItem.stackAmount.ToString() : "";
         }
         else
         {

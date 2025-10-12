@@ -27,7 +27,7 @@ public class HotbarSlot : MonoBehaviour
         {
             icon.gameObject.SetActive(true);
             icon.texture = item.data.Icon.texture;
-            stackText.text = item.data.Stackable ? item.stack.ToString() : "";
+            stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
         }
         else
         {

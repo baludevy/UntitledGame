@@ -15,10 +15,10 @@ MonoBehaviour:
   itemName: Axe
   itemDescription: chop chop chop
   icon: {fileID: 21300000, guid: b5e6dd7c0194df6489064de54bc82b31, type: 3}
-  itemType: 2
   maxStack: 0
   stackable: 0
   floorPrefab: {fileID: 1949016491754248376, guid: 26d9fd030d053674fa0747430fc2de05, type: 3}
   heldPrefab: {fileID: 2328842768290734269, guid: a92ace4d8bf39df408037c9bb5fff679, type: 3}
   damage: 5
   cooldown: 0.7
+  type: 1

@@ -4,13 +4,13 @@ using UnityEngine;
 public class ItemInstance
 {
     public readonly ItemData data;
-    public int stack;
+    public int stackAmount;
     public Guid id;
 
     public ItemInstance(ItemData data, int count = 1)
     {
         this.data = data;
-        stack = count;
+        stackAmount = count;
         id = Guid.NewGuid();
     }
 

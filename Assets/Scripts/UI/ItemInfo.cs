@@ -38,6 +38,6 @@ public class ItemInfo : MonoBehaviour
         itemName.text = newItem.data.Name;
         itemDescription.text = newItem.data.Description;
         itemIcon.sprite = newItem.data.Icon;
-        stackText.text = newItem.data.Stackable ? newItem.stack.ToString() : "";
+        stackText.text = newItem.data.Stackable ? newItem.stackAmount.ToString() : "";
     }
 }
