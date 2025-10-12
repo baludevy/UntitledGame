@@ -13,11 +13,17 @@ public class PlayerUIManager : MonoBehaviour
     public GameObject hud;
     
     [Header("HUD")]
+    
+    [Header("Stats")]
     [SerializeField] private Image staminaBar;
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
+    
+    [Header("Looking at type shit Info")]
     public ObjectInfo objectInfo;
     public ItemInfo itemInfo;
+    
+    [Header("Hotbar")]
     public List<HotbarSlot> hotbarSlots;
     [SerializeField] private Transform hotbarSlotsParent;
     
@@ -54,8 +60,8 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateStaminaBar();
-        UpdateHealth();
+        //UpdateStaminaBar();
+        //UpdateHealth();
         UpdateHudInfo();
     }
     

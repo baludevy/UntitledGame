@@ -31,92 +31,75 @@ public class PlayerInventory : MonoBehaviour
 
     private void Update()
     {
-        HandleInventoryInput();
-        HandleHotBarInput();
-    }
+        if (Input.GetButtonDown("Inventory")) ToggleInventory();
+        if (Input.GetKeyDown(KeyCode.Q)) DropActiveItem();
 
-    private void HandleInventoryInput()
-    {
-        if (Input.GetButtonDown("Inventory"))
-        {
-            inventoryOpen = !inventoryOpen;
-
-            PlayerUIManager.Instance.inventory.GetComponent<Canvas>().enabled = inventoryOpen;
-
-            if (inventoryOpen)
-                CursorManager.UnlockCursor();
-            else
-                CursorManager.LockCursor();
-            PlayerMovement.Instance.canLook = !inventoryOpen;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-            DropActiveItem();
-    }
-
-    private void HandleHotBarInput()
-    {
         for (int i = 1; i <= columns; i++)
             if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 SwitchToSlot(i);
     }
 
+    private void ToggleInventory()
+    {
+        inventoryOpen = !inventoryOpen;
+        PlayerUIManager.Instance.inventory.GetComponent<Canvas>().enabled = inventoryOpen;
+
+        if (inventoryOpen) CursorManager.UnlockCursor();
+        else CursorManager.LockCursor();
+        
+        PlayerMovement.Instance.canLook = !inventoryOpen;
+    }
+
     public void AddItem(ItemInstance newItem)
     {
-        // took some time to replace the AI generated code with code that works and thats mine
-        
-        for (int pass = 0; pass < 2; pass++)
-        {
-            for (int row = rows - 1; row >= 0; row--)
-            {
-                for (int col = 0; col < columns; col++)
-                {
-                    var slot = items[row, col];
+        TryStackItem(newItem);
+        if (newItem.stackAmount > 0) TryFindEmptySlot(newItem);
+    }
 
-                    if (pass == 0)
-                    {
-                        if (slot != null && slot.data == newItem.data && slot.data.Stackable &&
-                            slot.stackAmount < slot.data.MaxStack)
-                        {
-                            int canAdd = Mathf.Min(newItem.stackAmount, slot.data.MaxStack - slot.stackAmount);
-                            slot.stackAmount += canAdd;
-                            newItem.stackAmount -= canAdd;
-                            if (newItem.stackAmount <= 0)
-                            {
-                                RefreshHotbar();
-                                RefreshInventory();
-                                return;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (slot == null)
-                        {
-                            PlaceItem(newItem, row, col);
-                            RefreshHotbar();
-                            RefreshInventory();
-                            return;
-                        }
-                    }
+    private void TryStackItem(ItemInstance newItem)
+    {
+        for (int row = rows - 1; row >= 0; row--)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                var slot = items[row, col];
+                if (slot == null || slot.data != newItem.data || !slot.data.Stackable) continue;
+                if (slot.stackAmount >= slot.data.MaxStack) continue;
+
+                int canAdd = Mathf.Min(newItem.stackAmount, slot.data.MaxStack - slot.stackAmount);
+                slot.stackAmount += canAdd;
+                newItem.stackAmount -= canAdd;
+
+                if (newItem.stackAmount <= 0)
+                {
+                    RefreshUI();
+                    return;
                 }
             }
         }
     }
 
+    private void TryFindEmptySlot(ItemInstance newItem)
+    {
+        for (int row = rows - 1; row >= 0; row--)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                if (items[row, col] == null)
+                {
+                    PlaceItem(newItem, row, col);
+                    RefreshUI();
+                    return;
+                }
+            }
+        }
+    }
 
     private void PlaceItem(ItemInstance item, int row, int column)
     {
         items[row, column] = item;
-
-        int invIndex = row * columns + column;
-        if (invIndex < UIManager.inventorySlots.Count)
-            UIManager.inventorySlots[invIndex].SetItem(item);
-
-        if (row == rows - 1 && column < UIManager.hotbarSlots.Count)
-            UIManager.hotbarSlots[column].SetItem(item);
+        UpdateSlotUI(row, column, item);
     }
-
 
     private void SwitchToSlot(int slot)
     {
@@ -128,16 +111,8 @@ public class PlayerInventory : MonoBehaviour
     public void RemoveItem(int row, int column)
     {
         items[row, column] = null;
-
-        int invIndex = row * columns + column;
-        if (invIndex < UIManager.inventorySlots.Count)
-            UIManager.inventorySlots[invIndex].Clear();
-
-        if (row == rows - 1 && column < UIManager.hotbarSlots.Count)
-            UIManager.hotbarSlots[column].Clear();
-
-        RefreshHotbar();
-        RefreshInventory();
+        UpdateSlotUI(row, column, null);
+        RefreshUI();
     }
 
     public void RemoveItemByID(Guid id)
@@ -146,10 +121,10 @@ public class PlayerInventory : MonoBehaviour
         {
             for (int c = 0; c < columns; c++)
             {
-                ItemInstance item = items[r, c];
-                if (item != null && item.id == id)
+                if (items[r, c] != null && items[r, c].id == id)
                 {
                     RemoveItem(r, c);
+                    return;
                 }
             }
         }
@@ -160,30 +135,37 @@ public class PlayerInventory : MonoBehaviour
         RemoveItem(rows - 1, activeHotbarSlot);
     }
 
+    private void UpdateSlotUI(int row, int column, ItemInstance item)
+    {
+        int index = row * columns + column;
+        if (index < UIManager.inventorySlots.Count)
+            UIManager.inventorySlots[index].SetItem(item);
+
+        if (row == rows - 1 && column < UIManager.hotbarSlots.Count)
+            UIManager.hotbarSlots[column].SetItem(item);
+    }
+
+    private void RefreshUI()
+    {
+        RefreshHotbar();
+        RefreshInventory();
+    }
+
     public void RefreshHotbar()
     {
         int row = rows - 1;
         for (int col = 0; col < columns; col++)
-        {
             if (col < UIManager.hotbarSlots.Count)
                 UIManager.hotbarSlots[col].SetItem(items[row, col]);
-        }
     }
 
     public void RefreshInventory()
     {
         for (int r = 0; r < rows; r++)
-        {
             for (int c = 0; c < columns; c++)
-            {
-                int index = r * columns + c;
-                if (index < UIManager.inventorySlots.Count)
-                    UIManager.inventorySlots[index].SetItem(items[r, c]);
-            }
-        }
+                UpdateSlotUI(r, c, items[r, c]);
     }
 
-    // ai
     public void SwapItems(InventorySlot slotA, InventorySlot slotB)
     {
         int indexA = UIManager.inventorySlots.IndexOf(slotA);
@@ -191,7 +173,6 @@ public class PlayerInventory : MonoBehaviour
 
         int rowA = indexA / columns;
         int colA = indexA % columns;
-
         int rowB = indexB / columns;
         int colB = indexB % columns;
 
@@ -200,25 +181,18 @@ public class PlayerInventory : MonoBehaviour
 
     public ItemInstance GetItem(int row, int column)
     {
-        if (row < 0 || row >= rows || column < 0 || column >= columns)
-        {
-            return null;
-        }
-
+        if (row < 0 || row >= rows || column < 0 || column >= columns) return null;
         return items[row, column];
     }
 
     public ItemInstance GetActiveItem()
     {
-        ItemInstance item = items[rows - 1, activeHotbarSlot];
-
-        return item;
+        return items[rows - 1, activeHotbarSlot];
     }
 
     public InventorySlot GetInventorySlot(int row, int column)
     {
-        if (activeHotbarSlot < 0 || activeHotbarSlot >= UIManager.hotbarSlots.Count)
-            return null;
+        if (activeHotbarSlot < 0 || activeHotbarSlot >= UIManager.hotbarSlots.Count) return null;
         return UIManager.inventorySlots[row * columns + column];
     }
 
@@ -235,9 +209,7 @@ public class PlayerInventory : MonoBehaviour
         Vector3 dropFrom = o.position + o.forward * 2f;
 
         GameObject dropped = Instantiate(item.data.floorPrefab, dropFrom, Quaternion.identity);
-
         dropped.GetComponent<Rigidbody>().AddForce(o.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
-
         dropped.GetComponent<DroppedItem>().Initialize(item);
 
         RemoveItemByID(item.id);
