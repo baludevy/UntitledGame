@@ -4,7 +4,7 @@ public class Tool : MonoBehaviour
 {
     public ToolItem data;
     public Animator toolAnimator;
-
+    
     public void Use()
     {
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))
