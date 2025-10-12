@@ -14,7 +14,7 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -33,10 +33,10 @@ Material:
     - _MaxDist: 60
     - _MinDist: 40
     - _Rad: 0.6
-    - _Radius: 0.3
+    - _Radius: 2
     - _RandomHeight: 0.25
-    - _Strength: 5
-    - _WindSpeed: 100
+    - _Strength: 1
+    - _WindSpeed: 75
     - _WindStrength: 0.05
     m_Colors:
     - _BottomColor: {r: 0, g: 0.6117647, b: 0.5225886, a: 1}

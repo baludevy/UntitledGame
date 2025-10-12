@@ -18,7 +18,7 @@ public class HotbarSlot : MonoBehaviour
     public void SetActive(bool active)
     {
         isActive = active;
-        frame.color = new Color(frame.color.r, frame.color.g, frame.color.b, active ? 1f : 0.1f);
+        frame.color = new Color(frame.color.r, frame.color.g, frame.color.b, active ? 1f : 0.2f);
     }
 
     public void SetItem(ItemInstance item)
