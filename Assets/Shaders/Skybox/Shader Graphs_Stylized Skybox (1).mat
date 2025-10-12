@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_Stylized Skybox (1)
-  m_Shader: {fileID: -6465566751694194690, guid: a6253dfc84d00334191f62c7ba866fe3, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 7828427fa00f78049b0e4e2379f7b64e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -31,7 +31,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -45,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_6BA91097:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 8400000, guid: bac2725214941c4439d504a688bb75ba, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_C317BDD3:
@@ -66,29 +67,41 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_166C34A9: 0.17
-    - Vector1_249357C1: 0.1
-    - Vector1_2CC6A532: 0.2
-    - Vector1_3B7A233E: 3.5
+    - Vector1_166C34A9: 0
+    - Vector1_249357C1: 0.298
+    - Vector1_2CC6A532: 0.15
+    - Vector1_3B7A233E: 0.55
     - Vector1_6F3D4927: 0.08
-    - Vector1_9BA3FBEE: 0.04
-    - Vector1_9E12CF26: 0.1
+    - Vector1_9BA3FBEE: 0.02
+    - Vector1_9E12CF26: 0.151
     - Vector1_B93A03DE: 0.001
-    - Vector1_BA803F6: 0.7
-    - Vector1_D80769F7: 1.8
-    - Vector1_ECE38ED2: 0.1
-    - Vector1_FA4E5253: 0.05
-    - Vector1_FE797C36: 0.05
+    - Vector1_BA803F6: 0.14
+    - Vector1_D80769F7: 0.86
+    - Vector1_ECE38ED2: 0.2
+    - Vector1_FA4E5253: -0.07
+    - Vector1_FE797C36: 1.87
+    - _Offset_Color_Lerp: 0.28
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Secondary_Clouds_Cutoff: 0.53
+    - _Secondary_Clouds_Smoothness: 0.02
+    - _Stretch_Color_Lerp: 1
     m_Colors:
-    - Color_1EB49FED: {r: 0.495283, g: 0.728939, b: 1, a: 0}
+    - Color_1EB49FED: {r: 2.241924, g: 7.2546854, b: 8.967696, a: 0}
     - Color_424F81E0: {r: 0.9056604, g: 0.883785, b: 0.6237095, a: 0}
     - Color_68FD0CD8: {r: 0.25471696, g: 1, b: 0.9453618, a: 0}
-    - Color_83CF459: {r: 0.14391237, g: 0.20199266, b: 0.46226412, a: 0}
-    - Color_AB9D6D2F: {r: 0.5505777, g: 0.055001773, b: 0.9716981, a: 0}
+    - Color_83CF459: {r: 0.07450979, g: 0.2110886, b: 0.47058824, a: 0}
+    - Color_AB9D6D2F: {r: 0.0320741, g: 0.014462441, b: 0.047169805, a: 0}
     - Color_B54BEABE: {r: 0.764151, g: 0.67764324, b: 0.67764324, a: 0}
-    - Color_BE31CDF2: {r: 0.25490198, g: 0.5283097, b: 1, a: 0}
-    - Color_D230EFA1: {r: 0.17118105, g: 0.13883936, b: 0.37735847, a: 0}
-    - Color_E5129607: {r: 0.49056596, g: 0.46977317, b: 0.16660726, a: 0}
+    - Color_BE31CDF2: {r: 0, g: 0.73684216, b: 2, a: 0}
+    - Color_D230EFA1: {r: 0.005481825, g: 0.0027033652, b: 0.021226421, a: 0}
+    - Color_E5129607: {r: 0, g: 2.368681, b: 4, a: 0}
+    - _Cloud_Distortion_Speed_Dir: {r: -0.01, g: 0.01, b: 0, a: 0}
+    - _Cloud_Layer_Speed_Dir: {r: 0.003, g: 0, b: 0, a: 0}
+    - _Horizon_Clouds_Fade: {r: 0.06, g: 1, b: 0, a: 0}
+    - _Horizon_Color_Night: {r: 0.5346968, g: 0.9586877, b: 2.5190158, a: 0}
+    - _Moon_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Moon_Stars_Col: {r: 0.8018868, g: 1.3588845, b: 2, a: 0}
+    - _Sun_Color: {r: 3.9245284, g: 3.4419475, b: 1.4624422, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

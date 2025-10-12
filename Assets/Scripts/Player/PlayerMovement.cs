@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        fallSpeed = rb.velocity.y;
+        fallSpeed = rb.linearVelocity.y;
 
         GetInput();
         HandleDrag();
@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!grounded) return;
 
-        Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 horizontalVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         float speed = horizontalVel.magnitude;
 
         if (speed > 0.1f)
@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleDrag()
     {
-        rb.drag = grounded ? groundDrag : 0f;
+        rb.linearDamping = grounded ? groundDrag : 0f;
     }
 
     private void GetInput()
@@ -244,10 +244,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void SpeedLines()
     {
-        float angle = Vector3.Angle(rb.velocity, PlayerCamera.Instance.transform.forward);
+        float angle = Vector3.Angle(rb.linearVelocity, PlayerCamera.Instance.transform.forward);
         float angleFactor = Mathf.Max(angle, 0.1f);
 
-        float targetRate = rb.velocity.magnitude / angleFactor * 10f;
+        float targetRate = rb.linearVelocity.magnitude / angleFactor * 10f;
         targetRate = Mathf.Min(targetRate, 30f);
 
         emission.rateOverTimeMultiplier = Mathf.Lerp(
@@ -264,15 +264,15 @@ public class PlayerMovement : MonoBehaviour
             statistics.stamina -= staminaLoss * 0.5f;
             staminaRegenTimer = staminaRegenDelay;
 
-            Vector3 velocity = rb.velocity;
+            Vector3 velocity = rb.linearVelocity;
 
             rb.AddForce(Vector3.up * (jumpForce * 1.5f));
             rb.AddForce(normalVector * (jumpForce * 0.5f));
 
-            if (rb.velocity.y < 0.5f)
-                rb.velocity = new Vector3(velocity.x, 0f, velocity.z);
-            else if (rb.velocity.y > 0f)
-                rb.velocity = new Vector3(velocity.x, rb.velocity.y / 2f, velocity.z);
+            if (rb.linearVelocity.y < 0.5f)
+                rb.linearVelocity = new Vector3(velocity.x, 0f, velocity.z);
+            else if (rb.linearVelocity.y > 0f)
+                rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y / 2f, velocity.z);
         }
     }
 
@@ -299,15 +299,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (Mathf.Abs(x) < 0.05f && Mathf.Abs(y) < 0.05f)
         {
-            if (Mathf.Abs(rb.velocity.x) < threshold) rb.velocity = new Vector3(0, rb.velocity.y, 0);
-            if (Mathf.Abs(rb.velocity.z) < threshold) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
+            if (Mathf.Abs(rb.linearVelocity.x) < threshold) rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            if (Mathf.Abs(rb.linearVelocity.z) < threshold) rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, 0);
         }
 
-        if (new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude > runSpeed)
+        if (new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude > runSpeed)
         {
-            float vertical = rb.velocity.y;
-            Vector3 clamped = new Vector3(rb.velocity.x, 0f, rb.velocity.z).normalized * runSpeed;
-            rb.velocity = new Vector3(clamped.x, vertical, clamped.z);
+            float vertical = rb.linearVelocity.y;
+            Vector3 clamped = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).normalized * runSpeed;
+            rb.linearVelocity = new Vector3(clamped.x, vertical, clamped.z);
         }
     }
 
@@ -315,10 +315,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 FindVelRelativeToLook()
     {
         float currentY = orientation.eulerAngles.y;
-        float targetY = Mathf.Atan2(rb.velocity.x, rb.velocity.z) * Mathf.Rad2Deg;
+        float targetY = Mathf.Atan2(rb.linearVelocity.x, rb.linearVelocity.z) * Mathf.Rad2Deg;
         float deltaAngle = Mathf.DeltaAngle(currentY, targetY);
         float sideAngle = 90f - deltaAngle;
-        float mag = new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
+        float mag = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude;
 
         return new Vector2(
             y: mag * Mathf.Cos(deltaAngle * Mathf.Deg2Rad),
