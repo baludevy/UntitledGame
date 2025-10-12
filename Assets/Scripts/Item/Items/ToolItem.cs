@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Rock")]
-public class Rock : ItemData
+[CreateAssetMenu(menuName = "Items/Pickaxe")]
+public class ToolItem : ItemData
 {
     public int damage;
     public float cooldown;

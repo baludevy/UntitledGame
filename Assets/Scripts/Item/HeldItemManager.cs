@@ -114,7 +114,7 @@ public class HeldItemManager : MonoBehaviour
         currentTool.toolAnimator.ResetTrigger("Return");
         currentTool.toolAnimator.SetTrigger("Swing");
         
-        StartCoroutine(UseTool(currentTool));
+        currentTool.Use();
         toolUseTimer = Mathf.Max(currentTool.data.cooldown, 0.1f);
     }
 
@@ -157,13 +157,6 @@ public class HeldItemManager : MonoBehaviour
         if (!Input.GetButtonDown("Use") || item.data.Type != ItemType.consumable) return;
         PlayerInventory.Instance?.UseActiveItem(1);
     }
-
-    private IEnumerator UseTool(Tool tool)
-    {
-        yield return new WaitForSeconds(0.1f);
-        tool.Use();
-    }
-
     private bool UpdateHeldItem(ItemInstance item)
     {
         if (lastItemData == item.data) return false;

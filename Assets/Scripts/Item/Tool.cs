@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tool : MonoBehaviour
 {
-    public Pickaxe data;
+    public ToolItem data;
     public Animator toolAnimator;
     public ToolType type;
 
