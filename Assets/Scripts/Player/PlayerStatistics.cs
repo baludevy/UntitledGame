@@ -4,7 +4,6 @@ public class PlayerStatistics : MonoBehaviour
 {
     public float health = 100;
     public float stamina = 100f;
-    public float hunger = 100f;
     
     public static PlayerStatistics Instance;
 

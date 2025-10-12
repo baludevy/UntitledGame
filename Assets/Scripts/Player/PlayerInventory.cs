@@ -155,21 +155,6 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    public void UseActiveItem(int amount = 1)
-    {
-        ItemInstance item = GetActiveItem();
-        if (item == null) return;
-
-        item.stack -= amount;
-        item.OnUse();
-
-        if (item.stack <= 0)
-            RemoveHeldItem();
-
-        RefreshHotbar();
-        RefreshInventory();
-    }
-
     public void RemoveHeldItem()
     {
         RemoveItem(rows - 1, activeHotbarSlot);

@@ -12,7 +12,7 @@ public class ObjectInfo : MonoBehaviour
     
     public bool isActive;
 
-    private MineableObject currentObject;
+    private IMineable currentMineable;
 
     private void Start()
     {
@@ -33,14 +33,14 @@ public class ObjectInfo : MonoBehaviour
         }
     }
     
-    public void SetObject(MineableObject newObject)
+    public void SetObject(IMineable mineable)
     {
-        ItemData item = newObject.dropPrefab.GetComponent<DroppedItem>().itemData;
+        ItemData item = mineable.DropPrefab.itemData;
         
         itemName.text = item.Name;
         itemDescription.text = item.Description;
         itemIcon.sprite = item.Icon;
         
-        healthBar.fillAmount = (float)newObject.currentHealth / (float)newObject.maxHealth;
+        healthBar.fillAmount = (float)mineable.CurrentHealth / (float)mineable.MaxHealth;
     }
 }

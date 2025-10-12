@@ -12,7 +12,7 @@ public class ItemInfo : MonoBehaviour
 
     public bool isActive;
     
-    private MineableObject currentObject;
+    private ItemInstance item;
 
     private void Start()
     {

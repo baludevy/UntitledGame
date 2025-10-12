@@ -8,16 +8,12 @@ public class DroppedItem : MonoBehaviour
     
     public ItemInstance itemInstance;
     
-    [FormerlySerializedAs("placed")] public bool newItem;
-
-    private void Start()
+    private void Awake()
     {
-        if (itemInstance == null && newItem)
-        {
-            itemInstance = new ItemInstance(itemData, 1);
-        }
+        if (itemInstance == null && itemData != null)
+            itemInstance = new ItemInstance(itemData);
     }
-
+    
     public void Initialize(ItemInstance instance)
     {
         itemInstance = instance;

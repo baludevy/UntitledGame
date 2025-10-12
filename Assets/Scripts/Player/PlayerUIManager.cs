@@ -56,6 +56,40 @@ public class PlayerUIManager : MonoBehaviour
     {
         UpdateStaminaBar();
         UpdateHealth();
+        UpdateHudInfo();
+    }
+    
+    private void UpdateHudInfo()
+    {
+        LayerMask mask = LayerMask.GetMask("DroppedItem", "Mineable");
+        
+        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f, mask))
+        {
+            if (hit.collider.CompareTag("Mineable"))
+            {
+                IMineable obj = hit.collider.GetComponent<IMineable>();
+
+                objectInfo.SetState(true);
+                objectInfo.SetObject(obj);
+            }
+            else if (hit.collider.CompareTag("Item"))
+            {
+                DroppedItem item = hit.collider.GetComponent<DroppedItem>();
+
+                itemInfo.SetState(true);
+                itemInfo.SetItem(item.itemInstance);
+            }
+            else
+            {
+                objectInfo.SetState(false);
+                itemInfo.SetState(false);
+            }
+        }
+        else
+        {
+            objectInfo.SetState(false);
+            itemInfo.SetState(false);
+        }
     }
 
     private void UpdateStaminaBar()

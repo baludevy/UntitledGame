@@ -8,7 +8,6 @@ public class HealItem : ItemData
     public override void OnUse()
     {
         base.OnUse();
-        Debug.Log($"healing {healAmount}");
         PlayerStatistics.Instance.health += healAmount;
     }
 }

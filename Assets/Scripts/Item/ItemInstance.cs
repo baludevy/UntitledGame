@@ -1,17 +1,16 @@
 using System;
 using UnityEngine;
 
-[SerializeField]
 public class ItemInstance
 {
-    public ItemData data;
+    public readonly ItemData data;
     public int stack;
     public Guid id;
 
     public ItemInstance(ItemData data, int count = 1)
     {
         this.data = data;
-        this.stack = count;
+        stack = count;
         id = Guid.NewGuid();
     }
 

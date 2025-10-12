@@ -44,12 +44,7 @@ public class PlayerCamera : MonoBehaviour
         startPos = heldItemHolder.localPosition;
         rb = PlayerMovement.Instance.rb;
     }
-
-    private void Update()
-    {
-        UpdateHudInfo();
-    }
-
+    
     private void LateUpdate()
     {
         if (!target) return;
@@ -61,49 +56,6 @@ public class PlayerCamera : MonoBehaviour
         Vector3 finalPos = startPos + bobOffset;
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);
         transform.position = target.position + bobOffset + minimalBobOffset;
-    }
-
-    private void UpdateHudInfo()
-    {
-        LayerMask mask = LayerMask.GetMask("DroppedItem", "Mineable");
-        
-        if (Physics.Raycast(GetRay(), out RaycastHit hit, 5f, mask))
-        {
-            if (hit.collider.CompareTag("Mineable"))
-            {
-                MineableObject obj = hit.collider.GetComponent<MineableObject>();
-                ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
-
-                objInfo.SetState(true);
-                objInfo.SetObject(obj);
-            }
-            else if (hit.collider.CompareTag("Item"))
-            {
-                Debug.Log(hit.collider.tag);
-                
-                DroppedItem item = hit.collider.GetComponent<DroppedItem>();
-                ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
-
-                itemInfo.SetState(true);
-                itemInfo.SetItem(item.itemInstance);
-            }
-            else
-            {
-                ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
-                objInfo.SetState(false);
-
-                ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
-                itemInfo.SetState(false);
-            }
-        }
-        else
-        {
-            ObjectInfo objInfo = PlayerUIManager.Instance.objectInfo;
-            objInfo.SetState(false);
-
-            ItemInfo itemInfo = PlayerUIManager.Instance.itemInfo;
-            itemInfo.SetState(false);
-        }
     }
 
     public void BobOnce(Vector3 bobDirection)

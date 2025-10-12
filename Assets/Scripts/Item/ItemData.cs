@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class ItemData : ScriptableObject, IItem
 {
+    [Header("Data")]
     [SerializeField] string itemName;
     [SerializeField] string itemDescription;
     [SerializeField] Sprite icon;
-    [SerializeField] ItemType itemType;
+    
+    [Header("Stacking")]
     [SerializeField] int maxStack = 1;
     [SerializeField] bool stackable = true;
     
@@ -14,14 +16,9 @@ public class ItemData : ScriptableObject, IItem
     public string Name => itemName;
     public string Description => itemDescription;
     public Sprite Icon => icon;
-    public ItemType Type => itemType;
     public int MaxStack => maxStack;
     public bool Stackable => stackable;
     
-    public virtual void OnPickup()
-    {
-        Debug.Log($"picked up {itemName}");
-    }
-
+    public virtual void OnPickup() {}
     public virtual void OnUse() {}
 }
