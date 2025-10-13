@@ -3970,7 +3970,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 4
   columns: 6
-  UIManager: {fileID: 3582761190448753809}
   inventoryOpen: 0
 --- !u!114 &1452178255351561072
 MonoBehaviour:

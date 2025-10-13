@@ -187,14 +187,16 @@ public class PlayerInventory : MonoBehaviour
     {
         if (item == null) return;
 
-        Transform o = PlayerMovement.Instance.orientation;
+        Transform cam = PlayerCamera.Instance.transform;
 
-        Vector3 dropFrom = o.position + o.forward * 2f;
+        Vector3 dropFrom = cam.position + cam.forward * 1.5f;
+        Quaternion dropRotation = Quaternion.LookRotation(-cam.forward) * Quaternion.Euler(0, 90, 0);
 
-        GameObject dropped = Instantiate(item.data.floorPrefab, dropFrom, Quaternion.identity);
-        dropped.GetComponent<Rigidbody>().AddForce(o.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
-        dropped.GetComponent<DroppedItem>().Initialize(item);
-
+        DroppedItem dropped = Instantiate(item.data.floorPrefab, dropFrom, dropRotation).GetComponent<DroppedItem>();
+        dropped.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
+        
+        dropped.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
+        
         RemoveItemByID(item.id);
     }
     
