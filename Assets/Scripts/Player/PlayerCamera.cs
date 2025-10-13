@@ -8,7 +8,6 @@ public class PlayerCamera : MonoBehaviour
 
     [Header("Bob Settings")] public float bobSpeed = 15f;
     public float bobMultiplier = 0.5f;
-    public Vector3 minimalBobOffset = new Vector3(0, 0.05f, 0);
 
     [Header("Weapon Sway")] public float swayAmount = 0.05f;
     public float swaySmooth = 4f;
@@ -55,7 +54,7 @@ public class PlayerCamera : MonoBehaviour
 
         Vector3 finalPos = startPos + bobOffset;
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);
-        transform.position = target.position + bobOffset + minimalBobOffset;
+        transform.position = target.position + bobOffset;
     }
 
     public void BobOnce(Vector3 bobDirection)

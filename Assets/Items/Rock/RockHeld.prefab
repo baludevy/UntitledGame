@@ -36,7 +36,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7063249582431031299
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -50,6 +50,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb63ec8a6934538bd33cb316b930de2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 104d2099b17e3cb4b8460932e09bdf7d, type: 2}
+  data: {fileID: 11400000, guid: c7788caeddfd1f94bae29cd44d92dd8f, type: 2}
   toolAnimator: {fileID: 7063249582431031299}
 --- !u!1 &7961002224188427565
 GameObject:
