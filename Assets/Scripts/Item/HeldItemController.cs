@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,13 @@ public class HeldItemController : MonoBehaviour
     public Transform heldItemHolder;
     private GameObject currentItemObject;
     private ItemInstance lastItem;
+
+    private Animator itemRootAnimator;
+
+    private void Awake()
+    {
+        itemRootAnimator = transform.GetChild(0).GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -31,7 +39,7 @@ public class HeldItemController : MonoBehaviour
             ToolController.Instance.SetTool(null);
         }
     }
-    
+
     private void UpdateHeldItem(ItemInstance item)
     {
         if (lastItem == item) return;
@@ -43,7 +51,9 @@ public class HeldItemController : MonoBehaviour
 
         if (item.data.heldPrefab != null && heldItemHolder.childCount > 0)
         {
-            currentItemObject = Instantiate(item.data.heldPrefab, heldItemHolder.GetChild(0));
+            itemRootAnimator.SetTrigger("Equip");
+            
+            currentItemObject = Instantiate(item.data.heldPrefab, itemRootAnimator.transform);
 
             foreach (Transform child in currentItemObject.transform)
             {

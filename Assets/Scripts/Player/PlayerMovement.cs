@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Mouse Look")] public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation = 0f;
-    private float desiredX;
+    public float desiredX;
     public Transform orientation;
     public Transform camTransform;
     public bool canLook = true;

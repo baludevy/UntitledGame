@@ -206,6 +206,7 @@ public class PlayerInventory : MonoBehaviour
         if (item == null) return;
 
         Transform o = PlayerMovement.Instance.orientation;
+        
         Vector3 dropFrom = o.position + o.forward * 2f;
 
         GameObject dropped = Instantiate(item.data.floorPrefab, dropFrom, Quaternion.identity);
