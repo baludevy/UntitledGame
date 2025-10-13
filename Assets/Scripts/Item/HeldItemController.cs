@@ -17,16 +17,16 @@ public class HeldItemController : MonoBehaviour
 
     private void Update()
     {
-        ItemInstance item = PlayerInventory.Instance?.GetActiveItem();
+        ItemInstance item = PlayerInventory.Instance.ActiveItem;
 
-        if (item == null)
+         if (item == null)
         {
             ClearHeldItem();
         }
         else
         {
             UpdateHeldItem(item);
-        }
+        } 
     }
 
     private void ClearHeldItem()
