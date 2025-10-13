@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: grassToolSettings
   m_EditorClassIdentifier: 
   layerBlocking:
-  - 1
+  - 0.39
   - 1
   - 1
   - 1
@@ -34,7 +34,7 @@ MonoBehaviour:
   rangeR: 0
   rangeG: 0
   rangeB: 0
-  AdjustedColor: {r: 0.027450992, g: 0.6039216, b: 0.2446668, a: 1}
+  AdjustedColor: {r: 1, g: 1, b: 1, a: 1}
   paintBlockMask:
     serializedVersion: 2
     m_Bits: 0
@@ -44,10 +44,10 @@ MonoBehaviour:
   paintMask:
     serializedVersion: 2
     m_Bits: 9
-  brushSize: 2.3
+  brushSize: 4.7
   brushFalloffSize: 0.8
   Flow: 0
-  density: 1
+  density: 0.79
   normalLimit: 1
   grassAmountToGenerate: 100000
   generationDensity: 1
