@@ -69,7 +69,7 @@ Material:
     m_Floats:
     - Vector1_166C34A9: 0.12
     - Vector1_249357C1: 0.559
-    - Vector1_2CC6A532: 0.19
+    - Vector1_2CC6A532: 0.12
     - Vector1_3B7A233E: 0.55
     - Vector1_9BA3FBEE: 0
     - Vector1_9E12CF26: 0.071
@@ -100,6 +100,6 @@ Material:
     - _Horizon_Color_Night: {r: 0.013652531, g: 0.01059096, b: 0.13207549, a: 0}
     - _Moon_Offset: {r: 0.06, g: 0, b: 0, a: 0}
     - _Moon_Stars_Col: {r: 0.77563196, g: 1.5094882, b: 1.9811323, a: 0}
-    - _Sun_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Sun_Color: {r: 2, g: 2, b: 2, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
