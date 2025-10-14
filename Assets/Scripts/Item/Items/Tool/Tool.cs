@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tool : MonoBehaviour
 {
-    public ToolItem data;
+    public ToolInstance instance;
     public Animator toolAnimator;
     
     public void Use()
@@ -13,10 +13,20 @@ public class Tool : MonoBehaviour
             {
                 IMineable mineable = hit.collider.GetComponent<IMineable>();
 
+                ToolItem data = (ToolItem)instance.data;
+                
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
+                
+                instance.TakeDurability();
                 
                 mineable.TakeDamage(damage);
             }
         }
+    }
+
+    public void Break()
+    {
+        PlayerInventory.Instance.RemoveItemByID(instance.id);
+        Destroy(gameObject);
     }
 }

@@ -67,7 +67,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_166C34A9: 0.12
+    - Vector1_166C34A9: 0.06
     - Vector1_249357C1: 0.559
     - Vector1_2CC6A532: 0.12
     - Vector1_3B7A233E: 0.55
@@ -88,11 +88,11 @@ Material:
     - Color_1EB49FED: {r: 2.4686353, g: 1.5515109, b: 0.11632306, a: 0}
     - Color_424F81E0: {r: 0.7951061, g: 0.76561946, b: 0.8773585, a: 0}
     - Color_68FD0CD8: {r: 0.254902, g: 0.7000294, b: 1, a: 0}
-    - Color_83CF459: {r: 0.06697223, g: 0.11571609, b: 0.3301887, a: 0}
+    - Color_83CF459: {r: 0.036311854, g: 0.05855379, b: 0.1509434, a: 0}
     - Color_AB9D6D2F: {r: 0.02245749, g: 0.007843137, b: 0.05490196, a: 0}
     - Color_B54BEABE: {r: 0.9189517, g: 1.3868177, b: 1.4647952, a: 0}
     - Color_BE31CDF2: {r: 0.08232466, g: 0.28208497, b: 0.6981132, a: 0}
-    - Color_D230EFA1: {r: 0, g: 0.0023716441, b: 0.0754717, a: 0}
+    - Color_D230EFA1: {r: 0.019134922, g: 0.022335138, b: 0.09433961, a: 0}
     - Color_E5129607: {r: 0.6232645, g: 0.8185292, b: 0.8867924, a: 0}
     - _Cloud_Distortion_Speed_Dir: {r: -0.01, g: 0.01, b: 0, a: 0}
     - _Cloud_Layer_Speed_Dir: {r: 0.001, g: 0.001, b: 0, a: 0}
@@ -100,6 +100,6 @@ Material:
     - _Horizon_Color_Night: {r: 0.013652531, g: 0.01059096, b: 0.13207549, a: 0}
     - _Moon_Offset: {r: 0.06, g: 0, b: 0, a: 0}
     - _Moon_Stars_Col: {r: 0.77563196, g: 1.5094882, b: 1.9811323, a: 0}
-    - _Sun_Color: {r: 2, g: 2, b: 2, a: 0}
+    - _Sun_Color: {r: 3.275944, g: 2.1440938, b: 1.0971322, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

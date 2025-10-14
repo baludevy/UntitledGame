@@ -38,7 +38,7 @@ public class DayNightCycle : MonoBehaviour
         timeOfDayNormalized = currentTimeOfDay % cycleDurationSeconds / cycleDurationSeconds;
         
         float sunAngle = timeOfDayNormalized * 360f;
-        sunLight.transform.localRotation = Quaternion.Euler(sunAngle, 0f, 0f);
+        sunLight.transform.localRotation = Quaternion.Euler(sunAngle, 50f, 0f);
         
         float intensityFactor = Mathf.Clamp01(Mathf.Sin(timeOfDayNormalized * Mathf.PI * 2f));
         sunLight.intensity = Mathf.Lerp(lightIntensityNight, lightIntensityDay, intensityFactor);

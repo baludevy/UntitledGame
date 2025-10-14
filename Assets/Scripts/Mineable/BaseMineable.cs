@@ -82,9 +82,18 @@ public class BaseMineable : MonoBehaviour, IMineable
 
     public virtual void DropLoot()
     {
-        int amount = UnityEngine.Random.Range(minDropAmount, maxDropAmount);
+        int amount = Random.Range(minDropAmount, maxDropAmount);
         DroppedItem dropped = Instantiate(dropPrefab, transform.position, Quaternion.identity);
-        dropped.Initialize(new ItemInstance(dropped.itemData, amount));
+
+        if (dropped.itemData is ToolItem toolData)
+        {
+            dropped.Initialize(new ToolInstance(toolData, amount));
+        }
+        else
+        {
+            dropped.Initialize(new ItemInstance(dropped.itemData, amount));
+        }
+        
         Destroy(gameObject);
     }
 }

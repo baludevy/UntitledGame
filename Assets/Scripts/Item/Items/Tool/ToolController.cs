@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ToolController : MonoBehaviour
 {
-    private Tool currentTool;
+    public Tool currentTool;
     private float useTimer;
     private bool wasSwinging;
     private bool swingingThisFrame;
@@ -41,10 +41,10 @@ public class ToolController : MonoBehaviour
 
     void UseTool()
     {
-        useTimer = currentTool.data.cooldown;
+        ToolItem toolData = (ToolItem)currentTool.instance.data;
+        useTimer = toolData.cooldown;
         currentTool.Use();
     }
-
 
     public void SetTool(Tool tool)
     {

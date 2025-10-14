@@ -67,21 +67,29 @@ public class PlayerInventory : MonoBehaviour
     {
         activeHotbarSlot = slot;
         
-        for(int i = 0; i < UIManager.hotbarSlots.Count; i++)
+        UpdateHeldItem();
+
+        for (int i = 0; i < UIManager.hotbarSlots.Count; i++)
             UIManager.hotbarSlots[i].SetActive(i == activeHotbarSlot);
     }
-    
+
     public ItemInstance GetItem(int row, int col)
     {
         if (row < 0 || row >= rows || col < 0 || col >= columns) return null;
         return grid[row, col];
     }
 
+    public HotbarSlot GetActiveHotbarSlot()
+    {
+        return UIManager.hotbarSlots[activeHotbarSlot].GetComponent<HotbarSlot>();
+    }
+
     #region Appending to the inventory
-    
+
     public void AddItem(ItemInstance item)
     {
         if (TryStackItem(item)) return;
+
         TryAddToEmptySlot(item);
     }
 
@@ -101,8 +109,13 @@ public class PlayerInventory : MonoBehaviour
 
                 existingItem.stackAmount += toAdd;
                 newItem.stackAmount -= toAdd;
+
+                UpdateSlotUI(row, col);
                 
-                UpdateSlotUI(row,col);
+                if (row == HotbarRow && col == activeHotbarSlot)
+                {
+                    UpdateHeldItem();
+                }
 
                 if (newItem.stackAmount <= 0) return true;
             }
@@ -121,12 +134,13 @@ public class PlayerInventory : MonoBehaviour
                 if (grid[row, col] == null)
                 {
                     SetItem(item, row, col);
+
                     return;
                 }
             }
         }
     }
-    
+
     private bool CanStack(ItemInstance a, ItemInstance b)
     {
         return a != null && b != null && a.data == b.data && a.data.Stackable && a.stackAmount < a.data.MaxStack;
@@ -135,10 +149,11 @@ public class PlayerInventory : MonoBehaviour
     #endregion
 
     #region Modifying the inventory
-    
+
     private void SetItem(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
+        HeldItemController.Instance.UpdateHeldItem(GetItem(HotbarRow, activeHotbarSlot));
         UpdateSlotUI(row, col);
     }
 
@@ -153,7 +168,7 @@ public class PlayerInventory : MonoBehaviour
         int toCol = toIndex % columns;
 
         (grid[fromRow, fromCol], grid[toRow, toCol]) = (grid[toRow, toCol], grid[fromRow, fromCol]);
-        
+
         UpdateSlotUI(fromRow, fromCol);
         UpdateSlotUI(toRow, toCol);
     }
@@ -194,14 +209,14 @@ public class PlayerInventory : MonoBehaviour
 
         DroppedItem dropped = Instantiate(item.data.floorPrefab, dropFrom, dropRotation).GetComponent<DroppedItem>();
         dropped.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
-        
+
         dropped.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
-        
+
         RemoveItemByID(item.id);
     }
-    
+
     #endregion
-    
+
     private void UpdateSlotUI(int row, int col)
     {
         int index = row * columns + col;
@@ -214,4 +229,8 @@ public class PlayerInventory : MonoBehaviour
             UIManager.hotbarSlots[col].SetItem(item);
     }
 
+    private void UpdateHeldItem()
+    {
+        HeldItemController.Instance.UpdateHeldItem(GetItem(HotbarRow, activeHotbarSlot));
+    }
 }

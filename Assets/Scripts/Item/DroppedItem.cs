@@ -6,22 +6,27 @@ public class DroppedItem : MonoBehaviour
 {
     public ItemData itemData;
     public ItemInstance itemInstance;
-    
+
     private Collider playerCollider;
     private float ignoreUntil;
 
     private void Awake()
     {
-        if (itemInstance == null && itemData != null)
+        if (itemData is ToolItem item)
+            itemInstance = new ToolInstance(item);
+        else 
             itemInstance = new ItemInstance(itemData);
+        
+        Debug.Log(itemInstance.data.Name);
     }
-
+    
     public void Initialize(ItemInstance instance, Collider dropperCollider = null)
     {
         itemInstance = instance;
+
         playerCollider = dropperCollider;
         ignoreUntil = Time.time + 0.5f;
-        
+
         if (playerCollider != null)
             Physics.IgnoreCollision(GetComponent<Collider>(), playerCollider, true);
     }
@@ -34,12 +39,12 @@ public class DroppedItem : MonoBehaviour
             playerCollider = null;
         }
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
         if (Time.time < ignoreUntil) return;
-        
+
         PickupItem();
     }
 

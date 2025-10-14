@@ -16,7 +16,7 @@ public class PlayerUIManager : MonoBehaviour
     
     [Header("Stats")]
     [SerializeField] private Image staminaBar;
-    [SerializeField] private TMP_Text healthText;
+    // [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
     
     [Header("Looking at type shit Info")]
@@ -60,8 +60,8 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
-        //UpdateStaminaBar();
-        //UpdateHealth();
+        UpdateStaminaBar();
+        UpdateHealth();
         UpdateHudInfo();
     }
     
@@ -105,7 +105,7 @@ public class PlayerUIManager : MonoBehaviour
 
     public void UpdateHealth()
     {
-        healthText.text = PlayerStatistics.Instance.health.ToString();
+        // healthText.text = PlayerStatistics.Instance.health.ToString();
         healthBar.fillAmount = PlayerStatistics.Instance.health / 100f;
     }
 }

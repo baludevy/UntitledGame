@@ -7,4 +7,5 @@ public class ToolItem : ItemData
     public int damage;
     public float cooldown;
     public ToolType type;
+    public float maxDurability;
 }

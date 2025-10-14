@@ -10,23 +10,16 @@ public class HeldItemController : MonoBehaviour
 
     private Animator itemRootAnimator;
 
+    public static HeldItemController Instance;
+
     private void Awake()
     {
-        itemRootAnimator = transform.GetChild(0).GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        ItemInstance item = PlayerInventory.Instance.ActiveItem;
-
-         if (item == null)
-        {
-            ClearHeldItem();
-        }
+        if (Instance == null)
+            Instance = this;
         else
-        {
-            UpdateHeldItem(item);
-        } 
+            Destroy(gameObject);
+        
+        itemRootAnimator = transform.GetChild(0).GetComponent<Animator>();
     }
 
     private void ClearHeldItem()
@@ -40,8 +33,15 @@ public class HeldItemController : MonoBehaviour
         }
     }
 
-    private void UpdateHeldItem(ItemInstance item)
+    public void UpdateHeldItem(ItemInstance item)
     {
+        if (item == null)
+        {
+            lastItem = null;
+            ClearHeldItem();
+            return;
+        }
+    
         if (lastItem == item) return;
 
         if (currentItemObject != null)
@@ -63,6 +63,7 @@ public class HeldItemController : MonoBehaviour
             if (item.data is ToolItem)
             {
                 Tool tool = currentItemObject.GetComponent<Tool>();
+                tool.instance = (ToolInstance)item;
                 ToolController.Instance.SetTool(tool);
             }
         }
