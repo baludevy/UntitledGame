@@ -38,6 +38,7 @@ public class HotbarSlot : MonoBehaviour
 
             if (item.data is ToolItem toolData)
             {
+                if(ToolController.Instance.currentTool == null) return;
                 SetFrameFill(ToolController.Instance.currentTool.instance.currentDurability / toolData.maxDurability);
             }
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseMineable : MonoBehaviour, IMineable
+public sealed class BaseMineable : MonoBehaviour, IMineable
 {
     [Header("Info")] [SerializeField] private string itemName;
     [SerializeField] private string description;
@@ -31,22 +31,25 @@ public class BaseMineable : MonoBehaviour, IMineable
         set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
     }
 
-    [Header("Drop")] [SerializeField] protected int minDropAmount;
-    [SerializeField] protected int maxDropAmount;
-    [SerializeField] protected ToolType canBeMinedWith;
-    [SerializeField] protected DroppedItem dropPrefab;
+    [Header("Drop")] [SerializeField] private int minDropAmount;
+    [SerializeField] private int maxDropAmount;
+    [SerializeField] private ToolType canBeMinedWith;
+    [SerializeField] private DroppedItem dropPrefab;
 
     public ToolType CanBeMinedWith => canBeMinedWith;
     public DroppedItem DropPrefab => dropPrefab;
     public int MinDropAmount => minDropAmount;
     public int MaxDropAmount => maxDropAmount;
 
-    protected virtual void Start()
+    private Vector3 originalScale;
+    
+    private void Start()
     {
+        originalScale = transform.localScale;
         currentHealth = maxHealth;
     }
 
-    public virtual void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         StopAllCoroutines();
@@ -56,9 +59,9 @@ public class BaseMineable : MonoBehaviour, IMineable
             DropLoot();
     }
 
-    protected IEnumerator HitAnimation()
+    private IEnumerator HitAnimation()
     {
-        Vector3 start = transform.localScale;
+        Vector3 start = originalScale;
         Vector3 target = start * 0.9f;
 
         float t = 0f;
@@ -78,9 +81,11 @@ public class BaseMineable : MonoBehaviour, IMineable
             transform.localScale = Vector3.Lerp(target, start, eased);
             yield return null;
         }
+        
+        transform.localScale = start;
     }
 
-    public virtual void DropLoot()
+    public void DropLoot()
     {
         int amount = Random.Range(minDropAmount, maxDropAmount);
         DroppedItem dropped = Instantiate(dropPrefab, transform.position, Quaternion.identity);

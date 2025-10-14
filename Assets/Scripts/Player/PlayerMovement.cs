@@ -103,6 +103,17 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
             Jump();
         }
+
+        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))
+        {
+            if (Input.GetButtonDown("Use"))
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Oiiai"))
+                {
+                    hit.collider.gameObject.GetComponent<Oiiai>().TriggerSpin();
+                }
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -191,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = sprintSpeed;
             statistics.stamina -= staminaLoss * Time.deltaTime;
             statistics.stamina = Mathf.Max(statistics.stamina, 0f);
-            
+
             SpeedLines();
             FovEffect();
         }
@@ -199,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
         {
             statistics.stamina += staminaLoss * Time.deltaTime;
             statistics.stamina = Mathf.Min(statistics.stamina, 100f);
-            
+
             ResetSprintingEffects();
         }
         else
@@ -224,11 +235,11 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(orientation.forward * (y * moveSpeed * Time.deltaTime * sideMultiplier * forwardMultiplier));
         rb.AddForce(orientation.right * (x * moveSpeed * Time.deltaTime * sideMultiplier));
     }
-    
+
     private void ResetSprintingEffects()
     {
         emission.rateOverTimeMultiplier = 0;
-        
+
         if (!sprinting)
         {
             Camera cam = PlayerCamera.Instance.cam;
@@ -300,7 +311,8 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(x) < 0.05f && Mathf.Abs(y) < 0.05f)
         {
             if (Mathf.Abs(rb.linearVelocity.x) < threshold) rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            if (Mathf.Abs(rb.linearVelocity.z) < threshold) rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, 0);
+            if (Mathf.Abs(rb.linearVelocity.z) < threshold)
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, 0);
         }
 
         if (new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude > runSpeed)
