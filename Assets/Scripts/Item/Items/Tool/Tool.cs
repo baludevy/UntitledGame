@@ -1,10 +1,18 @@
+using System;
 using UnityEngine;
 
 public class Tool : MonoBehaviour
 {
     public ToolInstance instance;
     public Animator toolAnimator;
-    
+
+    private void Start()
+    {
+        ToolItem data = (ToolItem)instance.data;
+        float durabilityNormalized = instance.currentDurability / data.maxDurability;
+        PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
+    }
+
     public void Use()
     {
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))

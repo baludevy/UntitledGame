@@ -37,6 +37,8 @@ public class PlayerInventory : MonoBehaviour
 
     private void Update()
     {
+        UpdateHeldItem();
+        
         if (Input.GetButtonDown("Inventory")) ToggleInventory();
         if (Input.GetKeyDown(KeyCode.Q)) DropActiveItem();
 
@@ -66,8 +68,6 @@ public class PlayerInventory : MonoBehaviour
     private void SwitchToHotbarSlot(int slot)
     {
         activeHotbarSlot = slot;
-        
-        UpdateHeldItem();
 
         for (int i = 0; i < UIManager.hotbarSlots.Count; i++)
             UIManager.hotbarSlots[i].SetActive(i == activeHotbarSlot);
@@ -111,11 +111,6 @@ public class PlayerInventory : MonoBehaviour
                 newItem.stackAmount -= toAdd;
 
                 UpdateSlotUI(row, col);
-                
-                if (row == HotbarRow && col == activeHotbarSlot)
-                {
-                    UpdateHeldItem();
-                }
 
                 if (newItem.stackAmount <= 0) return true;
             }
@@ -134,7 +129,6 @@ public class PlayerInventory : MonoBehaviour
                 if (grid[row, col] == null)
                 {
                     SetItem(item, row, col);
-
                     return;
                 }
             }
