@@ -24,7 +24,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        // Convert day start time from minutes to seconds
+        // convert day start time from minutes to seconds
         currentTimeOfDay = startTime * 60;
     }
 
@@ -32,14 +32,15 @@ public class DayNightCycle : MonoBehaviour
     {
         currentTimeOfDay += Time.deltaTime;
         
+        // convert cycle duration time from minutes to seconds
         float cycleDurationSeconds = cycleDuration * 60;
-        
-        timeOfDayNormalized = (currentTimeOfDay % cycleDurationSeconds) / cycleDurationSeconds;
+
+        timeOfDayNormalized = currentTimeOfDay % cycleDurationSeconds / cycleDurationSeconds;
         
         float sunAngle = timeOfDayNormalized * 360f;
         sunLight.transform.localRotation = Quaternion.Euler(sunAngle, 0f, 0f);
         
-        float intensityFactor = Mathf.Clamp01(-Mathf.Cos(timeOfDayNormalized * Mathf.PI * 2f));
+        float intensityFactor = Mathf.Clamp01(Mathf.Sin(timeOfDayNormalized * Mathf.PI * 2f));
         sunLight.intensity = Mathf.Lerp(lightIntensityNight, lightIntensityDay, intensityFactor);
     }
 }
