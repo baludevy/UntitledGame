@@ -45,14 +45,18 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (item == null) return;
         dragIcon = new GameObject("drag");
         dragIcon.transform.SetParent(canvas.transform, false);
-        var img = dragIcon.AddComponent<RawImage>();
+        
+        RawImage img = dragIcon.AddComponent<RawImage>();
         img.raycastTarget = false;
         img.texture = item.data.Icon != null ? item.data.Icon.texture : null;
-        var rt = dragIcon.GetComponent<RectTransform>();
+        
+        RectTransform rt = dragIcon.GetComponent<RectTransform>();
         rt.sizeDelta = ((RectTransform)icon.transform).sizeDelta;
-        var cg = dragIcon.AddComponent<CanvasGroup>();
+        
+        CanvasGroup cg = dragIcon.AddComponent<CanvasGroup>();
         cg.blocksRaycasts = false;
         canvasGroup.blocksRaycasts = false;
+        
         UpdateDragPosition(eventData);
     }
 
