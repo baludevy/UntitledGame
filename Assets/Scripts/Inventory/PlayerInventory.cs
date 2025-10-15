@@ -12,11 +12,11 @@ public class PlayerInventory : MonoBehaviour
 
     private ItemInstance[,] grid;
 
-    private int HotbarRow => rows - 1;
-    public ItemInstance ActiveItem => grid[HotbarRow, activeHotbarSlot];
+    public int HotbarRow => rows - 1;
+    private ItemInstance ActiveItem => grid[HotbarRow, activeHotbarSlot];
     public int TotalSlots => rows * columns;
 
-    private int activeHotbarSlot;
+    public int activeHotbarSlot;
     public bool inventoryOpen;
 
     private void Awake()
@@ -82,6 +82,11 @@ public class PlayerInventory : MonoBehaviour
     public HotbarSlot GetActiveHotbarSlot()
     {
         return UIManager.hotbarSlots[activeHotbarSlot].GetComponent<HotbarSlot>();
+    }
+
+    public HotbarSlot GetHotbarSlot(int index)
+    {
+        return UIManager.hotbarSlots[index].GetComponent<HotbarSlot>();
     }
 
     #region Appending to the inventory
@@ -167,17 +172,37 @@ public class PlayerInventory : MonoBehaviour
         UpdateHotbarUI(toRow, toCol);
     }
     
-    public void SwapWithCraft(CraftSlot craft, InventorySlot inv)
+    public void SwapWithCraft(CraftSlot craft, InventorySlot invSlot)
     {
-        (inv.item, craft.item) = (craft.item, inv.item);
-        inv.SetItem(inv.item);
+        if(invSlot.item is { data: not ResourceItem }) return;
+        
+        (invSlot.item, craft.item) = (craft.item, invSlot.item);
+        invSlot.SetItem(invSlot.item);
         craft.SetItem(craft.item);
+        
+        SetItem(invSlot.item, invSlot.row, invSlot.col);
+        
+        if (invSlot.row == HotbarRow)
+        {
+            UpdateHotbarUI(invSlot.row, invSlot.col);
+            if (activeHotbarSlot == invSlot.col)
+            {
+                HeldItemController.Instance.UpdateHeldItem(invSlot.item);
+            }
+        }
     }
-
 
     public void RemoveItem(int row, int col)
     {
         SetItem(null, row, col);
+
+        if (row != HotbarRow) return;
+        
+        GetHotbarSlot(col).Clear();
+        if (activeHotbarSlot == col)
+        {
+            HeldItemController.Instance.UpdateHeldItem(null);
+        }
     }
 
     public void RemoveItemByID(Guid id)
@@ -219,7 +244,7 @@ public class PlayerInventory : MonoBehaviour
 
     #endregion
 
-    private void UpdateHotbarUI(int row, int col)
+    public void UpdateHotbarUI(int row, int col)
     {
         int index = row * columns + col;
         var item = grid[row, col];
@@ -231,7 +256,7 @@ public class PlayerInventory : MonoBehaviour
             UIManager.hotbarSlots[col].SetItem(item);
     }
 
-    private void UpdateHeldItem()
+    public void UpdateHeldItem()
     {
         HeldItemController.Instance.UpdateHeldItem(GetItem(HotbarRow, activeHotbarSlot));
     }

@@ -22,7 +22,11 @@ public class CraftSlot : BaseSlot
 
         if (target == null)
         {
-            if (item != null) Clear();
+            if (item != null)
+            {
+                PlayerInventory.Instance.DropItem(item);
+                Clear();
+            };
             return;
         }
 

@@ -48,7 +48,7 @@ public class HotbarSlot : MonoBehaviour
         }
     }
 
-    private void Clear()
+    public void Clear()
     {
         icon.gameObject.SetActive(false);
         icon.texture = null;

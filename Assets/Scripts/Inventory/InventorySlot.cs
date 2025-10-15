@@ -39,6 +39,7 @@ public class InventorySlot : BaseSlot
             if (item?.data is ResourceItem)
             {
                 CraftingManager.Instance.PlaceItem(craftSlot, item);
+                PlayerInventory.Instance.RemoveItem(row, col);
                 Clear();
             }
         }
