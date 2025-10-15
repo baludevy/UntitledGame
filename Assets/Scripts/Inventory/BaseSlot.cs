@@ -8,12 +8,11 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 {
     public ItemInstance item;
     public RawImage icon;
-    public RawImage frame;
     public TMP_Text stackText;
     public bool isActive;
-    protected GameObject dragIcon;
-    protected Canvas canvas;
-    protected CanvasGroup canvasGroup;
+    private GameObject dragIcon;
+    private Canvas canvas;
+    private CanvasGroup canvasGroup;
 
     protected virtual void Awake()
     {
@@ -25,24 +24,20 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void SetItem(ItemInstance newItem)
     {
         item = newItem;
-        if (item != null && item.data.Icon != null)
-        {
-            icon.gameObject.SetActive(true);
-            icon.texture = item.data.Icon.texture;
-            stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
-        }
-        else
-        {
-            Clear();
-        }
+        bool hasItem = item != null && item.data.Icon != null;
+        icon.gameObject.SetActive(hasItem);
+        icon.texture = hasItem ? item.data.Icon.texture : null;
+        stackText.text = hasItem && item.data.Stackable ? item.stackAmount.ToString() : "";
+        OnSetItem(newItem);
+    }
+
+    protected virtual void OnSetItem(ItemInstance newItem)
+    {
     }
 
     public virtual void Clear()
     {
-        icon.gameObject.SetActive(false);
-        icon.texture = null;
-        stackText.text = "";
-        item = null;
+        SetItem(null);
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)
@@ -73,9 +68,23 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         canvasGroup.blocksRaycasts = true;
     }
 
-    protected void UpdateDragPosition(PointerEventData eventData)
+    private void UpdateDragPosition(PointerEventData eventData)
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position, canvas.worldCamera, out var pos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position,
+            canvas.worldCamera, out var pos);
         dragIcon.GetComponent<RectTransform>().anchoredPosition = pos;
+    }
+
+    protected BaseSlot GetDragTarget(PointerEventData eventData)
+    {
+        var results = new List<RaycastResult>();
+        canvas.GetComponent<GraphicRaycaster>().Raycast(eventData, results);
+        foreach (var r in results)
+        {
+            var slot = r.gameObject.GetComponent<BaseSlot>();
+            if (slot != null) return slot;
+        }
+
+        return null;
     }
 }

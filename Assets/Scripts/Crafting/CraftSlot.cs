@@ -1,47 +1,32 @@
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class CraftSlot : BaseSlot
 {
     public override void OnEndDrag(PointerEventData eventData)
     {
         base.OnEndDrag(eventData);
-
-        var results = new List<RaycastResult>();
-        var gr = canvas.GetComponent<GraphicRaycaster>();
-        gr.Raycast(eventData, results);
-
-        BaseSlot target = null;
-        foreach (var r in results)
-        {
-            target = r.gameObject.GetComponent<BaseSlot>();
-            if (target != null) break;
-        }
-
+        var target = GetDragTarget(eventData);
         if (target == null)
         {
             if (item != null)
             {
                 PlayerInventory.Instance.DropItem(item);
                 Clear();
-            };
+            }
+
             return;
         }
 
-        if (target is InventorySlot invSlot)
+        switch (target)
         {
-            PlayerInventory.Instance.SwapWithCraft(this, invSlot);
-        }
-        else if (target is CraftSlot craftSlot && craftSlot != this)
-        {
-            if (item?.data is ResourceItem)
-            {
-                (item, craftSlot.item) = (craftSlot.item, item);
+            case InventorySlot inv:
+                PlayerInventory.Instance.SwapWithCraft(this, inv);
+                break;
+            case CraftSlot craft when craft != this && item?.data is ResourceItem:
+                (item, craft.item) = (craft.item, item);
                 SetItem(item);
-                craftSlot.SetItem(craftSlot.item);
-            }
+                craft.SetItem(craft.item);
+                break;
         }
     }
 }

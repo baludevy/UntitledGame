@@ -4,18 +4,15 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance;
-
     private PlayerUIManager UIManager;
 
     [SerializeField] private int rows = 4;
     [SerializeField] private int columns = 6;
-
     private ItemInstance[,] grid;
 
-    public int HotbarRow => rows - 1;
+    private int HotbarRow => rows - 1;
     private ItemInstance ActiveItem => grid[HotbarRow, activeHotbarSlot];
     public int TotalSlots => rows * columns;
-
     public int activeHotbarSlot;
     public bool inventoryOpen;
 
@@ -26,7 +23,7 @@ public class PlayerInventory : MonoBehaviour
         else
             Destroy(gameObject);
 
-        InitializeInventory();
+        grid = new ItemInstance[rows, columns];
     }
 
     private void Start()
@@ -37,88 +34,54 @@ public class PlayerInventory : MonoBehaviour
 
     private void Update()
     {
-        UpdateHeldItem();
-        
+        HeldItemController.Instance.UpdateHeldItem(ActiveItem);
+
         if (Input.GetButtonDown("Inventory")) ToggleInventory();
         if (Input.GetKeyDown(KeyCode.Q)) DropActiveItem();
 
-        for (int i = 1; i <= columns; i++)
-            if (Input.GetKeyDown(KeyCode.Alpha0 + i))
-                SwitchToHotbarSlot(i - 1);
+        for (int i = 0; i < columns; i++)
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+                SwitchToHotbarSlot(i);
     }
 
     private void ToggleInventory()
     {
         inventoryOpen = !inventoryOpen;
-        PlayerUIManager.Instance.inventory.GetComponent<Canvas>().enabled = inventoryOpen;
-
-        if (inventoryOpen)
-            CursorManager.UnlockCursor();
-        else
-            CursorManager.LockCursor();
-
+        UIManager.inventory.GetComponent<Canvas>().enabled = inventoryOpen;
+        CursorManager.SetCursorLock(!inventoryOpen);
         PlayerMovement.Instance.canLook = !inventoryOpen;
-    }
-
-    private void InitializeInventory()
-    {
-        grid = new ItemInstance[rows, columns];
     }
 
     private void SwitchToHotbarSlot(int slot)
     {
         activeHotbarSlot = slot;
-
         for (int i = 0; i < UIManager.hotbarSlots.Count; i++)
             UIManager.hotbarSlots[i].SetActive(i == activeHotbarSlot);
     }
 
-    public ItemInstance GetItem(int row, int col)
-    {
-        if (row < 0 || row >= rows || col < 0 || col >= columns) return null;
-        return grid[row, col];
-    }
-
-    public HotbarSlot GetActiveHotbarSlot()
-    {
-        return UIManager.hotbarSlots[activeHotbarSlot].GetComponent<HotbarSlot>();
-    }
-
-    public HotbarSlot GetHotbarSlot(int index)
-    {
-        return UIManager.hotbarSlots[index].GetComponent<HotbarSlot>();
-    }
-
-    #region Appending to the inventory
+    private HotbarSlot GetHotbarSlot(int index) => UIManager.hotbarSlots[index].GetComponent<HotbarSlot>();
+    public HotbarSlot GetActiveHotbarSlot() => GetHotbarSlot(activeHotbarSlot);
 
     public void AddItem(ItemInstance item)
     {
-        if (TryStackItem(item)) return;
-
-        TryAddToEmptySlot(item);
+        if (!TryStackItem(item)) TryAddToEmptySlot(item);
     }
 
     private bool TryStackItem(ItemInstance newItem)
     {
-        // first check the hotbar, then the rest
         for (int row = HotbarRow; row >= 0; row--)
+        for (int col = 0; col < columns; col++)
         {
-            for (int col = 0; col < columns; col++)
-            {
-                ItemInstance existingItem = grid[row, col];
+            var existingItem = grid[row, col];
+            if (existingItem == null || existingItem.data != newItem.data || !existingItem.data.Stackable ||
+                existingItem.stackAmount >= existingItem.data.MaxStack)
+                continue;
 
-                if (!CanStack(existingItem, newItem)) continue;
-
-                int space = existingItem.data.MaxStack - existingItem.stackAmount;
-                int toAdd = Mathf.Min(newItem.stackAmount, space);
-
-                existingItem.stackAmount += toAdd;
-                newItem.stackAmount -= toAdd;
-
-                UpdateHotbarUI(row, col);
-
-                if (newItem.stackAmount <= 0) return true;
-            }
+            int toAdd = Mathf.Min(newItem.stackAmount, existingItem.data.MaxStack - existingItem.stackAmount);
+            existingItem.stackAmount += toAdd;
+            newItem.stackAmount -= toAdd;
+            UpdateHotbarUI(row, col);
+            if (newItem.stackAmount <= 0) return true;
         }
 
         return false;
@@ -126,33 +89,19 @@ public class PlayerInventory : MonoBehaviour
 
     private void TryAddToEmptySlot(ItemInstance item)
     {
-        // again, check the hotbar first, then the rest
-        for (int row = rows - 1; row >= 0; row--)
-        {
-            for (int col = 0; col < columns; col++)
+        for (int row = HotbarRow; row >= 0; row--)
+        for (int col = 0; col < columns; col++)
+            if (grid[row, col] == null)
             {
-                if (grid[row, col] == null)
-                {
-                    SetItem(item, row, col);
-                    return;
-                }
+                SetItem(item, row, col);
+                return;
             }
-        }
     }
-
-    private bool CanStack(ItemInstance a, ItemInstance b)
-    {
-        return a != null && b != null && a.data == b.data && a.data.Stackable && a.stackAmount < a.data.MaxStack;
-    }
-
-    #endregion
-
-    #region Modifying the inventory
 
     private void SetItem(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
-        HeldItemController.Instance.UpdateHeldItem(GetItem(HotbarRow, activeHotbarSlot));
+        HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
         UpdateHotbarUI(row, col);
     }
 
@@ -167,28 +116,25 @@ public class PlayerInventory : MonoBehaviour
         int toCol = toIndex % columns;
 
         (grid[fromRow, fromCol], grid[toRow, toCol]) = (grid[toRow, toCol], grid[fromRow, fromCol]);
-
         UpdateHotbarUI(fromRow, fromCol);
         UpdateHotbarUI(toRow, toCol);
     }
-    
+
     public void SwapWithCraft(CraftSlot craft, InventorySlot invSlot)
     {
-        if(invSlot.item is { data: not ResourceItem }) return;
-        
+        if (invSlot.item is { data: not ResourceItem }) return;
+
         (invSlot.item, craft.item) = (craft.item, invSlot.item);
         invSlot.SetItem(invSlot.item);
         craft.SetItem(craft.item);
-        
+
         SetItem(invSlot.item, invSlot.row, invSlot.col);
-        
+
         if (invSlot.row == HotbarRow)
         {
             UpdateHotbarUI(invSlot.row, invSlot.col);
             if (activeHotbarSlot == invSlot.col)
-            {
                 HeldItemController.Instance.UpdateHeldItem(invSlot.item);
-            }
         }
     }
 
@@ -197,67 +143,44 @@ public class PlayerInventory : MonoBehaviour
         SetItem(null, row, col);
 
         if (row != HotbarRow) return;
-        
         GetHotbarSlot(col).Clear();
         if (activeHotbarSlot == col)
-        {
             HeldItemController.Instance.UpdateHeldItem(null);
-        }
     }
 
     public void RemoveItemByID(Guid id)
     {
         for (int row = 0; row < rows; row++)
-        {
-            for (int col = 0; col < columns; col++)
+        for (int col = 0; col < columns; col++)
+            if (grid[row, col]?.id == id)
             {
-                if (grid[row, col]?.id == id)
-                {
-                    RemoveItem(row, col);
-                    return;
-                }
+                RemoveItem(row, col);
+                return;
             }
-        }
     }
 
-    private void DropActiveItem()
-    {
-        DropItem(ActiveItem);
-    }
+    private void DropActiveItem() => DropItem(ActiveItem);
 
     public void DropItem(ItemInstance item)
     {
         if (item == null) return;
 
-        Transform cam = PlayerCamera.Instance.transform;
+        var cam = PlayerCamera.Instance.transform;
 
-        Vector3 dropFrom = cam.position + cam.forward * 1.5f;
-        Quaternion dropRotation = Quaternion.LookRotation(-cam.forward) * Quaternion.Euler(0, 90, 0);
-
-        DroppedItem dropped = Instantiate(item.data.floorPrefab, dropFrom, dropRotation).GetComponent<DroppedItem>();
-        dropped.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
-
-        dropped.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
+        var drop = Instantiate(item.data.floorPrefab, cam.position + cam.forward * 1.5f,
+            Quaternion.LookRotation(-cam.forward) * Quaternion.Euler(0, 90, 0)).GetComponent<DroppedItem>();
+        drop.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
+        drop.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
 
         RemoveItemByID(item.id);
     }
 
-    #endregion
-
-    public void UpdateHotbarUI(int row, int col)
+    private void UpdateHotbarUI(int row, int col)
     {
         int index = row * columns + col;
-        var item = grid[row, col];
-
         if (index < UIManager.inventorySlots.Count)
-            UIManager.inventorySlots[index].SetItem(item);
-
+            UIManager.inventorySlots[index].SetItem(grid[row, col]);
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
-            UIManager.hotbarSlots[col].SetItem(item);
-    }
-
-    public void UpdateHeldItem()
-    {
-        HeldItemController.Instance.UpdateHeldItem(GetItem(HotbarRow, activeHotbarSlot));
+            UIManager.hotbarSlots[col].SetItem(grid[row, col]);
     }
 }

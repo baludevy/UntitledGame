@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class InventorySlot : BaseSlot
 {
@@ -12,36 +9,23 @@ public class InventorySlot : BaseSlot
     public override void OnEndDrag(PointerEventData eventData)
     {
         base.OnEndDrag(eventData);
-
-        var results = new List<RaycastResult>();
-        var gr = canvas.GetComponent<GraphicRaycaster>();
-        gr.Raycast(eventData, results);
-
-        BaseSlot target = null;
-        foreach (var r in results)
-        {
-            target = r.gameObject.GetComponent<BaseSlot>();
-            if (target != null) break;
-        }
-
+        var target = GetDragTarget(eventData);
         if (target == null)
         {
             PlayerInventory.Instance.DropItem(item);
             return;
         }
 
-        if (target is InventorySlot invSlot && invSlot != this)
+        switch (target)
         {
-            PlayerInventory.Instance.SwapSlots(this, invSlot);
-        }
-        else if (target is CraftSlot craftSlot)
-        {
-            if (item?.data is ResourceItem)
-            {
-                CraftingManager.Instance.PlaceItem(craftSlot, item);
+            case InventorySlot inv when inv != this:
+                PlayerInventory.Instance.SwapSlots(this, inv);
+                break;
+            case CraftSlot craft when item?.data is ResourceItem:
+                CraftingManager.Instance.PlaceItem(craft, item);
                 PlayerInventory.Instance.RemoveItem(row, col);
                 Clear();
-            }
+                break;
         }
     }
 }

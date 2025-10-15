@@ -1,20 +1,15 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotbarSlot : MonoBehaviour
+public class HotbarSlot : BaseSlot
 {
-    public RawImage icon;
     public Image frame;
-    public TMP_Text stackText;
-    public bool isActive;
 
-    private void Awake()
+    protected override void Awake()
     {
         Clear();
     }
-    
+
     public void SetActive(bool active)
     {
         isActive = active;
@@ -28,31 +23,11 @@ public class HotbarSlot : MonoBehaviour
         frame.fillAmount = fill;
     }
 
-    public void SetItem(ItemInstance item)
+    protected override void OnSetItem(ItemInstance newItem)
     {
-        if (item != null)
-        {
-            icon.gameObject.SetActive(true);
-            icon.texture = item.data.Icon.texture;
-            stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
-
-            if (item.data is ToolItem toolData)
-            {
-                ToolInstance tool = (ToolInstance)item;
-                SetFrameFill(tool.currentDurability / toolData.maxDurability);
-            }
-        }
+        if (newItem is ToolInstance tool && newItem.data is ToolItem toolData)
+            SetFrameFill(tool.currentDurability / toolData.maxDurability);
         else
-        {
-            Clear();
-        }
-    }
-
-    public void Clear()
-    {
-        icon.gameObject.SetActive(false);
-        icon.texture = null;
-        stackText.text = "";
-        SetFrameFill(1);
+            SetFrameFill(1);
     }
 }

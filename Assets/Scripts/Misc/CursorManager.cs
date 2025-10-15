@@ -13,4 +13,10 @@ public static class CursorManager
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+
+    public static void SetCursorLock(bool locked)
+    {
+        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !locked;
+    }
 }

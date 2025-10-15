@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CraftingManager : MonoBehaviour
 {
@@ -9,7 +7,12 @@ public class CraftingManager : MonoBehaviour
 
     public Transform craftSlotsHolder;
     private CraftSlot[,] craftSlots;
-    
+
+    public CraftingManager(CraftSlot[,] craftSlots)
+    {
+        this.craftSlots = craftSlots;
+    }
+
     public static CraftingManager Instance;
 
     private void Awake()
@@ -18,10 +21,10 @@ public class CraftingManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        
+
         craftSlots = new CraftSlot[craftingGridRows, craftingGridCols];
 
-        for (int row = 0; row < craftingGridRows ; row++)
+        for (int row = 0; row < craftingGridRows; row++)
         {
             for (int col = 0; col < craftingGridCols; col++)
             {
@@ -29,13 +32,14 @@ public class CraftingManager : MonoBehaviour
             }
         }
     }
-    
+
     public void PlaceItem(CraftSlot slot, ItemInstance item)
     {
         if (slot.item != null)
         {
             PlayerInventory.Instance.AddItem(slot.item);
         }
+
         slot.SetItem(item);
     }
 }
