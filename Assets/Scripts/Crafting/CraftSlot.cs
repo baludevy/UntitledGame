@@ -3,12 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : BaseSlot
+public class CraftSlot : BaseSlot
 {
-    public int row;
-    public int col;
-    public ItemTooltip tooltip;
-
     public override void OnEndDrag(PointerEventData eventData)
     {
         base.OnEndDrag(eventData);
@@ -26,20 +22,21 @@ public class InventorySlot : BaseSlot
 
         if (target == null)
         {
-            PlayerInventory.Instance.DropItem(item);
+            if (item != null) Clear();
             return;
         }
 
-        if (target is InventorySlot invSlot && invSlot != this)
+        if (target is InventorySlot invSlot)
         {
-            PlayerInventory.Instance.SwapSlots(this, invSlot);
+            PlayerInventory.Instance.SwapWithCraft(this, invSlot);
         }
-        else if (target is CraftSlot craftSlot)
+        else if (target is CraftSlot craftSlot && craftSlot != this)
         {
             if (item?.data is ResourceItem)
             {
-                CraftingManager.Instance.PlaceItem(craftSlot, item);
-                Clear();
+                (item, craftSlot.item) = (craftSlot.item, item);
+                SetItem(item);
+                craftSlot.SetItem(craftSlot.item);
             }
         }
     }

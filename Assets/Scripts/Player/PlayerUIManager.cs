@@ -53,7 +53,12 @@ public class PlayerUIManager : MonoBehaviour
             Transform row = inventoryHolder.GetChild(i);
             for (int j = 0; j < row.childCount; j++)
             {
-                inventorySlots.Add(row.GetChild(j).GetComponent<InventorySlot>());
+                InventorySlot slot = row.GetChild(j).GetComponent<InventorySlot>();
+
+                slot.row = i;
+                slot.col = j;
+                
+                inventorySlots.Add(slot);
             }
         }
     }

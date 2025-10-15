@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a09cdc3e88fe4d21a8f627977daaf2a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 49d7b01bf07e4a27a79b38fe9b6ccc95, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
   itemName: Rock
   itemDescription: cute ahh rock
   icon: {fileID: 21300000, guid: 2d0868451bf1df0409f2b5fd6217e436, type: 3}
-  itemType: 2
-  maxStack: 67
+  maxStack: 64
   stackable: 1
   floorPrefab: {fileID: 1949016491754248376, guid: 523d461372208884d89e86637661150c, type: 3}
   heldPrefab: {fileID: 2328842768290734269, guid: 16596796c06b61d4fba1412375cc3092, type: 3}
-  damage: 1
-  cooldown: 0.7

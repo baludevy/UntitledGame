@@ -75,8 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab7befc162547dab1c2457ed7b9fea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: c7788caeddfd1f94bae29cd44d92dd8f, type: 2}
-  newItem: 0
+  itemData: {fileID: 11400000, guid: a7f5dce08727132448ac7bfe6dd201fb, type: 2}
 --- !u!65 &2759606630885742951
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,6 +156,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

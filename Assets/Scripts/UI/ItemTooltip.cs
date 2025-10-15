@@ -8,7 +8,7 @@ public class ItemTooltip : MonoBehaviour
     public TMP_Text tooltipItemName;
     public TMP_Text tooltipItemDescription;
 
-    public void Show(ItemInstance item, Vector3 position)
+    public void Show(ItemInstance item)
     {
         tooltipObject.transform.SetAsLastSibling();
         tooltipObject.SetActive(true);

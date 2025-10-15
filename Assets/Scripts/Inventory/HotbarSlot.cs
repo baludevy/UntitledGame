@@ -38,22 +38,21 @@ public class HotbarSlot : MonoBehaviour
 
             if (item.data is ToolItem toolData)
             {
-                if(ToolController.Instance.currentTool == null) return;
-                SetFrameFill(ToolController.Instance.currentTool.instance.currentDurability / toolData.maxDurability);
+                ToolInstance tool = (ToolInstance)item;
+                SetFrameFill(tool.currentDurability / toolData.maxDurability);
             }
         }
         else
         {
-            icon.gameObject.SetActive(false);
-            icon.texture = null;
-            stackText.text = "";
-            SetFrameFill(1);
+            Clear();
         }
     }
 
-    public void Clear()
+    private void Clear()
     {
         icon.gameObject.SetActive(false);
         icon.texture = null;
+        stackText.text = "";
+        SetFrameFill(1);
     }
 }

@@ -40,7 +40,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
     public DroppedItem DropPrefab => dropPrefab;
     public int MinDropAmount => minDropAmount;
     public int MaxDropAmount => maxDropAmount;
-
+    
     private Vector3 originalScale;
     
     private void Start()
@@ -55,7 +55,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && dropPrefab != null)
             DropLoot();
     }
 

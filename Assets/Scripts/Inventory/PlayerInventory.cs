@@ -110,7 +110,7 @@ public class PlayerInventory : MonoBehaviour
                 existingItem.stackAmount += toAdd;
                 newItem.stackAmount -= toAdd;
 
-                UpdateSlotUI(row, col);
+                UpdateHotbarUI(row, col);
 
                 if (newItem.stackAmount <= 0) return true;
             }
@@ -148,7 +148,7 @@ public class PlayerInventory : MonoBehaviour
     {
         grid[row, col] = item;
         HeldItemController.Instance.UpdateHeldItem(GetItem(HotbarRow, activeHotbarSlot));
-        UpdateSlotUI(row, col);
+        UpdateHotbarUI(row, col);
     }
 
     public void SwapSlots(InventorySlot from, InventorySlot to)
@@ -163,9 +163,17 @@ public class PlayerInventory : MonoBehaviour
 
         (grid[fromRow, fromCol], grid[toRow, toCol]) = (grid[toRow, toCol], grid[fromRow, fromCol]);
 
-        UpdateSlotUI(fromRow, fromCol);
-        UpdateSlotUI(toRow, toCol);
+        UpdateHotbarUI(fromRow, fromCol);
+        UpdateHotbarUI(toRow, toCol);
     }
+    
+    public void SwapWithCraft(CraftSlot craft, InventorySlot inv)
+    {
+        (inv.item, craft.item) = (craft.item, inv.item);
+        inv.SetItem(inv.item);
+        craft.SetItem(craft.item);
+    }
+
 
     public void RemoveItem(int row, int col)
     {
@@ -211,7 +219,7 @@ public class PlayerInventory : MonoBehaviour
 
     #endregion
 
-    private void UpdateSlotUI(int row, int col)
+    private void UpdateHotbarUI(int row, int col)
     {
         int index = row * columns + col;
         var item = grid[row, col];
