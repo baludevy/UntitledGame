@@ -2,6 +2,9 @@ using UnityEngine.EventSystems;
 
 public class CraftSlot : BaseSlot
 {
+    public int row;
+    public int col;
+    
     public override void OnEndDrag(PointerEventData eventData)
     {
         base.OnEndDrag(eventData);
@@ -13,8 +16,6 @@ public class CraftSlot : BaseSlot
                 PlayerInventory.Instance.DropItem(item);
                 Clear();
             }
-
-            return;
         }
     }
 }

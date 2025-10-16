@@ -10,7 +10,7 @@ public class InventorySlot : BaseSlot
     {
         base.OnEndDrag(eventData);
         var target = GetDragTarget(eventData);
-        
+
         if (target == null)
         {
             PlayerInventory.Instance.DropItem(dragData.item, !dragData.splitting);
@@ -20,15 +20,25 @@ public class InventorySlot : BaseSlot
         switch (target)
         {
             case InventorySlot inv when inv != this:
-                if (!dragData.splitting)
-                    PlayerInventory.Instance.SwapItems(dragData.item, this, inv);
+                var targetItem = PlayerInventory.Instance.GetItem(inv.row, inv.col);
+
+                if (dragData.splitting)
+                {
+                    if (targetItem == null)
+                    {
+                        PlayerInventory.Instance.SetItem(dragData.item, inv.row, inv.col);
+                    }
+                    else
+                    {
+                        PlayerInventory.Instance.AddItem(dragData.item);
+                        SetItem(item);
+                    }
+                }
                 else
                 {
-                    if (inv.item != null)
-                        PlayerInventory.Instance.DropItem(inv.item);
-                    PlayerInventory.Instance.SetItem(dragData.item, inv.row, inv.col);
+                    PlayerInventory.Instance.SwapItems(dragData.item, this, inv);
                 }
-                
+
                 break;
         }
     }

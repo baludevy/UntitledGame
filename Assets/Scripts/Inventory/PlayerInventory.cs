@@ -18,10 +18,8 @@ public class PlayerInventory : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
 
         grid = new ItemInstance[rows, columns];
     }
@@ -64,37 +62,39 @@ public class PlayerInventory : MonoBehaviour
 
     public void AddItem(ItemInstance item)
     {
+        if (item == null) return;
+
         if (!TryStackItem(item)) TryAddToEmptySlot(item);
     }
-    
+
     public (int, int) GetPositionOfItem(ItemInstance item)
     {
-        int row = 0;
-        int col = 0;
+        if (item == null) return (-1, -1);
 
         for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < columns; j++)
-            {
-                if (grid[i, j] != null)
-                    if (grid[i, j] == item)
-                    {
-                        row = i;
-                        col = j;
-                    }
-            }
-        }
+        for (int j = 0; j < columns; j++)
+            if (grid[i, j] == item)
+                return (i, j);
 
-        return (row, col);
+        return (-1, -1);
     }
 
-    public ItemInstance GetItem(int row, int col)
-    {
-        return grid[row, col];
-    }
+    public ItemInstance GetItem(int row, int col) =>
+        (row >= 0 && row < rows && col >= 0 && col < columns) ? grid[row, col] : null;
 
     private bool TryStackItem(ItemInstance newItem)
     {
+        if (newItem == null) return false;
+
+        while (newItem.stackAmount > newItem.data.MaxStack && newItem.data.Stackable)
+        {
+            int leftover = newItem.stackAmount - newItem.data.MaxStack;
+
+            newItem.stackAmount = newItem.data.MaxStack;
+
+            AddItem(new ItemInstance(newItem.data, leftover));
+        }
+
         for (int row = HotbarRow; row >= 0; row--)
         for (int col = 0; col < columns; col++)
         {
@@ -104,10 +104,12 @@ public class PlayerInventory : MonoBehaviour
                 continue;
 
             int toAdd = Mathf.Min(newItem.stackAmount, existingItem.data.MaxStack - existingItem.stackAmount);
-            AddAmountToItem(existingItem, toAdd);
-            SubtractAmountFromItem(newItem, toAdd);
-            UpdateSlotUI(row, col);
-            if (newItem.stackAmount <= 0) return true;
+            if (toAdd > 0)
+            {
+                AddAmountToItem(existingItem, toAdd);
+                SubtractAmountFromItem(newItem, toAdd);
+                if (newItem.stackAmount <= 0) return true;
+            }
         }
 
         return false;
@@ -115,36 +117,64 @@ public class PlayerInventory : MonoBehaviour
 
     private void TryAddToEmptySlot(ItemInstance item)
     {
+        if (item == null) return;
+
         for (int row = HotbarRow; row >= 0; row--)
         for (int col = 0; col < columns; col++)
             if (grid[row, col] == null)
             {
-                SetItem(item, row, col);
+                SetItemStrict(item, row, col);
                 return;
             }
     }
 
-    public void SetItem(ItemInstance item, int row, int col)
+    public void SetItemStrict(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
         HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
         UpdateSlotUI(row, col);
     }
 
-    public void SwapItems(ItemInstance newItem, InventorySlot fromSlot, InventorySlot toSlot)
+    public void SetItem(ItemInstance item, int row, int col)
     {
-        if (toSlot.item != null && toSlot.item.data == newItem.data)
+        var target = grid[row, col];
+
+        if (target == null)
         {
-            fromSlot.Clear();
-            grid[fromSlot.row, fromSlot.col] = null;
-            AddAmountToItem(toSlot.item, newItem.stackAmount);
+            grid[row, col] = item;
+        }
+        else if (item != null && target.data == item.data && item.data.Stackable)
+        {
+            AddAmountToItem(target, item.stackAmount);
         }
         else
         {
-            grid[fromSlot.row, fromSlot.col] = grid[toSlot.row, toSlot.col];
+            return;
+        }
+
+        HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
+        UpdateSlotUI(row, col);
+    }
+
+
+    public void SwapItems(ItemInstance newItem, InventorySlot fromSlot, InventorySlot toSlot)
+    {
+        if (fromSlot == null || toSlot == null) return;
+
+        var targetItem = grid[toSlot.row, toSlot.col];
+
+        if (CanMergeItem(newItem, toSlot.item))
+        {
+            AddAmountToItem(targetItem, newItem.stackAmount);
+            grid[fromSlot.row, fromSlot.col] = null;
+            fromSlot.Clear();
+        }
+        else
+        {
+            grid[fromSlot.row, fromSlot.col] = targetItem;
             grid[toSlot.row, toSlot.col] = newItem;
 
-            fromSlot.SetItem(toSlot.item);
+            fromSlot.SetItem(targetItem);
             toSlot.SetItem(newItem);
         }
 
@@ -154,12 +184,30 @@ public class PlayerInventory : MonoBehaviour
 
     public void RemoveItem(int row, int col)
     {
-        SetItem(null, row, col);
+        if (row < 0 || row >= rows || col < 0 || col >= columns) return;
 
-        if (row != HotbarRow) return;
-        GetHotbarSlot(col).Clear();
-        if (activeHotbarSlot == col)
-            HeldItemController.Instance.UpdateHeldItem(null);
+        SetItemStrict(null, row, col);
+
+        if (row == HotbarRow)
+        {
+            GetHotbarSlot(col)?.Clear();
+            if (activeHotbarSlot == col)
+                HeldItemController.Instance.UpdateHeldItem(null);
+        }
+    }
+
+    public void DropItem(ItemInstance item, bool removeFromInventory = true)
+    {
+        if (item == null) return;
+
+        var cam = PlayerCamera.Instance.transform;
+
+        var drop = Instantiate(item.data.floorPrefab, cam.position + cam.forward * 1.5f,
+            Quaternion.LookRotation(-cam.forward) * Quaternion.Euler(0, 90, 0)).GetComponent<DroppedItem>();
+        drop.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
+        drop.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
+
+        if (removeFromInventory) RemoveItemByID(item.id);
     }
 
     public void RemoveItemByID(Guid id)
@@ -175,23 +223,10 @@ public class PlayerInventory : MonoBehaviour
 
     private void DropActiveItem() => DropItem(ActiveItem);
 
-    public void DropItem(ItemInstance item, bool removeFromInventory = true)
-    {
-        if (item == null) return;
-
-        var cam = PlayerCamera.Instance.transform;
-
-        var drop = Instantiate(item.data.floorPrefab, cam.position + cam.forward * 1.5f,
-            Quaternion.LookRotation(-cam.forward) * Quaternion.Euler(0, 90, 0)).GetComponent<DroppedItem>();
-        drop.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
-        drop.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
-
-        if (removeFromInventory)
-            RemoveItemByID(item.id);
-    }
-
     public void UpdateSlotUI(int row, int col)
     {
+        if (row < 0 || row >= rows || col < 0 || col >= columns) return;
+
         int index = row * columns + col;
 
         if (index < UIManager.inventorySlots.Count)
@@ -203,22 +238,40 @@ public class PlayerInventory : MonoBehaviour
 
     public void AddAmountToItem(ItemInstance item, int amount)
     {
-        int maxAddable = item.data.MaxStack - item.stackAmount;
-        int amountToAdd = Mathf.Clamp(amount, 0, maxAddable);
-        item.stackAmount += amountToAdd;
-        
-        (int, int) posOfItem = GetPositionOfItem(item);
-        
-        UpdateSlotUI(posOfItem.Item1, posOfItem.Item2);
+        if (item == null || item.stackAmount >= item.data.MaxStack) return;
+
+        int toAdd = Mathf.Clamp(amount, 0, item.data.MaxStack - item.stackAmount);
+        if (toAdd <= 0) return;
+
+        item.stackAmount += toAdd;
+
+        var (row, col) = GetPositionOfItem(item);
+        UpdateSlotUI(row, col);
     }
-    
+
     public void SubtractAmountFromItem(ItemInstance item, int amount)
     {
-        int amountToSubtract = Mathf.Clamp(amount, 0, item.stackAmount);
-        item.stackAmount -= amountToSubtract;
+        if (item == null || item.stackAmount <= 0) return;
+
+        int toSubtract = Mathf.Clamp(amount, 0, item.stackAmount);
+        item.stackAmount -= toSubtract;
+
+        var (row, col) = GetPositionOfItem(item);
+        UpdateSlotUI(row, col);
+    }
+
+    public bool CanMergeItem(ItemInstance item1, ItemInstance item2)
+    {
+        if(item1 == null || item2 == null) return false;
         
-        (int, int) posOfItem = GetPositionOfItem(item);
-        
-        UpdateSlotUI(posOfItem.Item1, posOfItem.Item2);
+        if (item1.data == item2.data)
+        {
+            if (item1.data.Stackable && item2.data.Stackable)
+            {
+                if (item1.stackAmount + item2.stackAmount <= item2.data.MaxStack) return true;
+            }
+        }
+
+        return false;
     }
 }
