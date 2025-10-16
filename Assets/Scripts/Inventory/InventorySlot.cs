@@ -19,12 +19,15 @@ public class InventorySlot : BaseSlot
         switch (target)
         {
             case InventorySlot inv when inv != this:
-                PlayerInventory.Instance.SwapSlots(this, inv);
-                break;
-            case CraftSlot craft when item?.data is ResourceItem:
-                CraftingManager.Instance.PlaceItem(craft, item);
-                PlayerInventory.Instance.RemoveItem(row, col);
-                Clear();
+                if (!dragData.splitting)
+                    PlayerInventory.Instance.SwapItems(dragData.item, this, inv);
+                else
+                {
+                    if (inv.item != null)
+                        PlayerInventory.Instance.DropItem(inv.item);
+                    PlayerInventory.Instance.SetItem(dragData.item, inv.row, inv.col);
+                }
+                
                 break;
         }
     }

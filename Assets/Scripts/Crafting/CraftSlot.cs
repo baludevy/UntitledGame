@@ -16,17 +16,5 @@ public class CraftSlot : BaseSlot
 
             return;
         }
-
-        switch (target)
-        {
-            case InventorySlot inv:
-                PlayerInventory.Instance.SwapWithCraft(this, inv);
-                break;
-            case CraftSlot craft when craft != this && item?.data is ResourceItem:
-                (item, craft.item) = (craft.item, item);
-                SetItem(item);
-                craft.SetItem(craft.item);
-                break;
-        }
     }
 }

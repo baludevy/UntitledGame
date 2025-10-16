@@ -13,7 +13,7 @@ public class ItemInstance
         stackAmount = count;
         id = Guid.NewGuid();
     }
-
+    
     public void OnUse()
     {
         data.OnUse();

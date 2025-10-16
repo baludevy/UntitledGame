@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public RawImage icon;
     public TMP_Text stackText;
     public bool isActive;
-    private GameObject dragIcon;
+    public DragData dragData;
     private Canvas canvas;
     private CanvasGroup canvasGroup;
 
@@ -43,32 +44,57 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         if (item == null) return;
-        dragIcon = new GameObject("drag");
-        dragIcon.transform.SetParent(canvas.transform, false);
+
+        ItemInstance draggingItem;
+
+        dragData = new GameObject("drag").AddComponent<DragData>();
         
-        RawImage img = dragIcon.AddComponent<RawImage>();
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if(item.stackAmount < 2 || !item.data.Stackable) return;
+            
+            int half = Mathf.FloorToInt(item.stackAmount / 2);
+            draggingItem = new ItemInstance(item.data, half);
+            item.stackAmount -= half;
+            stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
+            dragData.splitting = true;
+            if (item.stackAmount <= 0) item = null;
+        }
+        else
+        {
+            dragData.splitting = false;
+            draggingItem = item;
+            item = null;
+        }
+        
+        dragData.transform.SetParent(canvas.transform);
+        
+        dragData.item = draggingItem;
+
+        RawImage img = dragData.AddComponent<RawImage>();
         img.raycastTarget = false;
-        img.texture = item.data.Icon != null ? item.data.Icon.texture : null;
-        
-        RectTransform rt = dragIcon.GetComponent<RectTransform>();
+        img.texture = draggingItem.data.Icon != null ? draggingItem.data.Icon.texture : null;
+
+        RectTransform rt = dragData.GetComponent<RectTransform>();
         rt.sizeDelta = ((RectTransform)icon.transform).sizeDelta;
-        
-        CanvasGroup cg = dragIcon.AddComponent<CanvasGroup>();
+
+        CanvasGroup cg = dragData.AddComponent<CanvasGroup>();
         cg.blocksRaycasts = false;
         canvasGroup.blocksRaycasts = false;
-        
+
         UpdateDragPosition(eventData);
     }
 
     public virtual void OnDrag(PointerEventData eventData)
     {
-        if (dragIcon == null) return;
+        if (dragData == null) return;
         UpdateDragPosition(eventData);
     }
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        if (dragIcon != null) Destroy(dragIcon);
+        if (dragData != null) 
+            Destroy(dragData.gameObject);
         canvasGroup.blocksRaycasts = true;
     }
 
@@ -76,7 +102,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position,
             canvas.worldCamera, out var pos);
-        dragIcon.GetComponent<RectTransform>().anchoredPosition = pos;
+        dragData.GetComponent<RectTransform>().anchoredPosition = pos;
     }
 
     protected BaseSlot GetDragTarget(PointerEventData eventData)

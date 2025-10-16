@@ -98,43 +98,38 @@ public class PlayerInventory : MonoBehaviour
             }
     }
 
-    private void SetItem(ItemInstance item, int row, int col)
+    public void SetItem(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
         HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
         UpdateHotbarUI(row, col);
     }
 
-    public void SwapSlots(InventorySlot from, InventorySlot to)
+    public void SwapItems(ItemInstance newItem, InventorySlot fromSlot, InventorySlot toSlot)
     {
-        int fromIndex = UIManager.inventorySlots.IndexOf(from);
-        int toIndex = UIManager.inventorySlots.IndexOf(to);
-
-        int fromRow = fromIndex / columns;
-        int fromCol = fromIndex % columns;
-        int toRow = toIndex / columns;
-        int toCol = toIndex % columns;
-
-        (grid[fromRow, fromCol], grid[toRow, toCol]) = (grid[toRow, toCol], grid[fromRow, fromCol]);
-        UpdateHotbarUI(fromRow, fromCol);
-        UpdateHotbarUI(toRow, toCol);
-    }
-
-    public void SwapWithCraft(CraftSlot craft, InventorySlot invSlot)
-    {
-        if (invSlot.item is { data: not ResourceItem }) return;
-
-        (invSlot.item, craft.item) = (craft.item, invSlot.item);
-        invSlot.SetItem(invSlot.item);
-        craft.SetItem(craft.item);
-
-        SetItem(invSlot.item, invSlot.row, invSlot.col);
-
-        if (invSlot.row == HotbarRow)
+        if (toSlot.item != null && toSlot.item.data == newItem.data)
         {
-            UpdateHotbarUI(invSlot.row, invSlot.col);
-            if (activeHotbarSlot == invSlot.col)
-                HeldItemController.Instance.UpdateHeldItem(invSlot.item);
+            fromSlot.Clear();
+            grid[fromSlot.row, fromSlot.col] = null;
+            toSlot.item.stackAmount += newItem.stackAmount;
+        }
+        else
+        {
+            grid[fromSlot.row, fromSlot.col] = grid[toSlot.row, toSlot.col];
+            grid[toSlot.row, toSlot.col] = newItem;
+
+            fromSlot.SetItem(toSlot.item);
+            toSlot.SetItem(newItem);
+        }
+
+        if (fromSlot.row == HotbarRow)
+        {
+            UpdateHotbarUI(fromSlot.row, fromSlot.col);
+        }
+
+        if (toSlot.row == HotbarRow)
+        {
+            UpdateHotbarUI(toSlot.row, toSlot.col);
         }
     }
 
@@ -178,8 +173,10 @@ public class PlayerInventory : MonoBehaviour
     private void UpdateHotbarUI(int row, int col)
     {
         int index = row * columns + col;
+        
         if (index < UIManager.inventorySlots.Count)
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
+        
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
             UIManager.hotbarSlots[col].SetItem(grid[row, col]);
     }

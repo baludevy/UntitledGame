@@ -1479,8 +1479,8 @@
     "m_ObjectId": "3e1ac251b21e44f296d990278ea9918d",
     "m_Title": "Grass Painted Color",
     "m_Position": {
-        "x": 725.0001220703125,
-        "y": 146.00003051757813
+        "x": 725.0,
+        "y": 146.0
     }
 }
 
@@ -2027,7 +2027,7 @@
     "m_Title": "Blend Switch",
     "m_Position": {
         "x": 1379.0001220703125,
-        "y": 136.00003051757813
+        "y": 135.9999542236328
     }
 }
 
@@ -3308,8 +3308,8 @@
     "m_ObjectId": "e11a09d5c60541f89ece3e930dc4c9d3",
     "m_Title": "GetGrassData",
     "m_Position": {
-        "x": 704.0001220703125,
-        "y": -291.0000305175781
+        "x": 704.0,
+        "y": -291.0
     }
 }
 
@@ -3686,8 +3686,8 @@
     "m_ObjectId": "f7330befd4a1454598de51903e691fbc",
     "m_Title": "Blending Texture",
     "m_Position": {
-        "x": -111.99998474121094,
-        "y": -88.0
+        "x": -112.0,
+        "y": -88.00003051757813
     }
 }
 
@@ -3697,7 +3697,7 @@
     "m_ObjectId": "f8cbdbe051ca4a71ab01d9dcc968e79e",
     "m_Title": "Top and Bottom Blend",
     "m_Position": {
-        "x": 202.00003051757813,
+        "x": 201.99989318847657,
         "y": 532.0
     }
 }
