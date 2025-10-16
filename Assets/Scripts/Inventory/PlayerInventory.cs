@@ -66,6 +66,32 @@ public class PlayerInventory : MonoBehaviour
     {
         if (!TryStackItem(item)) TryAddToEmptySlot(item);
     }
+    
+    public (int, int) GetPositionOfItem(ItemInstance item)
+    {
+        int row = 0;
+        int col = 0;
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                if (grid[i, j] != null)
+                    if (grid[i, j] == item)
+                    {
+                        row = i;
+                        col = j;
+                    }
+            }
+        }
+
+        return (row, col);
+    }
+
+    public ItemInstance GetItem(int row, int col)
+    {
+        return grid[row, col];
+    }
 
     private bool TryStackItem(ItemInstance newItem)
     {
@@ -78,8 +104,8 @@ public class PlayerInventory : MonoBehaviour
                 continue;
 
             int toAdd = Mathf.Min(newItem.stackAmount, existingItem.data.MaxStack - existingItem.stackAmount);
-            existingItem.stackAmount += toAdd;
-            newItem.stackAmount -= toAdd;
+            AddAmountToItem(existingItem, toAdd);
+            SubtractAmountFromItem(newItem, toAdd);
             UpdateSlotUI(row, col);
             if (newItem.stackAmount <= 0) return true;
         }
@@ -111,7 +137,7 @@ public class PlayerInventory : MonoBehaviour
         {
             fromSlot.Clear();
             grid[fromSlot.row, fromSlot.col] = null;
-            grid[toSlot.row, toSlot.col].stackAmount += newItem.stackAmount;
+            AddAmountToItem(toSlot.item, newItem.stackAmount);
         }
         else
         {
@@ -124,32 +150,6 @@ public class PlayerInventory : MonoBehaviour
 
         UpdateSlotUI(fromSlot.row, fromSlot.col);
         UpdateSlotUI(toSlot.row, toSlot.col);
-    }
-
-    public (int, int) GetPositionOfItem(ItemInstance item)
-    {
-        int row = 0;
-        int col = 0;
-        
-        for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < columns; j++)
-            {
-                if(grid[i, j] != null)
-                    if (grid[i, j] == item)
-                    {
-                        row = i;
-                        col = j;
-                    }
-            }
-        }
-
-        return (row, col);
-    }
-
-    public ItemInstance GetItem(int row, int col)
-    {
-        return grid[row, col];
     }
 
     public void RemoveItem(int row, int col)
@@ -175,7 +175,7 @@ public class PlayerInventory : MonoBehaviour
 
     private void DropActiveItem() => DropItem(ActiveItem);
 
-    public void DropItem(ItemInstance item)
+    public void DropItem(ItemInstance item, bool removeFromInventory = true)
     {
         if (item == null) return;
 
@@ -186,7 +186,8 @@ public class PlayerInventory : MonoBehaviour
         drop.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
         drop.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
 
-        RemoveItemByID(item.id);
+        if (removeFromInventory)
+            RemoveItemByID(item.id);
     }
 
     public void UpdateSlotUI(int row, int col)
@@ -198,5 +199,26 @@ public class PlayerInventory : MonoBehaviour
 
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
             UIManager.hotbarSlots[col].SetItem(grid[row, col]);
+    }
+
+    public void AddAmountToItem(ItemInstance item, int amount)
+    {
+        int maxAddable = item.data.MaxStack - item.stackAmount;
+        int amountToAdd = Mathf.Clamp(amount, 0, maxAddable);
+        item.stackAmount += amountToAdd;
+        
+        (int, int) posOfItem = GetPositionOfItem(item);
+        
+        UpdateSlotUI(posOfItem.Item1, posOfItem.Item2);
+    }
+    
+    public void SubtractAmountFromItem(ItemInstance item, int amount)
+    {
+        int amountToSubtract = Mathf.Clamp(amount, 0, item.stackAmount);
+        item.stackAmount -= amountToSubtract;
+        
+        (int, int) posOfItem = GetPositionOfItem(item);
+        
+        UpdateSlotUI(posOfItem.Item1, posOfItem.Item2);
     }
 }

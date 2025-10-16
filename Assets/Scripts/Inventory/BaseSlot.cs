@@ -55,11 +55,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
             draggingItem = new ItemInstance(item.data, half);
 
-            var itemPosInInv = PlayerInventory.Instance.GetPositionOfItem(item);
-            ItemInstance itemInInv = PlayerInventory.Instance.GetItem(itemPosInInv.Item1, (int)itemPosInInv.Item2);
-
-            itemInInv.stackAmount -= half;
-            PlayerInventory.Instance.UpdateSlotUI(itemPosInInv.Item1, itemPosInInv.Item2);
+            PlayerInventory.Instance.SubtractAmountFromItem(item, half);
 
             stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
 

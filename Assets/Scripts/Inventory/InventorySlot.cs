@@ -10,9 +10,10 @@ public class InventorySlot : BaseSlot
     {
         base.OnEndDrag(eventData);
         var target = GetDragTarget(eventData);
+        
         if (target == null)
         {
-            PlayerInventory.Instance.DropItem(item);
+            PlayerInventory.Instance.DropItem(dragData.item, !dragData.splitting);
             return;
         }
 
