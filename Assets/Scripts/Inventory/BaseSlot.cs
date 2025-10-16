@@ -22,7 +22,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Clear();
     }
 
-    public virtual void SetItem(ItemInstance newItem)
+    public void SetItem(ItemInstance newItem)
     {
         item = newItem;
         bool hasItem = item != null && item.data.Icon != null;
@@ -48,16 +48,23 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         ItemInstance draggingItem;
 
         dragData = new GameObject("drag").AddComponent<DragData>();
-        
-        if (eventData.button == PointerEventData.InputButton.Right)
+
+        if (eventData.button == PointerEventData.InputButton.Right && item.stackAmount > 1 && item.data.Stackable)
         {
-            if(item.stackAmount < 2 || !item.data.Stackable) return;
-            
             int half = Mathf.FloorToInt(item.stackAmount / 2);
+
             draggingItem = new ItemInstance(item.data, half);
-            item.stackAmount -= half;
+
+            var itemPosInInv = PlayerInventory.Instance.GetPositionOfItem(item);
+            ItemInstance itemInInv = PlayerInventory.Instance.GetItem(itemPosInInv.Item1, (int)itemPosInInv.Item2);
+
+            itemInInv.stackAmount -= half;
+            PlayerInventory.Instance.UpdateSlotUI(itemPosInInv.Item1, itemPosInInv.Item2);
+
             stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
+
             dragData.splitting = true;
+
             if (item.stackAmount <= 0) item = null;
         }
         else
@@ -66,9 +73,9 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             draggingItem = item;
             item = null;
         }
-        
+
         dragData.transform.SetParent(canvas.transform);
-        
+
         dragData.item = draggingItem;
 
         RawImage img = dragData.AddComponent<RawImage>();
@@ -93,7 +100,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        if (dragData != null) 
+        if (dragData != null)
             Destroy(dragData.gameObject);
         canvasGroup.blocksRaycasts = true;
     }

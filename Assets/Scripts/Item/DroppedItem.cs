@@ -16,8 +16,6 @@ public class DroppedItem : MonoBehaviour
             itemInstance = new ToolInstance(item);
         else 
             itemInstance = new ItemInstance(itemData);
-        
-        Debug.Log(itemInstance.data.Name);
     }
     
     public void Initialize(ItemInstance instance, Collider dropperCollider = null)

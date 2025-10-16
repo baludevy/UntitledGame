@@ -80,7 +80,7 @@ public class PlayerInventory : MonoBehaviour
             int toAdd = Mathf.Min(newItem.stackAmount, existingItem.data.MaxStack - existingItem.stackAmount);
             existingItem.stackAmount += toAdd;
             newItem.stackAmount -= toAdd;
-            UpdateHotbarUI(row, col);
+            UpdateSlotUI(row, col);
             if (newItem.stackAmount <= 0) return true;
         }
 
@@ -102,7 +102,7 @@ public class PlayerInventory : MonoBehaviour
     {
         grid[row, col] = item;
         HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
-        UpdateHotbarUI(row, col);
+        UpdateSlotUI(row, col);
     }
 
     public void SwapItems(ItemInstance newItem, InventorySlot fromSlot, InventorySlot toSlot)
@@ -111,7 +111,7 @@ public class PlayerInventory : MonoBehaviour
         {
             fromSlot.Clear();
             grid[fromSlot.row, fromSlot.col] = null;
-            toSlot.item.stackAmount += newItem.stackAmount;
+            grid[toSlot.row, toSlot.col].stackAmount += newItem.stackAmount;
         }
         else
         {
@@ -122,15 +122,34 @@ public class PlayerInventory : MonoBehaviour
             toSlot.SetItem(newItem);
         }
 
-        if (fromSlot.row == HotbarRow)
+        UpdateSlotUI(fromSlot.row, fromSlot.col);
+        UpdateSlotUI(toSlot.row, toSlot.col);
+    }
+
+    public (int, int) GetPositionOfItem(ItemInstance item)
+    {
+        int row = 0;
+        int col = 0;
+        
+        for (int i = 0; i < rows; i++)
         {
-            UpdateHotbarUI(fromSlot.row, fromSlot.col);
+            for (int j = 0; j < columns; j++)
+            {
+                if(grid[i, j] != null)
+                    if (grid[i, j] == item)
+                    {
+                        row = i;
+                        col = j;
+                    }
+            }
         }
 
-        if (toSlot.row == HotbarRow)
-        {
-            UpdateHotbarUI(toSlot.row, toSlot.col);
-        }
+        return (row, col);
+    }
+
+    public ItemInstance GetItem(int row, int col)
+    {
+        return grid[row, col];
     }
 
     public void RemoveItem(int row, int col)
@@ -170,13 +189,13 @@ public class PlayerInventory : MonoBehaviour
         RemoveItemByID(item.id);
     }
 
-    private void UpdateHotbarUI(int row, int col)
+    public void UpdateSlotUI(int row, int col)
     {
         int index = row * columns + col;
-        
+
         if (index < UIManager.inventorySlots.Count)
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
-        
+
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
             UIManager.hotbarSlots[col].SetItem(grid[row, col]);
     }
