@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class UIBob : MonoBehaviour
@@ -6,21 +5,18 @@ public class UIBob : MonoBehaviour
     public RectTransform uiElement;
     public float multiplier = 0.3f;
 
-    private Vector3 uiBobOffset;
+    Vector2 defaultPos;
 
-    private Vector3 defaultPos;
-
-    private void Awake()
+    void Awake()
     {
-        defaultPos = uiElement.localPosition;
+        defaultPos = uiElement.anchoredPosition;
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
-        if (PlayerCamera.Instance != null)
-        {
-            uiBobOffset = -PlayerCamera.Instance.bobOffset * multiplier;
-            uiElement.localPosition = defaultPos + uiBobOffset;
-        }
+        if (PlayerCamera.Instance == null) return;
+
+        Vector3 offset = -PlayerCamera.Instance.bobOffset * multiplier;
+        uiElement.anchoredPosition = defaultPos + new Vector2(offset.x, offset.y);
     }
 }

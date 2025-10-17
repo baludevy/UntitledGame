@@ -171,6 +171,13 @@ public class PlayerMovement : MonoBehaviour
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
+
+        if (PlayerUIManager.Instance.containerOpen)
+        {
+            x = 0;
+            y = 0;
+        }
+        
         jumping = Input.GetButton("Jump");
         sprinting = Input.GetButton("Sprint");
     }

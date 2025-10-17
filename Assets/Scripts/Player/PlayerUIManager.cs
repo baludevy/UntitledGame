@@ -7,30 +7,36 @@ using UnityEngine.UI;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    [Header("Player UI Elements")]
-    public GameObject inventory;
+    [Header("Player UI Elements")] public GameObject inventory;
     public GameObject crosshair;
     public GameObject hud;
-    
-    [Header("HUD")]
-    
-    [Header("Stats")]
-    [SerializeField] private Image staminaBar;
+
+    [Header("HUD")] [Header("Stats")] [SerializeField]
+    private Image staminaBar;
+
     // [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
-    
-    [Header("Looking at type shit Info")]
-    public ObjectInfo objectInfo;
+
+    [Header("Looking at type shit Info")] public ObjectInfo objectInfo;
     public ItemInfo itemInfo;
-    
-    [Header("Hotbar")]
-    public List<HotbarSlot> hotbarSlots;
+
+    [Header("Hotbar")] public List<HotbarSlot> hotbarSlots;
     [SerializeField] private Transform hotbarSlotsParent;
-    
-    [Header("Inventory")]
-    [SerializeField] private Transform inventoryHolder;
+
+    [Header("Inventory")] [SerializeField] public Transform inventoryHolder;
+    public Transform inventorySlotsHolder;
     public List<InventorySlot> inventorySlots;
-    
+
+    [Header("Container Inventory")] [SerializeField]
+    private Transform containerInventoryHolder;
+
+    [SerializeField] private Transform containerSlotsHolder;
+    public List<ContainerSlot> containerSlots;
+    public bool containerOpen;
+    public Chest openedChest;
+
+    [Header("Misc")] public GameObject keyTip;
+
     public static PlayerUIManager Instance;
 
     private void Awake()
@@ -39,26 +45,40 @@ public class PlayerUIManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        
+
         hotbarSlots = new List<HotbarSlot>();
         inventorySlots = new List<InventorySlot>();
-        
+
         for (int i = 0; i < hotbarSlotsParent.childCount; i++)
         {
             hotbarSlots.Add(hotbarSlotsParent.GetChild(i).GetComponent<HotbarSlot>());
         }
-        
-        for (int i = 0; i < inventoryHolder.childCount; i++)
+
+        for (int i = 0; i < inventorySlotsHolder.childCount; i++)
         {
-            Transform row = inventoryHolder.GetChild(i);
+            Transform row = inventorySlotsHolder.GetChild(i);
             for (int j = 0; j < row.childCount; j++)
             {
                 InventorySlot slot = row.GetChild(j).GetComponent<InventorySlot>();
 
                 slot.row = i;
                 slot.col = j;
-                
+
                 inventorySlots.Add(slot);
+            }
+        }
+
+        for (int i = 0; i < containerSlotsHolder.childCount; i++)
+        {
+            Transform row = containerSlotsHolder.GetChild(i);
+            for (int j = 0; j < row.childCount; j++)
+            {
+                ContainerSlot slot = row.GetChild(j).GetComponent<ContainerSlot>();
+
+                slot.row = i;
+                slot.col = j;
+
+                containerSlots.Add(slot);
             }
         }
     }
@@ -68,12 +88,15 @@ public class PlayerUIManager : MonoBehaviour
         UpdateStaminaBar();
         UpdateHealth();
         UpdateHudInfo();
+
+        if (Input.GetKeyDown(KeyCode.Escape) && containerOpen)
+            CloseContainerInventory();
     }
-    
+
     private void UpdateHudInfo()
     {
         LayerMask mask = LayerMask.GetMask("DroppedItem", "Mineable");
-        
+
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f, mask))
         {
             if (hit.collider.CompareTag("Mineable"))
@@ -112,5 +135,61 @@ public class PlayerUIManager : MonoBehaviour
     {
         // healthText.text = PlayerStatistics.Instance.health.ToString();
         healthBar.fillAmount = PlayerStatistics.Instance.health / 100f;
+    }
+
+    public void OpenContainerInventory(ItemInstance[,] items, Chest chest)
+    {
+        openedChest = chest;
+        containerOpen = true;
+        containerInventoryHolder.gameObject.SetActive(true);
+        inventoryHolder.gameObject.SetActive(true);
+        inventoryHolder.localPosition = new Vector3(0f, -185f, 0f);
+        
+        CursorManager.SetCursorLock(false);
+        PlayerMovement.Instance.canLook = false;
+
+
+        for (int i = 0; i < containerSlots.Count; i++)
+            containerSlots[i].Clear();
+
+        int rows = items.GetLength(0);
+        int cols = items.GetLength(1);
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                ItemInstance item = items[row, col];
+                if (item != null)
+                {
+                    int index = row * cols + col;
+                    if (index < containerSlots.Count)
+                        containerSlots[index].SetItem(item);
+                }
+            }
+        }
+    }
+
+    public void CloseContainerInventory()
+    {
+        openedChest = null;
+        containerOpen = false;
+        containerInventoryHolder.gameObject.SetActive(false);
+        inventoryHolder.gameObject.SetActive(false);
+        inventoryHolder.localPosition = Vector3.zero;
+        
+        CursorManager.SetCursorLock(true);
+        PlayerMovement.Instance.canLook = true;
+
+        for (int i = 0; i < containerSlots.Count; i++)
+            containerSlots[i].Clear();
+    }
+
+    public void UpdateContainerSlotUI(int row, int col)
+    {
+        if (openedChest == null) return;
+        int index = row * openedChest.columns + col;
+        if (index < containerSlots.Count)
+            containerSlots[index].SetItem(openedChest.GetItem(row, col));
     }
 }

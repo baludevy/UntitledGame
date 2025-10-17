@@ -41,21 +41,25 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         SetItem(null);
     }
 
+    protected virtual void SubtractAmount(int amount)
+    {
+        PlayerInventory.Instance.SubtractAmountFromItem(item, amount);
+    }
+
     public virtual void OnBeginDrag(PointerEventData e)
     {
         if (item == null) return;
+        
+        GameObject drag = new GameObject("drag", typeof(RectTransform));
+        dragData = drag.AddComponent<DragData>();
+        drag.transform.SetParent(canvas.transform, false);
 
-        dragData = new GameObject("drag").AddComponent<DragData>();
-        dragData.transform.SetParent(canvas.transform);
-
-        bool split = e.button == PointerEventData.InputButton.Right && item.data.Stackable &&
-                              item.stackAmount > 1;
-
+        bool split = e.button == PointerEventData.InputButton.Right && item.data.Stackable && item.stackAmount > 1;
         if (split)
         {
             int half = item.stackAmount / 2;
             dragData.item = new ItemInstance(item.data, half);
-            PlayerInventory.Instance.SubtractAmountFromItem(item, half);
+            SubtractAmount(half);
             stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
             dragData.splitting = true;
         }
@@ -66,19 +70,18 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             dragData.splitting = false;
         }
 
-        var img = dragData.gameObject.AddComponent<RawImage>();
+        var img = drag.AddComponent<RawImage>();
         img.raycastTarget = false;
         img.texture = dragData.item.data.Icon ? dragData.item.data.Icon.texture : null;
 
-        var rt = dragData.GetComponent<RectTransform>();
+        var rt = drag.GetComponent<RectTransform>();
         rt.sizeDelta = ((RectTransform)icon.transform).sizeDelta;
 
-        dragData.gameObject.AddComponent<CanvasGroup>().blocksRaycasts = false;
+        drag.AddComponent<CanvasGroup>().blocksRaycasts = false;
         canvasGroup.blocksRaycasts = false;
 
         UpdateDragPosition(e);
     }
-
 
     public virtual void OnDrag(PointerEventData eventData)
     {
@@ -98,9 +101,12 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     private void UpdateDragPosition(PointerEventData eventData)
     {
+        if (dragData == null) return;
+        var rt = dragData.GetComponent<RectTransform>();
+        if (rt == null) return;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position,
             canvas.worldCamera, out var pos);
-        dragData.GetComponent<RectTransform>().anchoredPosition = pos;
+        rt.anchoredPosition = pos;
     }
 
     protected BaseSlot GetDragTarget(PointerEventData eventData)

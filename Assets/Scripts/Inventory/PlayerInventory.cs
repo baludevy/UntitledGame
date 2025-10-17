@@ -34,7 +34,7 @@ public class PlayerInventory : MonoBehaviour
     {
         HeldItemController.Instance.UpdateHeldItem(ActiveItem);
 
-        if (Input.GetButtonDown("Inventory")) ToggleInventory();
+        if (Input.GetButtonDown("Inventory") && !PlayerUIManager.Instance.containerOpen) ToggleInventory();
         if (Input.GetKeyDown(KeyCode.Q)) DropActiveItem();
 
         for (int i = 0; i < columns; i++)
@@ -45,7 +45,7 @@ public class PlayerInventory : MonoBehaviour
     private void ToggleInventory()
     {
         inventoryOpen = !inventoryOpen;
-        UIManager.inventory.GetComponent<Canvas>().enabled = inventoryOpen;
+        UIManager.inventoryHolder.gameObject.SetActive(inventoryOpen);
         CursorManager.SetCursorLock(!inventoryOpen);
         PlayerMovement.Instance.canLook = !inventoryOpen;
     }
@@ -108,7 +108,7 @@ public class PlayerInventory : MonoBehaviour
             if (toAdd > 0)
             {
                 AddAmountToItem(existingItem, toAdd);
-                SubtractAmountFromItem(newItem, toAdd);
+                newItem.stackAmount -= toAdd;
                 if (newItem.stackAmount <= 0) return true;
             }
         }
@@ -178,12 +178,6 @@ public class PlayerInventory : MonoBehaviour
             grid[toSlot.row, toSlot.col] = newItem;
         }
 
-        string fromName = fromSlot.item != null ? fromSlot.item.data.name : "empty";
-        string toName = toSlot.item != null ? toSlot.item.data.name : "empty";
-
-        Debug.Log(
-            $"swapping 2 items, the slot that had the item now has {fromName}\nthe slot that the item was dragged to now has {toName}");
-
         UpdateSlotUI(fromSlot.row, fromSlot.col);
         UpdateSlotUI(toSlot.row, toSlot.col);
     }
@@ -228,8 +222,6 @@ public class PlayerInventory : MonoBehaviour
 
     public void UpdateSlotUI(int row, int col)
     {
-        if (row < 0 || row >= rows || col < 0 || col >= columns) return;
-
         int index = row * columns + col;
 
         if (index < UIManager.inventorySlots.Count)
@@ -261,6 +253,9 @@ public class PlayerInventory : MonoBehaviour
 
         int toSubtract = Mathf.Clamp(amount, 0, item.stackAmount);
         item.stackAmount -= toSubtract;
+        
+        if(item.stackAmount <= 0)
+            RemoveItemByID(item.id);
 
         var (row, col) = GetPositionOfItem(item);
         UpdateSlotUI(row, col);
@@ -280,4 +275,9 @@ public class PlayerInventory : MonoBehaviour
 
         return false;
     }
-}
+
+    public (int, int) GetSize()
+    {
+        return (rows, columns);
+    }
+} 

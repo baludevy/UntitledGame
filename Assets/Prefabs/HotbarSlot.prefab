@@ -209,9 +209,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 3043017501255322732}
-  frame: {fileID: 1090302430850647431}
   stackText: {fileID: 3931722255309935151}
   isActive: 1
+  dragData: {fileID: 0}
+  frame: {fileID: 1090302430850647431}
 --- !u!1 &5699864078410532727
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 67
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
