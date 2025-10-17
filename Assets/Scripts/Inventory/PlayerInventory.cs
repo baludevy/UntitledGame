@@ -86,6 +86,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (newItem == null) return false;
 
+        // add new iteminstances until the leftover is under the item's stack cap
         while (newItem.stackAmount > newItem.data.MaxStack && newItem.data.Stackable)
         {
             int leftover = newItem.stackAmount - newItem.data.MaxStack;
@@ -115,7 +116,7 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    private void TryAddToEmptySlot(ItemInstance item)
+    public void TryAddToEmptySlot(ItemInstance item)
     {
         if (item == null) return;
 
@@ -128,42 +129,41 @@ public class PlayerInventory : MonoBehaviour
             }
     }
 
+    // this sets the slot's item strictly, without trying to merge, overwriting the existing item
     public void SetItemStrict(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
-        HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
+        
         UpdateSlotUI(row, col);
     }
-
+    
     public void SetItem(ItemInstance item, int row, int col)
     {
+        // the existing item if there is any
         var target = grid[row, col];
-
+        
         if (target == null)
         {
             grid[row, col] = item;
         }
-        else if (item != null && target.data == item.data && item.data.Stackable)
+        else if (CanMergeItem(item, target))
         {
             AddAmountToItem(target, item.stackAmount);
         }
-        else
-        {
-            return;
-        }
-
-        HeldItemController.Instance.UpdateHeldItem(grid[HotbarRow, activeHotbarSlot]);
+        
         UpdateSlotUI(row, col);
     }
 
 
     public void SwapItems(ItemInstance newItem, InventorySlot fromSlot, InventorySlot toSlot)
     {
-        if (fromSlot == null || toSlot == null) return;
+        if (newItem == null) return;
 
+        // the item we're swapping to the newitem
         var targetItem = grid[toSlot.row, toSlot.col];
 
-        if (CanMergeItem(newItem, toSlot.item))
+        // first try merging
+        if (CanMergeItem(newItem, targetItem))
         {
             AddAmountToItem(targetItem, newItem.stackAmount);
             grid[fromSlot.row, fromSlot.col] = null;
@@ -171,28 +171,31 @@ public class PlayerInventory : MonoBehaviour
         }
         else
         {
+            // couldnt merge, move the item from the target slot to the slot we dragged the item from
             grid[fromSlot.row, fromSlot.col] = targetItem;
+            
+            // move the new item to the target slot
             grid[toSlot.row, toSlot.col] = newItem;
-
-            fromSlot.SetItem(targetItem);
-            toSlot.SetItem(newItem);
         }
+
+        string fromName = fromSlot.item != null ? fromSlot.item.data.name : "empty";
+        string toName = toSlot.item != null ? toSlot.item.data.name : "empty";
+
+        Debug.Log(
+            $"swapping 2 items, the slot that had the item now has {fromName}\nthe slot that the item was dragged to now has {toName}");
 
         UpdateSlotUI(fromSlot.row, fromSlot.col);
         UpdateSlotUI(toSlot.row, toSlot.col);
     }
 
+
     public void RemoveItem(int row, int col)
     {
-        if (row < 0 || row >= rows || col < 0 || col >= columns) return;
-
         SetItemStrict(null, row, col);
 
         if (row == HotbarRow)
         {
-            GetHotbarSlot(col)?.Clear();
-            if (activeHotbarSlot == col)
-                HeldItemController.Instance.UpdateHeldItem(null);
+            UpdateSlotUI(row, col);
         }
     }
 
@@ -233,7 +236,10 @@ public class PlayerInventory : MonoBehaviour
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
 
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
+        {
+            HeldItemController.Instance.UpdateHeldItem(grid[row, col]);
             UIManager.hotbarSlots[col].SetItem(grid[row, col]);
+        }
     }
 
     public void AddAmountToItem(ItemInstance item, int amount)
@@ -262,8 +268,8 @@ public class PlayerInventory : MonoBehaviour
 
     public bool CanMergeItem(ItemInstance item1, ItemInstance item2)
     {
-        if(item1 == null || item2 == null) return false;
-        
+        if (item1 == null || item2 == null) return false;
+
         if (item1.data == item2.data)
         {
             if (item1.data.Stackable && item2.data.Stackable)

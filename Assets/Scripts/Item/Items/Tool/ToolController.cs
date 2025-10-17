@@ -41,6 +41,8 @@ public class ToolController : MonoBehaviour
 
     void UseTool()
     {
+        if(PlayerInventory.Instance.inventoryOpen) return; 
+        
         ToolItem toolData = (ToolItem)currentTool.instance.data;
         useTimer = toolData.cooldown;
         currentTool.Use();

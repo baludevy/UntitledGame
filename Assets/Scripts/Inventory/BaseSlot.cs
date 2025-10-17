@@ -44,7 +44,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         if (item == null) return;
-
+        
         ItemInstance draggingItem;
 
         dragData = new GameObject("drag").AddComponent<DragData>();
@@ -60,8 +60,6 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
 
             dragData.splitting = true;
-
-            if (item.stackAmount <= 0) item = null;
         }
         else
         {
@@ -97,7 +95,9 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void OnEndDrag(PointerEventData eventData)
     {
         if (dragData != null)
+        {
             Destroy(dragData.gameObject);
+        }
         canvasGroup.blocksRaycasts = true;
     }
 

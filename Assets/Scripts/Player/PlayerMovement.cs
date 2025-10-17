@@ -80,6 +80,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 120;
+        
         desiredX = orientation.localEulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
