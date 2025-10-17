@@ -18,6 +18,12 @@ public class ToolController : MonoBehaviour
 
     void Update()
     {
+        if(!PlayerInventory.Instance.inventoryOpen)
+            ToolUseInput();
+    }
+
+    private void ToolUseInput()
+    {
         if (currentTool == null) return;
 
         bool isSwinging = Input.GetMouseButton(0);
@@ -39,10 +45,8 @@ public class ToolController : MonoBehaviour
         swingingThisFrame = false;
     }
 
-    void UseTool()
+    private void UseTool()
     {
-        if(PlayerInventory.Instance.inventoryOpen) return; 
-        
         ToolItem toolData = (ToolItem)currentTool.instance.data;
         useTimer = toolData.cooldown;
         currentTool.Use();

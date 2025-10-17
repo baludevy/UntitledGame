@@ -8,10 +8,10 @@ public class InventorySlot : BaseSlot
 
     public override void OnEndDrag(PointerEventData eventData)
     {
+        if (dragData == null) return;
+            
         base.OnEndDrag(eventData);
         var target = GetDragTarget(eventData);
-
-        if (dragData.item == null) return;
 
         if (target == null)
         {

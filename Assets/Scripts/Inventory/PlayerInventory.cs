@@ -133,15 +133,15 @@ public class PlayerInventory : MonoBehaviour
     public void SetItemStrict(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
-        
+
         UpdateSlotUI(row, col);
     }
-    
+
     public void SetItem(ItemInstance item, int row, int col)
     {
         // the existing item if there is any
         var target = grid[row, col];
-        
+
         if (target == null)
         {
             grid[row, col] = item;
@@ -150,7 +150,7 @@ public class PlayerInventory : MonoBehaviour
         {
             AddAmountToItem(target, item.stackAmount);
         }
-        
+
         UpdateSlotUI(row, col);
     }
 
@@ -173,7 +173,7 @@ public class PlayerInventory : MonoBehaviour
         {
             // couldnt merge, move the item from the target slot to the slot we dragged the item from
             grid[fromSlot.row, fromSlot.col] = targetItem;
-            
+
             // move the new item to the target slot
             grid[toSlot.row, toSlot.col] = newItem;
         }
