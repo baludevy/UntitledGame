@@ -23,7 +23,7 @@ public class PlayerInteract : MonoBehaviour
             return;
         }
 
-        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))
+        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
             if (hit.collider.CompareTag("Interactable"))
             {
@@ -32,12 +32,8 @@ public class PlayerInteract : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     var interactable = hit.collider.GetComponent<IInteractable>();
-                    switch (interactable)
-                    {
-                        case Chest chest:
-                            chest.Interact();
-                            break;
-                    }
+                    
+                    interactable.Interact();
                 }
             }
         }

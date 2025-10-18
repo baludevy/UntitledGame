@@ -11,7 +11,7 @@ public class PlayerInventory : MonoBehaviour
     private ItemInstance[,] grid;
 
     private int HotbarRow => rows - 1;
-    private ItemInstance ActiveItem => grid[HotbarRow, activeHotbarSlot];
+    public ItemInstance ActiveItem => grid[HotbarRow, activeHotbarSlot];
     public int TotalSlots => rows * columns;
     public int activeHotbarSlot;
     public bool inventoryOpen;
@@ -265,7 +265,10 @@ public class PlayerInventory : MonoBehaviour
         item.stackAmount -= toSubtract;
 
         if (item.stackAmount <= 0)
+        {
             RemoveItemByID(item.id);
+            return;
+        }
 
         var (row, col) = GetPositionOfItem(item);
         UpdateSlotUI(row, col);
