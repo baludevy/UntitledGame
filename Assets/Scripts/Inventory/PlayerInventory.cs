@@ -45,7 +45,7 @@ public class PlayerInventory : MonoBehaviour
     private void ToggleInventory()
     {
         inventoryOpen = !inventoryOpen;
-        UIManager.inventoryHolder.gameObject.SetActive(inventoryOpen);
+        UIManager.SetInventoryState(inventoryOpen);
         CursorManager.SetCursorLock(!inventoryOpen);
         PlayerMovement.Instance.canLook = !inventoryOpen;
     }
@@ -62,7 +62,11 @@ public class PlayerInventory : MonoBehaviour
 
     public void AddItem(ItemInstance item)
     {
-        if (item == null) return;
+        if (item == null)
+        {
+            Debug.Log("a");
+            return;
+        }
 
         if (!TryStackItem(item)) TryAddToEmptySlot(item);
     }
@@ -224,8 +228,14 @@ public class PlayerInventory : MonoBehaviour
     {
         int index = row * columns + col;
 
+
         if (index < UIManager.inventorySlots.Count)
+        {
+            Debug.Log("a");
+            
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
+        }
+            
 
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
         {
@@ -253,8 +263,8 @@ public class PlayerInventory : MonoBehaviour
 
         int toSubtract = Mathf.Clamp(amount, 0, item.stackAmount);
         item.stackAmount -= toSubtract;
-        
-        if(item.stackAmount <= 0)
+
+        if (item.stackAmount <= 0)
             RemoveItemByID(item.id);
 
         var (row, col) = GetPositionOfItem(item);
@@ -280,4 +290,4 @@ public class PlayerInventory : MonoBehaviour
     {
         return (rows, columns);
     }
-} 
+}

@@ -24,12 +24,12 @@ public class PlayerUIManager : MonoBehaviour
     [Header("Hotbar")] public List<HotbarSlot> hotbarSlots;
     [SerializeField] private Transform hotbarSlotsParent;
 
-    [Header("Inventory")] [SerializeField] public Transform inventoryHolder;
+    [Header("Inventory")] [SerializeField] public CanvasGroup inventoryHolder;
     public Transform inventorySlotsHolder;
     public List<InventorySlot> inventorySlots;
 
     [Header("Container Inventory")] [SerializeField]
-    private Transform containerInventoryHolder;
+    private CanvasGroup containerInventoryHolder;
 
     [SerializeField] private Transform containerSlotsHolder;
     public List<ContainerSlot> containerSlots;
@@ -69,9 +69,9 @@ public class PlayerUIManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < containerSlotsHolder.childCount; i++)
+        for (int i = 0; i < containerSlotsHolder.transform.childCount; i++)
         {
-            Transform row = containerSlotsHolder.GetChild(i);
+            Transform row = containerSlotsHolder.transform.GetChild(i);
             for (int j = 0; j < row.childCount; j++)
             {
                 ContainerSlot slot = row.GetChild(j).GetComponent<ContainerSlot>();
@@ -154,9 +154,9 @@ public class PlayerUIManager : MonoBehaviour
     {
         openedChest = chest;
         containerOpen = true;
-        containerInventoryHolder.gameObject.SetActive(true);
-        inventoryHolder.gameObject.SetActive(true);
-        inventoryHolder.localPosition = new Vector3(0f, -185f, 0f);
+        SetContainerInventoryState(true);
+        SetInventoryState(true);
+        inventoryHolder.transform.localPosition = new Vector3(0f, -185f, 0f);
 
         CursorManager.SetCursorLock(false);
         PlayerMovement.Instance.canLook = false;
@@ -187,9 +187,9 @@ public class PlayerUIManager : MonoBehaviour
     {
         openedChest = null;
         containerOpen = false;
-        containerInventoryHolder.gameObject.SetActive(false);
-        inventoryHolder.gameObject.SetActive(false);
-        inventoryHolder.localPosition = Vector3.zero;
+        SetContainerInventoryState(false);
+        SetInventoryState(false);
+        inventoryHolder.transform.localPosition = Vector3.zero;
 
         CursorManager.SetCursorLock(true);
         PlayerMovement.Instance.canLook = true;
@@ -204,5 +204,17 @@ public class PlayerUIManager : MonoBehaviour
         int index = row * openedChest.columns + col;
         if (index < containerSlots.Count)
             containerSlots[index].SetItem(openedChest.GetItem(row, col));
+    }
+
+    public void SetInventoryState(bool state)
+    {
+        inventoryHolder.alpha = state ? 1f : 0f;
+        inventoryHolder.interactable = state;
+    }
+    
+    public void SetContainerInventoryState(bool state)
+    {
+        containerInventoryHolder.alpha = state ? 1f : 0f;
+        containerInventoryHolder.interactable = state;
     }
 }
