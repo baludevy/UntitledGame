@@ -3,9 +3,25 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
+    public bool blocked;
+    
+    public static PlayerInteract Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     public void Update()
     {
-        if (PlayerUIManager.Instance.containerOpen) return;
+        if (blocked || PlayerUIManager.Instance.containerOpen)
+        {
+            PlayerUIManager.Instance.keyTip.SetActive(false);
+            return;
+        }
 
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))
         {

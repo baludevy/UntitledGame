@@ -52,6 +52,9 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        
+        Debug.Log($"{damage} {currentHealth}");
+        
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
 

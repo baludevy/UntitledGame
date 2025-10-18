@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -89,9 +90,21 @@ public class PlayerUIManager : MonoBehaviour
         UpdateHealth();
         UpdateHudInfo();
 
-        if (Input.GetKeyDown(KeyCode.Escape) && containerOpen)
+        if (Input.GetKeyDown(KeyCode.E) && containerOpen)
+        {
             CloseContainerInventory();
+            StartCoroutine(BlockInteractUntilKeyUp());
+        }
     }
+    
+    IEnumerator BlockInteractUntilKeyUp()
+    {
+        PlayerInteract.Instance.blocked = true;
+        while (Input.GetKey(KeyCode.E))
+            yield return null;
+        PlayerInteract.Instance.blocked = false;
+    }
+
 
     private void UpdateHudInfo()
     {
@@ -144,7 +157,7 @@ public class PlayerUIManager : MonoBehaviour
         containerInventoryHolder.gameObject.SetActive(true);
         inventoryHolder.gameObject.SetActive(true);
         inventoryHolder.localPosition = new Vector3(0f, -185f, 0f);
-        
+
         CursorManager.SetCursorLock(false);
         PlayerMovement.Instance.canLook = false;
 
@@ -177,7 +190,7 @@ public class PlayerUIManager : MonoBehaviour
         containerInventoryHolder.gameObject.SetActive(false);
         inventoryHolder.gameObject.SetActive(false);
         inventoryHolder.localPosition = Vector3.zero;
-        
+
         CursorManager.SetCursorLock(true);
         PlayerMovement.Instance.canLook = true;
 
