@@ -15,9 +15,9 @@ public class Tool : MonoBehaviour
 
     public void Use()
     {
-        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))
+        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
-            if (hit.collider.CompareTag("Mineable"))
+            if (hit.collider.gameObject.GetComponent<BaseMineable>())
             {
                 IMineable mineable = hit.collider.GetComponent<IMineable>();
 

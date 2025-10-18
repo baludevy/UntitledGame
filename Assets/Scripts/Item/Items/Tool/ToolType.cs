@@ -1,6 +1,6 @@
 public enum ToolType
 {
-    sword,
-    axe,
-    pickaxe,
+    Sword,
+    Axe,
+    Pickaxe,
 }

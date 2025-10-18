@@ -19,6 +19,7 @@ public class InventorySlot : BaseSlot
             return;
         }
 
+
         switch (target)
         {
             // if the slot we released the mouse button is an inventory slot

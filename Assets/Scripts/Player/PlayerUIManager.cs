@@ -210,11 +210,13 @@ public class PlayerUIManager : MonoBehaviour
     {
         inventoryHolder.alpha = state ? 1f : 0f;
         inventoryHolder.interactable = state;
+        inventoryHolder.blocksRaycasts = state;
     }
     
     public void SetContainerInventoryState(bool state)
     {
         containerInventoryHolder.alpha = state ? 1f : 0f;
         containerInventoryHolder.interactable = state;
+        containerInventoryHolder.blocksRaycasts = state;
     }
 }

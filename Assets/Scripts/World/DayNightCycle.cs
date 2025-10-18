@@ -6,21 +6,34 @@ public class DayNightCycle : MonoBehaviour
 {
     [SerializeField] private Light sunLight;
 
-    [Header("Day-Night cycle settings")] 
-    [SerializeField] private float startTime;
+    [Header("Day-Night cycle settings")] [SerializeField]
+    private float startTime;
 
-    [Tooltip("In Minutes")] 
-    [SerializeField] private float cycleDuration;
+    [SerializeField] private float speed;
 
-    [Header("Lighting settings")] 
-    [SerializeField] private float lightIntensityNight = 0f;
+    [Tooltip("In Minutes")] [SerializeField]
+    private float cycleDuration;
+
+    [Header("Lighting settings")] [SerializeField]
+    private float lightIntensityNight = 0f;
+
     [SerializeField] private float lightIntensityDay = 1f;
-    
+
     [SerializeField] private float sunriseAngle = -90f;
     [SerializeField] private float sunsetAngle = 90f;
 
     private float currentTimeOfDay;
     private float timeOfDayNormalized;
+
+    public static DayNightCycle Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     private void Start()
     {
@@ -30,17 +43,25 @@ public class DayNightCycle : MonoBehaviour
 
     public void Update()
     {
-        currentTimeOfDay += Time.deltaTime;
-        
+        currentTimeOfDay += Time.deltaTime * speed;
+
         // convert cycle duration time from minutes to seconds
         float cycleDurationSeconds = cycleDuration * 60;
 
         timeOfDayNormalized = currentTimeOfDay % cycleDurationSeconds / cycleDurationSeconds;
-        
+
         float sunAngle = timeOfDayNormalized * 360f;
         sunLight.transform.localRotation = Quaternion.Euler(sunAngle, 50f, 0f);
-        
+
         float intensityFactor = Mathf.Clamp01(Mathf.Sin(timeOfDayNormalized * Mathf.PI * 2f));
         sunLight.intensity = Mathf.Lerp(lightIntensityNight, lightIntensityDay, intensityFactor);
+    }
+
+    public bool IsNight()
+    {
+        float nightStart = 0.5f;
+        float nightEnd = 0.99f;
+        
+        return timeOfDayNormalized >= nightStart && timeOfDayNormalized < nightEnd;
     }
 }
