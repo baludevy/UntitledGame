@@ -233,7 +233,7 @@ public class PlayerInventory : MonoBehaviour
         {
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
         }
-            
+
 
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
         {
@@ -286,8 +286,21 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public (int, int) GetSize()
+    public bool HasItem(string itemName)
     {
-        return (rows, columns);
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                if (grid[row, col] == null)
+                    continue;
+
+                ItemData itemData = grid[row, col].data;
+                if (itemData != null && itemData.Name == itemName)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   damage: 2
-  attackCooldown: 1.5
+  attackCooldown: 3
   attackRange: 15
   attackAccuracy: 0.7
   weapon: {fileID: 3590283239409764632}

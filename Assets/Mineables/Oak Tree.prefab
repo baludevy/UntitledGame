@@ -365,8 +365,8 @@ MonoBehaviour:
   description: sigma tree
   maxHealth: 50
   currentHealth: 50
-  minDropAmount: 4
-  maxDropAmount: 5
+  minDropAmount: 10
+  maxDropAmount: 17
   canBeMinedWith: 1
   dropPrefab: {fileID: 1948767809470562048, guid: 289cf72797c571347ad5a0c2eb0b82e8, type: 3}
   canBeMined: 1

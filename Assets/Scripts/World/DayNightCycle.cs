@@ -9,7 +9,7 @@ public class DayNightCycle : MonoBehaviour
     [Header("Day-Night cycle settings")] 
     [SerializeField] private float startTime;
     [SerializeField] private float speed;
-    [Tooltip("In Minutes")] [SerializeField] private float cycleDuration;
+    [Tooltip("In Minutes")] [SerializeField] public float cycleDuration;
 
     [Header("Lighting settings")] 
     [SerializeField] private float lightIntensityNight = 0f;
@@ -17,8 +17,8 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private float sunriseAngle = -90f;
     [SerializeField] private float sunsetAngle = 90f;
 
-    private float currentTimeOfDay;
-    private float timeOfDayNormalized;
+    public float currentTimeOfDay;
+    public float timeOfDayNormalized;
     private bool nightSpawnActive;
     public int currentDay;
     private float lastTimeOfDay;
