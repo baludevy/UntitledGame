@@ -196,13 +196,25 @@ public class PlayerMovement : MonoBehaviour
         float moveSpeed = speed;
 
         bool isMoving = x != 0 || y != 0;
-        bool canSprint = sprinting && isMoving && statistics.stamina > 0;
+        bool isAttemptingSprint = sprinting && isMoving;
+        bool canSprint = isAttemptingSprint && statistics.stamina > 0;
+
+        if (canSprint)
+        {
+            staminaRegenTimer = staminaRegenDelay;
+        }
+        else if (staminaRegenTimer > 0f)
+        {
+            staminaRegenTimer -= Time.deltaTime;
+        }
+
+        bool canRegenStaminaNow = !canSprint && staminaRegenTimer <= 0f;
 
         if (canSprint)
         {
             moveSpeed = sprintSpeed;
             statistics.stamina -= statistics.staminaLoss * Time.deltaTime;
-            statistics.stamina = Mathf.Max(statistics.stamina, 0f);
+            if (statistics.stamina < 0f) statistics.stamina = 0f;
 
             SpeedLines();
             FovEffect();
@@ -210,14 +222,14 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             ResetSprintingEffects();
-
-            if (canRegenStamina)
+            if (canRegenStaminaNow)
             {
                 statistics.stamina += statistics.staminaRegen * Time.deltaTime;
-                statistics.stamina = Mathf.Min(statistics.stamina, 100f);
+                if (statistics.stamina > 100f) statistics.stamina = 100f;
             }
         }
-        
+
+
         if (x > 0f && xVelLook > maxSpeed) x = 0f;
         if (x < 0f && xVelLook < -maxSpeed) x = 0f;
         if (y > 0f && yVelLook > maxSpeed) y = 0f;
