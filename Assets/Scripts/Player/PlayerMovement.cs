@@ -103,17 +103,6 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
             Jump();
         }
-
-        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 3f))
-        {
-            if (Input.GetButtonDown("Use"))
-            {
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Oiiai"))
-                {
-                    hit.collider.gameObject.GetComponent<Oiiai>().TriggerSpin();
-                }
-            }
-        }
     }
 
     private void FixedUpdate()

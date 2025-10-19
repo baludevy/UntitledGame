@@ -5,9 +5,11 @@ public class Tool : MonoBehaviour
 {
     public ToolInstance instance;
     public Animator toolAnimator;
+    private Camera camera;
 
     private void Start()
     {
+        camera = Camera.main;
         ToolItem data = (ToolItem)instance.data;
         float durabilityNormalized = instance.currentDurability / data.maxDurability;
         PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
@@ -15,6 +17,27 @@ public class Tool : MonoBehaviour
 
     public void Use()
     {
+        ToolItem data = (ToolItem)instance.data;
+        
+        if (data.type == ToolType.Sword)
+        {
+            Vector3 origin = camera.transform.position;
+            Vector3 direction = camera.transform.forward;
+            float slashRange = 2.5f;
+            float slashRadius = 3f;
+
+            RaycastHit[] hits = Physics.SphereCastAll(origin, slashRadius, direction, slashRange);
+            foreach (var slashHit in hits)
+            {
+                if (slashHit.collider.TryGetComponent(out BaseEnemy enemy))
+                {
+                    enemy.TakeDamage(data.damage);
+                }
+            }
+            
+            return;
+        }
+        
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
             if (hit.collider.gameObject.GetComponent<IMineable>() != null)
@@ -22,8 +45,6 @@ public class Tool : MonoBehaviour
                 IMineable mineable = hit.collider.GetComponent<IMineable>();
                 
                 if(!mineable.CanBeMined) return;
-
-                ToolItem data = (ToolItem)instance.data;
                 
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
                 
@@ -31,13 +52,6 @@ public class Tool : MonoBehaviour
                     instance.TakeDurability();
                 
                 mineable.TakeDamage(damage);
-            } else if (hit.collider.gameObject.GetComponent<BaseEnemy>() != null)
-            {
-                BaseEnemy enemy = hit.collider.GetComponent<BaseEnemy>();
-                
-                ToolItem data = (ToolItem)instance.data;
-                
-                enemy.TakeDamage(data.damage);
             }
         }
     }

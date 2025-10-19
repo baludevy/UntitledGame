@@ -96,7 +96,7 @@ public class PlayerUIManager : MonoBehaviour
             StartCoroutine(BlockInteractUntilKeyUp());
         }
     }
-    
+
     IEnumerator BlockInteractUntilKeyUp()
     {
         PlayerInteract.Instance.blocked = true;
@@ -212,7 +212,7 @@ public class PlayerUIManager : MonoBehaviour
         inventoryHolder.interactable = state;
         inventoryHolder.blocksRaycasts = state;
     }
-    
+
     public void SetContainerInventoryState(bool state)
     {
         containerInventoryHolder.alpha = state ? 1f : 0f;

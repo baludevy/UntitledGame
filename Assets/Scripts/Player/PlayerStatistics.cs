@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStatistics : MonoBehaviour
 {
@@ -22,5 +23,12 @@ public class PlayerStatistics : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

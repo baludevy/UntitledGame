@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,6 +32,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     [SerializeField] private GameObject weapon;
     [SerializeField] private GameObject bulletPrefab;
 
+    private Vector3 futurePos;
+
     private void Start()
     {
         currentHealth = MaxHealth;
@@ -52,6 +53,31 @@ public class BaseEnemy : MonoBehaviour, IDamageable
 
         agent.destination = PlayerMovement.Instance.transform.position;
 
+        Vector3 playerPos = PlayerMovement.Instance.transform.position;
+        Vector3 playerVel = PlayerMovement.Instance.GetComponent<Rigidbody>().linearVelocity;
+        Vector3 startPos = weapon.transform.position;
+
+        // done by ai ----------------
+        Vector3 toPlayer = playerPos - startPos;
+        float distance = new Vector2(toPlayer.x, toPlayer.z).magnitude;
+        float yOffset = playerPos.y - startPos.y;
+
+        float arc = Mathf.Max(1f, 2f * (distance / 12.5f));
+        float h = Mathf.Max(arc, yOffset + 0.25f);
+        float g = Mathf.Abs(Physics.gravity.y);
+        float tUp = Mathf.Sqrt(2f * h / g);
+        float tDown = Mathf.Sqrt(2f * Mathf.Max(0.0001f, (h - yOffset)) / g);
+        float time = Mathf.Max(0.01f, tUp + tDown);
+
+        float predictionFactor = 0.6f;
+        futurePos = playerPos + playerVel * (time * predictionFactor);
+        // ---------------------------
+
+        Vector3 lookDir = futurePos - transform.position;
+        lookDir.y = 0f;
+        if (lookDir.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.LookRotation(lookDir);
+
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             if (attackTimer <= 0)
@@ -61,12 +87,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable
 
     private void Attack()
     {
-        Vector3 playerPos = PlayerMovement.Instance.transform.position;
-        Vector3 playerVel = PlayerMovement.Instance.GetComponent<Rigidbody>().linearVelocity;
-
         Vector3 startPos = weapon.transform.position;
-        Vector3 targetPos = playerPos;
-        targetPos.y -= 0.5f;
+        Vector3 targetPos = futurePos;
 
         // done by ai ----------------
         Vector3 horizontal = new Vector3(targetPos.x - startPos.x, 0f, targetPos.z - startPos.z);
@@ -81,27 +103,6 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         float tDown = Mathf.Sqrt(2f * Mathf.Max(0.0001f, (h - yOffset)) / g);
         float time = Mathf.Max(0.01f, tUp + tDown);
 
-        float predictionFactor = 0.7f;
-        Vector3 futurePos = playerPos + playerVel * (time * predictionFactor);
-
-        targetPos = futurePos;
-
-        Vector3 lookDir = futurePos - transform.position;
-        lookDir.y = 0f;
-        if (lookDir.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.LookRotation(lookDir);
-
-        horizontal = new Vector3(targetPos.x - startPos.x, 0f, targetPos.z - startPos.z);
-        distance = horizontal.magnitude;
-        yOffset = targetPos.y - startPos.y;
-
-        arc = Mathf.Max(1f, 2f * (distance / 12.5f));
-        h = Mathf.Max(arc, yOffset + 0.25f);
-
-        tUp = Mathf.Sqrt(2f * h / g);
-        tDown = Mathf.Sqrt(2f * Mathf.Max(0.0001f, (h - yOffset)) / g);
-        time = Mathf.Max(0.01f, tUp + tDown);
-
         Vector3 velocity = horizontal / time;
         velocity.y = Mathf.Sqrt(2f * g * h);
         // ---------------------------
@@ -115,10 +116,9 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         attackTimer = attackCooldown;
     }
 
-
     public void TakeDamage(int amount)
     {
-        StopAllCoroutines();
+        StopCoroutine(HitAnimation());
         StartCoroutine(HitAnimation());
         currentHealth -= amount;
 

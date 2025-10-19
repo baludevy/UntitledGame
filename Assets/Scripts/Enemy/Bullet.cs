@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("hit");
+            PlayerStatistics.Instance.TakeDamage(5f);
         }
         
         Destroy(gameObject);
