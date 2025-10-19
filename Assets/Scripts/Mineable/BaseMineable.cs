@@ -35,18 +35,22 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
     [SerializeField] private int maxDropAmount;
     [SerializeField] private ToolType canBeMinedWith;
     [SerializeField] private DroppedItem dropPrefab;
+    public bool canBeMined = true;
 
     public ToolType CanBeMinedWith => canBeMinedWith;
     public DroppedItem DropPrefab => dropPrefab;
     public int MinDropAmount => minDropAmount;
     public int MaxDropAmount => maxDropAmount;
     
+    public bool CanBeMined => canBeMined;
+        
     private Vector3 originalScale;
-    
+
     private void Start()
     {
         originalScale = transform.localScale;
         currentHealth = maxHealth;
+        canBeMined = true;
     }
 
     public void TakeDamage(int damage)

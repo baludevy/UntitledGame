@@ -6,6 +6,8 @@ public interface IMineable : IDamageable
     DroppedItem DropPrefab { get; }
     int MinDropAmount { get; }
     int MaxDropAmount { get; }
+    
+    bool CanBeMined { get; }
 
     void DropLoot();
 }

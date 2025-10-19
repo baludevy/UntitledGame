@@ -337,7 +337,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sample text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -556,6 +556,7 @@ MonoBehaviour:
   maxDropAmount: 1
   canBeMinedWith: 1
   dropPrefab: {fileID: 1948767809470562048, guid: 8ac2dc4eb6e35934ea8b5a598eb94923, type: 3}
+  canBeMined: 1
 --- !u!1 &7632787157234652290
 GameObject:
   m_ObjectHideFlags: 0

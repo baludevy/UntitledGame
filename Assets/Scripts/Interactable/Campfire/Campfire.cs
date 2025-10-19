@@ -11,15 +11,19 @@ public class Campfire : MonoBehaviour, IInteractable
     private PlayerInventory inventory;
 
     private float timer = 60f;
-    private float timerCap = 60f;
+    private float timerCap => CampfireController.timerCap;
 
     private bool wasLit;
     private bool lit;
     private bool wasNight;
-
+    
+    
     private void Start()
     {
         inventory = PlayerInventory.Instance;
+        CampfireController.Instance.campfire = this;
+        
+        infoText.text = timerCap.ToString();
     }
 
     private void Update()
@@ -79,6 +83,7 @@ public class Campfire : MonoBehaviour, IInteractable
         infoText.gameObject.SetActive(true);
         bar.gameObject.SetActive(true);
         bar.transform.GetChild(0).gameObject.SetActive(true);
+        GetComponent<BaseMineable>().canBeMined = false;
     }
 
     private void Extinguish()
@@ -87,5 +92,11 @@ public class Campfire : MonoBehaviour, IInteractable
         infoText.gameObject.SetActive(false);
         bar.gameObject.SetActive(false);
         bar.transform.GetChild(0).gameObject.SetActive(false);
+        GetComponent<BaseMineable>().canBeMined = true;
+    }
+
+    private void OnDestroy()
+    {
+        CampfireController.Instance.campfire = null;
     }
 }

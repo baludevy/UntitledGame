@@ -20,12 +20,15 @@ public class Tool : MonoBehaviour
             if (hit.collider.gameObject.GetComponent<BaseMineable>())
             {
                 IMineable mineable = hit.collider.GetComponent<IMineable>();
+                
+                if(!mineable.CanBeMined) return;
 
                 ToolItem data = (ToolItem)instance.data;
                 
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
                 
-                instance.TakeDurability();
+                if(damage > 0) 
+                    instance.TakeDurability();
                 
                 mineable.TakeDamage(damage);
             }

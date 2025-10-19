@@ -19,6 +19,8 @@ public class PlaceableController : MonoBehaviour
     {
         if (inventory.ActiveItem?.data is PlaceableItem item)
         {
+            if(item.Name == "Campfire" && CampfireController.Instance.campfire != null) return;  
+            
             LayerMask ground = LayerMask.GetMask("Ground");
 
             if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 6.7f, ground))

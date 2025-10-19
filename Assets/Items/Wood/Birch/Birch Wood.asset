@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d7b01bf07e4a27a79b38fe9b6ccc95, type: 3}
+  m_Name: Birch Wood
+  m_EditorClassIdentifier: 
+  itemName: Birch Wood
+  itemDescription: ew
+  icon: {fileID: 21300000, guid: 544d93163cc244c418b7bacf3c6c5215, type: 3}
+  maxStack: 64
+  stackable: 1
+  floorPrefab: {fileID: 1949016491754248376, guid: 5ddc721f0fd2d384795dc6a75ea7e24b, type: 3}
+  heldPrefab: {fileID: 2328842768290734269, guid: 8f487c9649d901f49bc61d9f5af82f1f, type: 3}
+  resourceType: 0
+  value: 5

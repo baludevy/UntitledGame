@@ -153,6 +153,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         desiredX += mouseX;
+        desiredX = Mathf.Repeat(desiredX, 360f);
+
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
