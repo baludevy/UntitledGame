@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ProgressiveDifficulty : MonoBehaviour
 {
-    public static int enemiesPerNight = 2;
+    public static int enemiesPerNight = 4;
     private int lastDay = 0;
 
     private void Update()

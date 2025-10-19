@@ -5,11 +5,9 @@ public class Tool : MonoBehaviour
 {
     public ToolInstance instance;
     public Animator toolAnimator;
-    private Camera camera;
 
     private void Start()
     {
-        camera = Camera.main;
         ToolItem data = (ToolItem)instance.data;
         float durabilityNormalized = instance.currentDurability / data.maxDurability;
         PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
@@ -21,8 +19,8 @@ public class Tool : MonoBehaviour
         
         if (data.type == ToolType.Sword)
         {
-            Vector3 origin = camera.transform.position;
-            Vector3 direction = camera.transform.forward;
+            Vector3 origin = PlayerCamera.Instance.transform.position;
+            Vector3 direction = PlayerCamera.Instance.transform.forward;
             float slashRange = 2f;
             float slashRadius = 3f;
 

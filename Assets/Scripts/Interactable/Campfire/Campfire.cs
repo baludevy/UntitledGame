@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,57 +6,34 @@ public class Campfire : MonoBehaviour, IInteractable
 {
     public TMP_Text infoText;
     public Image bar;
-
-    private PlayerInventory inventory;
-    private float timer;
-    private float timerCap => CampfireController.timerCap;
-
     public bool wasLit;
     public bool lit;
+
+    private PlayerInventory inventory;
 
     private void Start()
     {
         inventory = PlayerInventory.Instance;
         CampfireController.Instance.campfire = this;
-        infoText.text = timerCap.ToString();
-        timer = timerCap;
-    }
-
-    private void Update()
-    {
-        if (lit)
-        {
-            if (timer > 0)
-            {
-                timer -= Time.deltaTime;
-            }
-            else
-            {
-                Extinguish();
-            }
-
-            infoText.text = Mathf.FloorToInt(timer).ToString();
-            bar.fillAmount = timer / timerCap;
-        }
+        CampfireController.Instance.ResetCampfireTimer();
+        UpdateUI(CampfireController.Instance.GetCampfireTimer(), CampfireController.timerCap);
     }
 
     public void Interact()
     {
-        if (inventory.ActiveItem?.data is ResourceItem item && item.resourceType == ResourceTypes.Wood)
+        if (inventory.ActiveItem?.data is ResourceItem item && item.resourceType == ResourceTypes.Wood && DayNightCycle.Instance.IsNight())
         {
             inventory.SubtractAmountFromItem(inventory.ActiveItem, 1);
 
             if (!lit)
                 Light();
 
-            timer += item.value;
-            timer = Mathf.Min(timer, timerCap);
+            CampfireController.Instance.AddCampfireTime(item.value);
         }
     }
 
     public void Light()
     {
-        if (timer <= 0) timer = timerCap;
         lit = true;
         infoText.gameObject.SetActive(true);
         bar.gameObject.SetActive(true);
@@ -72,6 +48,12 @@ public class Campfire : MonoBehaviour, IInteractable
         bar.gameObject.SetActive(false);
         bar.transform.GetChild(0).gameObject.SetActive(false);
         GetComponent<BaseMineable>().canBeMined = true;
+    }
+
+    public void UpdateUI(float current, float max)
+    {
+        infoText.text = Mathf.FloorToInt(current).ToString();
+        bar.fillAmount = current / max;
     }
 
     private void OnDestroy()

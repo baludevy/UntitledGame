@@ -3,11 +3,7 @@ using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
-    [Header("References")]
-    public TMP_Text tutorialText;
-
-    [Header("Settings")]
-    public float warningTimeBeforeNight = 30f;
+    [Header("References")] public TMP_Text tutorialText;
 
     private bool showedCampfireWarning;
     private bool showedLightCampfire;
@@ -39,7 +35,7 @@ public class TutorialManager : MonoBehaviour
 
         if (startTipActive)
         {
-            tutorialText.text = "Chop down trees and prepare for nighttime";
+            tutorialText.text = "Pick up your items, chop down trees and prepare for nighttime";
 
             if (PlayerInventory.Instance.HasItem("Oak Wood") || PlayerInventory.Instance.HasItem("Birch Wood"))
             {
@@ -48,11 +44,7 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
-        float currentTime = DayNightCycle.Instance.currentTimeOfDay;
-        float cycleDurationSeconds = DayNightCycle.Instance.cycleDuration * 60;
-        float timeLeft = (1f - currentTime) * cycleDurationSeconds;
-
-        if (!showedCampfireWarning && timeLeft <= warningTimeBeforeNight)
+        if (!showedCampfireWarning && DayNightCycle.Instance.IsNight())
         {
             if (CampfireController.Instance.campfire == null)
             {
@@ -64,10 +56,11 @@ public class TutorialManager : MonoBehaviour
         bool isNight = DayNightCycle.Instance.IsNight();
         if (isNight && !showedLightCampfire)
         {
-            var campfire = CampfireController.Instance.campfire;
+            Campfire campfire = CampfireController.Instance.campfire;
             if (campfire != null && !campfire.lit)
             {
-                tutorialText.text = "Light the campfire";
+                tutorialText.text =
+                    "Light the campfire with your wood make sure it doesn't extinguish, and don't go too far from it so you don't get too cold";
                 showedLightCampfire = true;
             }
         }
