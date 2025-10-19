@@ -9,6 +9,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     [SerializeField] private int damage;
     [SerializeField] private float attackCooldown;
     [SerializeField] private int attackRange;
+    [SerializeField] private float attackAccuracy;
     private int currentHealth;
     private float attackTimer;
 
@@ -69,7 +70,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         float tDown = Mathf.Sqrt(2f * Mathf.Max(0.0001f, (h - yOffset)) / g);
         float time = Mathf.Max(0.01f, tUp + tDown);
 
-        float predictionFactor = 0.6f;
+        float predictionFactor = attackAccuracy;
         futurePos = playerPos + playerVel * (time * predictionFactor);
         // ---------------------------
 

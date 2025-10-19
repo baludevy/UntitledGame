@@ -38,6 +38,11 @@ public class PlayerUIManager : MonoBehaviour
 
     [Header("Misc")] public GameObject keyTip;
 
+    [Header("Damage /flash effect")] [SerializeField]
+    private Image effectImage;
+
+    private Coroutine periodicFlashCoroutine;
+
     public static PlayerUIManager Instance;
 
     private void Awake()
@@ -218,5 +223,74 @@ public class PlayerUIManager : MonoBehaviour
         containerInventoryHolder.alpha = state ? 1f : 0f;
         containerInventoryHolder.interactable = state;
         containerInventoryHolder.blocksRaycasts = state;
+    }
+
+    public void Flash(Color color, float duration)
+    {
+        StartCoroutine(FlashEffect(color, duration));
+    }
+
+    IEnumerator FlashEffect(Color color, float duration)
+    {
+        float maxAlpha = 0.5f;
+        float half = duration / 2f;
+
+        color.a = 0f;
+        effectImage.color = color;
+
+        for (float t = 0; t < half; t += Time.deltaTime)
+        {
+            float a = Mathf.Lerp(0f, maxAlpha, t / half);
+            var c = effectImage.color;
+            c.a = a;
+            effectImage.color = c;
+            yield return null;
+        }
+
+        for (float t = 0; t < half; t += Time.deltaTime)
+        {
+            float a = Mathf.Lerp(maxAlpha, 0f, t / half);
+            var c = effectImage.color;
+            c.a = a;
+            effectImage.color = c;
+            yield return null;
+        }
+
+        var final = effectImage.color;
+        final.a = 0f;
+        effectImage.color = final;
+    }
+
+    public void StartPeriodicFlash(Color color, float speed)
+    {
+        if (periodicFlashCoroutine != null)
+        {
+            StopCoroutine(periodicFlashCoroutine);
+        }
+
+        periodicFlashCoroutine = StartCoroutine(PeriodicFlash(color, speed));
+    }
+
+    public void StopPeriodicFlash()
+    {
+        if (periodicFlashCoroutine != null)
+        {
+            StopCoroutine(periodicFlashCoroutine);
+            periodicFlashCoroutine = null;
+            var final = effectImage.color;
+            final.a = 0f;
+            effectImage.color = final;
+        }
+    }
+
+    IEnumerator PeriodicFlash(Color color, float interval)
+    {
+        float flashDuration = 0.5f;
+
+        while (true)
+        {
+            Flash(color, flashDuration);
+            yield return new WaitForSeconds(interval);
+        }
     }
 }

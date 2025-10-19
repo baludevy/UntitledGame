@@ -28,6 +28,7 @@ public class PlayerStatistics : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        PlayerUIManager.Instance.Flash(new Color(0.8f, 0f, 0f), 0.3f);
         if (health <= 0)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

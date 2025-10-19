@@ -129,6 +129,7 @@ MonoBehaviour:
   damage: 2
   attackCooldown: 1.5
   attackRange: 20
+  attackAccuracy: 1
   weapon: {fileID: 3590283239409764632}
   bulletPrefab: {fileID: 4694184758369598442, guid: 4c6a1fa89424e854bb57731b01afa8a1, type: 3}
 --- !u!195 &1698542046336996294

@@ -231,8 +231,6 @@ public class PlayerInventory : MonoBehaviour
 
         if (index < UIManager.inventorySlots.Count)
         {
-            Debug.Log("a");
-            
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
         }
             

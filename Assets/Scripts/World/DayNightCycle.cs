@@ -6,24 +6,22 @@ public class DayNightCycle : MonoBehaviour
 {
     [SerializeField] private Light sunLight;
 
-    [Header("Day-Night cycle settings")] [SerializeField]
-    private float startTime;
-
+    [Header("Day-Night cycle settings")] 
+    [SerializeField] private float startTime;
     [SerializeField] private float speed;
+    [Tooltip("In Minutes")] [SerializeField] private float cycleDuration;
 
-    [Tooltip("In Minutes")] [SerializeField]
-    private float cycleDuration;
-
-    [Header("Lighting settings")] [SerializeField]
-    private float lightIntensityNight = 0f;
-
+    [Header("Lighting settings")] 
+    [SerializeField] private float lightIntensityNight = 0f;
     [SerializeField] private float lightIntensityDay = 1f;
-
     [SerializeField] private float sunriseAngle = -90f;
     [SerializeField] private float sunsetAngle = 90f;
 
     private float currentTimeOfDay;
     private float timeOfDayNormalized;
+    private bool nightSpawnActive;
+    private int currentDay;
+    private float lastTimeOfDay;
 
     public static DayNightCycle Instance;
 
@@ -37,17 +35,15 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        // convert day start time from minutes to seconds
         currentTimeOfDay = startTime * 60;
+        currentDay = 1;
+        lastTimeOfDay = 0f;
     }
 
     public void Update()
     {
         currentTimeOfDay += Time.deltaTime * speed;
-
-        // convert cycle duration time from minutes to seconds
         float cycleDurationSeconds = cycleDuration * 60;
-
         timeOfDayNormalized = currentTimeOfDay % cycleDurationSeconds / cycleDurationSeconds;
 
         float sunAngle = timeOfDayNormalized * 360f;
@@ -55,13 +51,43 @@ public class DayNightCycle : MonoBehaviour
 
         float intensityFactor = Mathf.Clamp01(Mathf.Sin(timeOfDayNormalized * Mathf.PI * 2f));
         sunLight.intensity = Mathf.Lerp(lightIntensityNight, lightIntensityDay, intensityFactor);
+
+        if (IsNight() && !nightSpawnActive)
+        {
+            float sessionDuration = cycleDurationSeconds / 2f;
+
+            if (EnemySpawner.Instance != null)
+            {
+                EnemySpawner.Instance.StartSpawn(sessionDuration, 2);
+                nightSpawnActive = true;
+            }
+        }
+        else if (!IsNight() && nightSpawnActive)
+        {
+            if (EnemySpawner.Instance != null)
+                EnemySpawner.Instance.StopSpawn();
+
+            nightSpawnActive = false;
+        }
+        
+        if (timeOfDayNormalized < lastTimeOfDay)
+        {
+            currentDay++;
+            Debug.Log("new day" + currentDay);
+        }
+
+        lastTimeOfDay = timeOfDayNormalized;
     }
 
     public bool IsNight()
     {
         float nightStart = 0.5f;
         float nightEnd = 0.99f;
-        
         return timeOfDayNormalized >= nightStart && timeOfDayNormalized < nightEnd;
+    }
+
+    public int GetCurrentDay()
+    {
+        return currentDay;
     }
 }

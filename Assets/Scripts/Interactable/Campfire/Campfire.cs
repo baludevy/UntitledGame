@@ -10,30 +10,27 @@ public class Campfire : MonoBehaviour, IInteractable
 
     private PlayerInventory inventory;
 
-    private float timer = 60f;
+    private float timer;
     private float timerCap => CampfireController.timerCap;
 
     private bool wasLit;
-    private bool lit;
+    public bool lit;
     private bool wasNight;
-    
-    
+
     private void Start()
     {
         inventory = PlayerInventory.Instance;
         CampfireController.Instance.campfire = this;
-        
         infoText.text = timerCap.ToString();
+        timer = timerCap;
     }
 
     private void Update()
     {
         if (lit)
         {
-            if (timer > 0)
-                timer -= Time.deltaTime;
-            else
-                Extinguish();
+            if (timer > 0) timer -= Time.deltaTime;
+            else Extinguish();
 
             infoText.text = Mathf.FloorToInt(timer).ToString();
             bar.fillAmount = timer / timerCap;
@@ -41,7 +38,6 @@ public class Campfire : MonoBehaviour, IInteractable
 
         bool isNight = DayNightCycle.Instance.IsNight();
 
-        // night just started
         if (isNight && !wasNight)
         {
             if (!wasLit)
@@ -51,7 +47,6 @@ public class Campfire : MonoBehaviour, IInteractable
             }
         }
 
-        // day just started
         if (!isNight && wasNight)
         {
             Extinguish();
@@ -63,22 +58,21 @@ public class Campfire : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (!lit) return;
-
-        if (inventory.ActiveItem?.data is ResourceItem item)
+        if (inventory.ActiveItem?.data is ResourceItem item && item.resourceType == ResourceTypes.Wood)
         {
-            if (item.resourceType == ResourceTypes.Wood && timer + item.value < timerCap)
-            {
-                inventory.SubtractAmountFromItem(inventory.ActiveItem, 1);
-                timer += item.value;
-                timer = Mathf.Min(timer, timerCap);
-            }
+            inventory.SubtractAmountFromItem(inventory.ActiveItem, 1);
+
+            if (!lit)
+                Light();
+
+            timer += item.value;
+            timer = Mathf.Min(timer, timerCap);
         }
     }
 
     private void Light()
     {
-        timer = timerCap;
+        if (timer <= 0) timer = timerCap;
         lit = true;
         infoText.gameObject.SetActive(true);
         bar.gameObject.SetActive(true);
@@ -93,10 +87,13 @@ public class Campfire : MonoBehaviour, IInteractable
         bar.gameObject.SetActive(false);
         bar.transform.GetChild(0).gameObject.SetActive(false);
         GetComponent<BaseMineable>().canBeMined = true;
+        
+        PlayerStatistics.Instance.TakeDamage(100);
     }
 
     private void OnDestroy()
     {
-        CampfireController.Instance.campfire = null;
+        if (CampfireController.Instance != null)
+            CampfireController.Instance.campfire = null;
     }
 }
