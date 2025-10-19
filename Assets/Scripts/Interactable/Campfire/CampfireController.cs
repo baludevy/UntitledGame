@@ -48,7 +48,6 @@ public class CampfireController : MonoBehaviour
                     campfireTimer -= Time.deltaTime;
                 else
                 {
-                    PlayerStatistics.Instance.health -= 100f;
                     campfire.Extinguish();
                 }
 

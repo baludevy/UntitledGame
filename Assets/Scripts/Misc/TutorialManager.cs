@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
-    [Header("References")] public TMP_Text tutorialText;
+    public TMP_Text tutorialText;
 
     private bool showedCampfireWarning;
     private bool showedLightCampfire;
@@ -48,7 +48,7 @@ public class TutorialManager : MonoBehaviour
         {
             if (CampfireController.Instance.campfire == null)
             {
-                tutorialText.text = "Place a campfire";
+                tutorialText.text = "Place a campfire with your left mouse button";
                 showedCampfireWarning = true;
             }
         }

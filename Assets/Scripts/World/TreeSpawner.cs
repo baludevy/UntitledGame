@@ -1,13 +1,15 @@
 using System;
+using Unity.AI.Navigation;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.AI;
 
 public class TreeSpawner : MonoBehaviour
 {
     public GameObject[] treePrefabs;
     public int treeCount = 100;
-    
     public Collider spawnPlaneCollider;
+    public NavMeshSurface surface;
 
     public static TreeSpawner Instance;
 
@@ -38,7 +40,12 @@ public class TreeSpawner : MonoBehaviour
             Vector3 randomPosition = new Vector3(randomX, bounds.max.y, randomZ);
 
             GameObject prefab = treePrefabs[Random.Range(0, treePrefabs.Length)];
-            Instantiate(prefab, randomPosition, Quaternion.identity);
+            GameObject tree = Instantiate(prefab, randomPosition, Quaternion.identity);
+            
+            var obstacle = tree.AddComponent<NavMeshObstacle>();
+            obstacle.carving = true;
         }
+
+        surface.BuildNavMesh();
     }
 }

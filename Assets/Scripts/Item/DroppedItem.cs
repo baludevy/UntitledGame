@@ -14,19 +14,23 @@ public class DroppedItem : MonoBehaviour
     {
         if (itemData is ToolItem item)
             itemInstance = new ToolInstance(item);
-        else 
+        else
             itemInstance = new ItemInstance(itemData);
     }
-    
-    public void Initialize(ItemInstance instance, Collider dropperCollider = null)
+
+    public void Initialize(ItemInstance instance, bool ignore, Collider dropperCollider = null)
     {
         itemInstance = instance;
 
         playerCollider = dropperCollider;
-        ignoreUntil = Time.time + 0.5f;
 
-        if (playerCollider != null)
-            Physics.IgnoreCollision(GetComponent<Collider>(), playerCollider, true);
+        if (ignore)
+        {
+            ignoreUntil = Time.time + 0.5f;
+
+            if (playerCollider != null)
+                Physics.IgnoreCollision(GetComponent<Collider>(), playerCollider, true);
+        }
     }
 
     private void Update()

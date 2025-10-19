@@ -97,11 +97,11 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
 
         if (dropped.itemData is ToolItem toolData)
         {
-            dropped.Initialize(new ToolInstance(toolData, amount));
+            dropped.Initialize(new ToolInstance(toolData, amount), false);
         }
         else
         {
-            dropped.Initialize(new ItemInstance(dropped.itemData, amount));
+            dropped.Initialize(new ItemInstance(dropped.itemData, amount), false);
         }
         
         Destroy(gameObject);

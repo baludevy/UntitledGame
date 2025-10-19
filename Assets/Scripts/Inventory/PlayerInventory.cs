@@ -206,7 +206,7 @@ public class PlayerInventory : MonoBehaviour
         var drop = Instantiate(item.data.floorPrefab, cam.position + cam.forward * 1.5f,
             Quaternion.LookRotation(-cam.forward) * Quaternion.Euler(0, 90, 0)).GetComponent<DroppedItem>();
         drop.GetComponent<Rigidbody>().AddForce(cam.forward * 5f + Vector3.up * 1.5f, ForceMode.Impulse);
-        drop.Initialize(item, PlayerMovement.Instance.GetComponent<Collider>());
+        drop.Initialize(item, true, PlayerMovement.Instance.GetComponent<Collider>());
 
         if (removeFromInventory) RemoveItemByID(item.id);
     }
