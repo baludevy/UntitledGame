@@ -20,7 +20,7 @@ public class DayNightCycle : MonoBehaviour
     private float currentTimeOfDay;
     private float timeOfDayNormalized;
     private bool nightSpawnActive;
-    private int currentDay;
+    public int currentDay;
     private float lastTimeOfDay;
 
     public static DayNightCycle Instance;
@@ -36,7 +36,7 @@ public class DayNightCycle : MonoBehaviour
     private void Start()
     {
         currentTimeOfDay = startTime * 60;
-        currentDay = 1;
+        currentDay = 0;
         lastTimeOfDay = 0f;
     }
 
@@ -58,7 +58,7 @@ public class DayNightCycle : MonoBehaviour
 
             if (EnemySpawner.Instance != null)
             {
-                EnemySpawner.Instance.StartSpawn(sessionDuration, 2);
+                EnemySpawner.Instance.StartSpawn(sessionDuration, ProgressiveDifficulty.enemiesPerNight);
                 nightSpawnActive = true;
             }
         }
@@ -73,7 +73,7 @@ public class DayNightCycle : MonoBehaviour
         if (timeOfDayNormalized < lastTimeOfDay)
         {
             currentDay++;
-            Debug.Log("new day" + currentDay);
+            Debug.Log("new day " + currentDay);
         }
 
         lastTimeOfDay = timeOfDayNormalized;
@@ -84,10 +84,5 @@ public class DayNightCycle : MonoBehaviour
         float nightStart = 0.5f;
         float nightEnd = 0.99f;
         return timeOfDayNormalized >= nightStart && timeOfDayNormalized < nightEnd;
-    }
-
-    public int GetCurrentDay()
-    {
-        return currentDay;
     }
 }

@@ -22,4 +22,4 @@ MonoBehaviour:
   damage: 48
   cooldown: 0.7
   type: 2
-  maxDurability: 100
+  maxDurability: 1000

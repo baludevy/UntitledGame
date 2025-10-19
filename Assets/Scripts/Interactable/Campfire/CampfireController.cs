@@ -8,6 +8,7 @@ public class CampfireController : MonoBehaviour
 
     private float damageTimer;
     private bool isExposed;
+    private bool wasNight;
 
     public static float timerCap = 30f;
     public static CampfireController Instance;
@@ -20,39 +21,47 @@ public class CampfireController : MonoBehaviour
 
     private void Update()
     {
-        if (DayNightCycle.Instance == null || PlayerUIManager.Instance == null || PlayerStatistics.Instance == null)
+        if (!DayNightCycle.Instance || !PlayerUIManager.Instance || !PlayerStatistics.Instance)
             return;
 
         bool isNight = DayNightCycle.Instance.IsNight();
 
-        bool nearCampfire = false;
-
-        if (campfire != null)
+        if (campfire)
         {
-            float dist = Vector3.Distance(PlayerMovement.Instance.transform.position, campfire.transform.position);
-            if (dist <= proximityRadius && campfire.lit)
-                nearCampfire = true;
-            
-            Debug.Log(dist);
-        }
-        else
-        {
-            nearCampfire = false;
-        }
-
-        if (isNight && !nearCampfire)
-        {
-            if (!isExposed)
+            if (!isNight && wasNight)
             {
-                PlayerUIManager.Instance.StartPeriodicFlash(Color.cyan, damageInterval);
-                isExposed = true;
-                damageTimer = 0f;
+                campfire.Extinguish();
+                campfire.wasLit = false;
             }
+        }
 
-            damageTimer += Time.deltaTime;
-            if (damageTimer >= damageInterval)
+        bool nearCampfire = campfire && campfire.lit &&
+                            Vector3.Distance(PlayerMovement.Instance.transform.position, campfire.transform.position) <=
+                            proximityRadius;
+
+        if (isNight)
+        {
+            if (!nearCampfire)
             {
-                PlayerStatistics.Instance.TakeDamage(5);
+                if (!isExposed)
+                {
+                    PlayerUIManager.Instance.StartPeriodicFlash(Color.cyan, damageInterval);
+                    PlayerStatistics.Instance.TakeDamage(5, false);
+                    isExposed = true;
+                    damageTimer = 0f;
+                }
+
+                damageTimer += Time.deltaTime;
+                if (damageTimer >= damageInterval)
+                {
+                    PlayerStatistics.Instance.TakeDamage(5, false);
+                    damageTimer = 0f;
+                }
+            }
+            else if (isExposed)
+            {
+                PlayerUIManager.Instance.StopPeriodicFlash();
+                isExposed = false;
                 damageTimer = 0f;
             }
         }
@@ -62,8 +71,11 @@ public class CampfireController : MonoBehaviour
             {
                 PlayerUIManager.Instance.StopPeriodicFlash();
                 isExposed = false;
-                damageTimer = 0f;
             }
+
+            damageTimer = 0f;
         }
+
+        wasNight = isNight;
     }
 }

@@ -43,6 +43,8 @@ public class PlayerUIManager : MonoBehaviour
 
     private Coroutine periodicFlashCoroutine;
 
+    public TMP_Text dayCounterText;
+
     public static PlayerUIManager Instance;
 
     private void Awake()
@@ -94,6 +96,7 @@ public class PlayerUIManager : MonoBehaviour
         UpdateStaminaBar();
         UpdateHealth();
         UpdateHudInfo();
+        UpdateDayCounter();
 
         if (Input.GetKeyDown(KeyCode.E) && containerOpen)
         {
@@ -149,10 +152,15 @@ public class PlayerUIManager : MonoBehaviour
         staminaBar.fillAmount = PlayerStatistics.Instance.stamina / 100f;
     }
 
-    public void UpdateHealth()
+    private void UpdateHealth()
     {
         // healthText.text = PlayerStatistics.Instance.health.ToString();
         healthBar.fillAmount = PlayerStatistics.Instance.health / 100f;
+    }
+
+    private void UpdateDayCounter()
+    {
+        dayCounterText.text = DayNightCycle.Instance.currentDay.ToString();
     }
 
     public void OpenContainerInventory(ItemInstance[,] items, Chest chest)
@@ -235,13 +243,10 @@ public class PlayerUIManager : MonoBehaviour
         float maxAlpha = 0.5f;
         float half = duration / 2f;
 
-        color.a = 0f;
-        effectImage.color = color;
-
         for (float t = 0; t < half; t += Time.deltaTime)
         {
             float a = Mathf.Lerp(0f, maxAlpha, t / half);
-            var c = effectImage.color;
+            Color c = color;
             c.a = a;
             effectImage.color = c;
             yield return null;
@@ -250,16 +255,17 @@ public class PlayerUIManager : MonoBehaviour
         for (float t = 0; t < half; t += Time.deltaTime)
         {
             float a = Mathf.Lerp(maxAlpha, 0f, t / half);
-            var c = effectImage.color;
+            Color c = color;
             c.a = a;
             effectImage.color = c;
             yield return null;
         }
 
-        var final = effectImage.color;
+        Color final = color;
         final.a = 0f;
         effectImage.color = final;
     }
+
 
     public void StartPeriodicFlash(Color color, float speed)
     {

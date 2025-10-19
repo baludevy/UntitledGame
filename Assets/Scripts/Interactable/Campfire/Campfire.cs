@@ -9,13 +9,11 @@ public class Campfire : MonoBehaviour, IInteractable
     public Image bar;
 
     private PlayerInventory inventory;
-
     private float timer;
     private float timerCap => CampfireController.timerCap;
 
-    private bool wasLit;
+    public bool wasLit;
     public bool lit;
-    private bool wasNight;
 
     private void Start()
     {
@@ -29,31 +27,18 @@ public class Campfire : MonoBehaviour, IInteractable
     {
         if (lit)
         {
-            if (timer > 0) timer -= Time.deltaTime;
-            else Extinguish();
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                Extinguish();
+            }
 
             infoText.text = Mathf.FloorToInt(timer).ToString();
             bar.fillAmount = timer / timerCap;
         }
-
-        bool isNight = DayNightCycle.Instance.IsNight();
-
-        if (isNight && !wasNight)
-        {
-            if (!wasLit)
-            {
-                Light();
-                wasLit = true;
-            }
-        }
-
-        if (!isNight && wasNight)
-        {
-            Extinguish();
-            wasLit = false;
-        }
-
-        wasNight = isNight;
     }
 
     public void Interact()
@@ -70,7 +55,7 @@ public class Campfire : MonoBehaviour, IInteractable
         }
     }
 
-    private void Light()
+    public void Light()
     {
         if (timer <= 0) timer = timerCap;
         lit = true;
@@ -80,15 +65,13 @@ public class Campfire : MonoBehaviour, IInteractable
         GetComponent<BaseMineable>().canBeMined = false;
     }
 
-    private void Extinguish()
+    public void Extinguish()
     {
         lit = false;
         infoText.gameObject.SetActive(false);
         bar.gameObject.SetActive(false);
         bar.transform.GetChild(0).gameObject.SetActive(false);
         GetComponent<BaseMineable>().canBeMined = true;
-        
-        PlayerStatistics.Instance.TakeDamage(100);
     }
 
     private void OnDestroy()

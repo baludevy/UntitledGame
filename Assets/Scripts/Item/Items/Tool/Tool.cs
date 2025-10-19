@@ -23,7 +23,7 @@ public class Tool : MonoBehaviour
         {
             Vector3 origin = camera.transform.position;
             Vector3 direction = camera.transform.forward;
-            float slashRange = 1.5f;
+            float slashRange = 2f;
             float slashRadius = 3f;
 
             RaycastHit[] hits = Physics.SphereCastAll(origin, slashRadius, direction, slashRange);
@@ -48,8 +48,8 @@ public class Tool : MonoBehaviour
                 
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
                 
-                if(damage > 0) 
-                    instance.TakeDurability();
+                /* if(damage > 0) 
+                    instance.TakeDurability(); */
                 
                 mineable.TakeDamage(damage);
             }
