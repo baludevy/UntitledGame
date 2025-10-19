@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sword
   itemDescription: pointy
-  icon: {fileID: 21300000, guid: b5e6dd7c0194df6489064de54bc82b31, type: 3}
+  icon: {fileID: 21300000, guid: 5cd004785e96c8044b494c48084bce08, type: 3}
   maxStack: 0
   stackable: 0
   floorPrefab: {fileID: 1949016491754248376, guid: 473254496036ec14b81a6d5a62c0435f, type: 3}

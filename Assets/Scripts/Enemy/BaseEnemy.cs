@@ -1,11 +1,16 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private int maxHealth;
+    [SerializeField] private int damage;
+    [SerializeField] private float attackCooldown;
+    [SerializeField] private int attackRange;
     private int currentHealth;
+    private float attackTimer;
 
     public int MaxHealth
     {
@@ -20,11 +25,39 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     }
 
     private Vector3 originalScale;
+    private NavMeshAgent agent;
 
     private void Start()
     {
         currentHealth = MaxHealth;
         originalScale = transform.localScale;
+        
+        agent = GetComponent<NavMeshAgent>();
+        agent.stoppingDistance = attackRange;
+    }
+
+    private void Update()
+    {
+        if(attackTimer > 0)
+            attackTimer -= Time.deltaTime;
+        
+        if (!PlayerMovement.Instance) return;
+            
+        agent.destination = PlayerMovement.Instance.transform.position;
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if(attackTimer <= 0)
+                Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        Debug.Log("attack");
+        PlayerStatistics.Instance.health -= damage;
+
+        attackTimer += attackCooldown;
     }
 
     public void TakeDamage(int amount)

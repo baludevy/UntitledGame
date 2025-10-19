@@ -50,8 +50,6 @@ public class PlayerMovement : MonoBehaviour
     public ParticleSystem ps;
     private ParticleSystem.EmissionModule emission;
 
-    [Header("Stats thing")] public float staminaLoss = 5;
-
     private float staminaRegenDelay = 1.5f;
     private float staminaRegenTimer = 0f;
     private bool canRegenStamina;
@@ -81,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 120;
-        
+
         desiredX = orientation.localEulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -99,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
         HandleLook();
         WalkBob();
 
-        if (readyToJump && grounded && jumping && statistics.stamina > staminaLoss * 0.5f)
+        if (readyToJump && grounded && jumping && statistics.stamina > statistics.jumpStaminaLoss)
         {
             readyToJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);
@@ -179,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
             x = 0;
             y = 0;
         }
-        
+
         jumping = Input.GetButton("Jump");
         sprinting = Input.GetButton("Sprint");
     }
@@ -197,38 +195,29 @@ public class PlayerMovement : MonoBehaviour
         float maxSpeed = 25f;
         float moveSpeed = speed;
 
-        if (sprinting)
-        {
-            staminaRegenTimer = staminaRegenDelay;
-        }
-        else if (staminaRegenTimer > 0)
-        {
-            staminaRegenTimer -= Time.deltaTime;
-        }
+        bool isMoving = x != 0 || y != 0;
+        bool canSprint = sprinting && isMoving && statistics.stamina > 0;
 
-        canRegenStamina = !sprinting && staminaRegenTimer <= 0;
-
-        if (sprinting && statistics.stamina > 0)
+        if (canSprint)
         {
             moveSpeed = sprintSpeed;
-            statistics.stamina -= staminaLoss * Time.deltaTime;
+            statistics.stamina -= statistics.staminaLoss * Time.deltaTime;
             statistics.stamina = Mathf.Max(statistics.stamina, 0f);
 
             SpeedLines();
             FovEffect();
         }
-        else if (canRegenStamina)
-        {
-            statistics.stamina += staminaLoss * Time.deltaTime;
-            statistics.stamina = Mathf.Min(statistics.stamina, 100f);
-
-            ResetSprintingEffects();
-        }
         else
         {
             ResetSprintingEffects();
-        }
 
+            if (canRegenStamina)
+            {
+                statistics.stamina += statistics.staminaRegen * Time.deltaTime;
+                statistics.stamina = Mathf.Min(statistics.stamina, 100f);
+            }
+        }
+        
         if (x > 0f && xVelLook > maxSpeed) x = 0f;
         if (x < 0f && xVelLook < -maxSpeed) x = 0f;
         if (y > 0f && yVelLook > maxSpeed) y = 0f;
@@ -283,7 +272,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (grounded || surfing)
         {
-            statistics.stamina -= staminaLoss * 0.5f;
+            statistics.stamina -= statistics.jumpStaminaLoss;
             staminaRegenTimer = staminaRegenDelay;
 
             Vector3 velocity = rb.linearVelocity;
