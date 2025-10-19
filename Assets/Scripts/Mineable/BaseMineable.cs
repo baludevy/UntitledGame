@@ -23,12 +23,12 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
     
     [SerializeField] private int maxHealth;
     [SerializeField] int currentHealth;
-
-    public int MaxHealth { get; set; }
+    
+    public int MaxHealth { get => maxHealth; set => maxHealth = value; }
     public int CurrentHealth
     {
         get => currentHealth;
-        set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
+        set => currentHealth = Mathf.Clamp(value, 0, maxHealth);
     }
 
     [Header("Drop")] [SerializeField] private int minDropAmount;

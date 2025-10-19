@@ -239,7 +239,6 @@ public class PlayerInventory : MonoBehaviour
 
         if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
         {
-            HeldItemController.Instance.UpdateHeldItem(grid[row, col]);
             UIManager.hotbarSlots[col].SetItem(grid[row, col]);
         }
     }

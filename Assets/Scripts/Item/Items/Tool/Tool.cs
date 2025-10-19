@@ -17,7 +17,7 @@ public class Tool : MonoBehaviour
     {
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
-            if (hit.collider.gameObject.GetComponent<BaseMineable>())
+            if (hit.collider.gameObject.GetComponent<IMineable>() != null)
             {
                 IMineable mineable = hit.collider.GetComponent<IMineable>();
                 
@@ -31,6 +31,13 @@ public class Tool : MonoBehaviour
                     instance.TakeDurability();
                 
                 mineable.TakeDamage(damage);
+            } else if (hit.collider.gameObject.GetComponent<BaseEnemy>() != null)
+            {
+                BaseEnemy enemy = hit.collider.GetComponent<BaseEnemy>();
+                
+                ToolItem data = (ToolItem)instance.data;
+                
+                enemy.TakeDamage(data.damage);
             }
         }
     }
