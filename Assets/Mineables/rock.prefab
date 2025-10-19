@@ -119,12 +119,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6309795082623155338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 875c483b3a9b4dd590ed95ffb557a85e, type: 3}
+  m_Script: {fileID: 11500000, guid: f33e3ee86df74a90adca6b60a27294fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mineableName: Rock
+  itemName: Rock
+  description: cute ahh rock
   maxHealth: 25
+  currentHealth: 25
   minDropAmount: 2
-  maxDropAmount: 5
-  dropPrefab: {fileID: 1949016491754248376, guid: 523d461372208884d89e86637661150c, type: 3}
-  canBeMinedWith: 1
+  maxDropAmount: 3
+  canBeMinedWith: 2
+  dropPrefab: {fileID: 1948767809470562048, guid: 523d461372208884d89e86637661150c, type: 3}
+  canBeMined: 1
