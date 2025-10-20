@@ -16,15 +16,10 @@ public class PlayerCamera : MonoBehaviour
 
     public static PlayerCamera Instance;
 
-    public Vector3 bobOffset;
+    public Vector3 bobOffset { get; private set; }
+    
     private Vector3 desiredBob;
-
     private Vector3 speedBob;
-
-    private Vector3 recoilOffset;
-    private Vector3 recoilRotation;
-    private Vector3 recoilOffsetVel;
-    private Vector3 recoilRotVel;
 
     private Vector3 startPos;
 
@@ -83,7 +78,7 @@ public class PlayerCamera : MonoBehaviour
     private void UpdateWeaponSway()
     {
         float mouseX = Input.GetAxis("Mouse X") * swayAmount;
-        float mouseY = Input.GetAxis("Mouse Y") * swayAmount;
+        float mouseY = Input.GetAxis("Mouse Y") * swayAmount * 0.5f;
         Quaternion targetRot = Quaternion.Euler(mouseY, -mouseX, 0);
         heldItemHolder.localRotation =
             Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);

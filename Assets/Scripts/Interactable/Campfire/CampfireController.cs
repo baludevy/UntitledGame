@@ -32,7 +32,7 @@ public class CampfireController : MonoBehaviour
         if (!DayNightCycle.Instance || !PlayerUIManager.Instance || !PlayerStatistics.Instance)
             return;
 
-        bool isNight = DayNightCycle.Instance.IsNight();
+        bool isNight = DayNightCycle.IsNight();
 
         if (isNight && !wasNight)
         {
@@ -120,7 +120,7 @@ public class CampfireController : MonoBehaviour
 
     public void ResetCampfireTimer()
     {
-        campfireTimer = timerCap;
+        campfireTimer = 0;
     }
 
     public float GetCampfireTimer()

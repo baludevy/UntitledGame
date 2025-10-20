@@ -122,7 +122,7 @@ public class PlayerUIManager : MonoBehaviour
         {
             if (hit.collider.CompareTag("Mineable"))
             {
-                IMineable obj = hit.collider.GetComponent<IMineable>();
+                BaseMineable obj = hit.collider.GetComponent<BaseMineable>();
 
                 objectInfo.SetState(true);
                 objectInfo.SetObject(obj);
@@ -160,7 +160,7 @@ public class PlayerUIManager : MonoBehaviour
 
     private void UpdateDayCounter()
     {
-        dayCounterText.text = DayNightCycle.Instance.currentDay.ToString();
+        dayCounterText.text = DayNightCycle.CurrentDay.ToString();
     }
 
     public void OpenContainerInventory(ItemInstance[,] items, Chest chest)
@@ -173,7 +173,6 @@ public class PlayerUIManager : MonoBehaviour
 
         CursorManager.SetCursorLock(false);
         PlayerMovement.Instance.canLook = false;
-
 
         for (int i = 0; i < containerSlots.Count; i++)
             containerSlots[i].Clear();

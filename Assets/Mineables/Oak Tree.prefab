@@ -361,12 +361,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33e3ee86df74a90adca6b60a27294fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Oak Tree
-  description: sigma tree
+  data: {fileID: 11400000, guid: b4987b7927d31a346b0cdbe37d6bc312, type: 2}
   maxHealth: 50
-  currentHealth: 50
-  minDropAmount: 2
-  maxDropAmount: 6
-  canBeMinedWith: 1
-  dropPrefab: {fileID: 1948767809470562048, guid: 289cf72797c571347ad5a0c2eb0b82e8, type: 3}
   canBeMined: 1

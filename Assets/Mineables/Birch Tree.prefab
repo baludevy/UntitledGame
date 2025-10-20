@@ -275,14 +275,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33e3ee86df74a90adca6b60a27294fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Tree
-  description: sigma tree
+  data: {fileID: 11400000, guid: e5a2687da92277240b1625b310b49fcc, type: 2}
   maxHealth: 50
-  currentHealth: 50
-  minDropAmount: 3
-  maxDropAmount: 4
-  canBeMinedWith: 1
-  dropPrefab: {fileID: 1948767809470562048, guid: 5ddc721f0fd2d384795dc6a75ea7e24b, type: 3}
   canBeMined: 1
 --- !u!1 &6548934595952996610
 GameObject:

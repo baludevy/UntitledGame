@@ -4,10 +4,11 @@ using UnityEngine.UI;
 
 public class Campfire : MonoBehaviour, IInteractable
 {
-    public TMP_Text infoText;
-    public Image bar;
+    [SerializeField] private TMP_Text infoText;
+    [SerializeField] private Image bar;
+    
     public bool wasLit;
-    public bool lit;
+    public bool lit { get; private set; }
 
     private PlayerInventory inventory;
 
@@ -21,7 +22,8 @@ public class Campfire : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (inventory.ActiveItem?.data is ResourceItem item && item.resourceType == ResourceTypes.Wood && DayNightCycle.Instance.IsNight())
+        if (inventory.ActiveItem?.data is ResourceItem item && item.resourceType == ResourceTypes.Wood &&
+            DayNightCycle.IsNight())
         {
             inventory.SubtractAmountFromItem(inventory.ActiveItem, 1);
 

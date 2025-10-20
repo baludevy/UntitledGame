@@ -40,9 +40,9 @@ public class Tool : MonoBehaviour
         {
             if (hit.collider.gameObject.GetComponent<IMineable>() != null)
             {
-                IMineable mineable = hit.collider.GetComponent<IMineable>();
+                BaseMineable mineable = hit.collider.GetComponent<BaseMineable>();
                 
-                if(!mineable.CanBeMined) return;
+                if(!mineable.canBeMined) return;
                 
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
                 

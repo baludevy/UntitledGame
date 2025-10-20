@@ -4,31 +4,38 @@ using UnityEngine;
 public class ProgressiveDifficulty : MonoBehaviour
 {
     public static int enemiesPerNight = 4;
-    private int lastDay = 0;
+    public int lastDay;
 
-    private void Update()
+    private void OnEnable()
     {
-        int currentDay = DayNightCycle.Instance.currentDay;
+        DayNightCycle.Instance.OnDay += IncreaseDifficulty;
+    }
+    
+    private void OnDisable()
+    {
+        DayNightCycle.Instance.OnDay -= IncreaseDifficulty;
+    }
+    
+    private void IncreaseDifficulty()
+    {
+        int currentDay = DayNightCycle.CurrentDay;
 
         if (currentDay != lastDay)
         {
-            enemiesPerNight += GetIncrementForDay(currentDay);
+            switch (currentDay)
+            {
+                case 1: enemiesPerNight = 3; break;
+                case 2: enemiesPerNight = 6; break;
+                case 3: enemiesPerNight = 8; break;
+                case 4: enemiesPerNight = 12; break; 
+                case 5: enemiesPerNight = 15; break;
+                default:
+                    enemiesPerNight = Mathf.RoundToInt(10 * Mathf.Pow(1.5f, currentDay - 5));
+                    break;
+            }
+            
             lastDay = currentDay;
             Debug.Log(enemiesPerNight);
-        }
-    }
-
-    private int GetIncrementForDay(int day)
-    {
-        switch (day)
-        {
-            case 1: return 1;
-            case 2: return 2;
-            case 3: return 4;
-            case 4: return 6;
-            case 5: return 10;
-            default:
-                return Mathf.RoundToInt(10 * Mathf.Pow(1.2f, day - 5));
         }
     }
 }

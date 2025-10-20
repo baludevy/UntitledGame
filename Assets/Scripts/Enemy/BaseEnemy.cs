@@ -5,21 +5,21 @@ using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour, IDamageable
 {
-    [SerializeField] private int maxHealth;
+    [SerializeField] private float maxHealth;
     [SerializeField] private int damage;
     [SerializeField] private float attackCooldown;
     [SerializeField] private int attackRange;
     [SerializeField] private float attackAccuracy;
-    private int currentHealth;
+    private float currentHealth;
     private float attackTimer;
 
-    public int MaxHealth
+    public float MaxHealth
     {
         get => maxHealth;
         set => maxHealth = value;
     }
 
-    public int CurrentHealth
+    public float CurrentHealth
     {
         get => currentHealth;
         set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
@@ -117,7 +117,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         attackTimer = attackCooldown;
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
         StopCoroutine(HitAnimation());
         StartCoroutine(HitAnimation());

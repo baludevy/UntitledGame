@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UIBob : MonoBehaviour
+public class PlayerUIBob : MonoBehaviour
 {
     public RectTransform uiElement;
     public float multiplier = 0.3f;

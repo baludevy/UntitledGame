@@ -3,16 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class PlayerStatistics : MonoBehaviour
 {
-    public float health = 100;
-    public float stamina = 100f;
+    public float health { get; private set; }= 100;
+    public float stamina= 100f;
 
-    public float staminaLoss = 20;
-    public float jumpStaminaLoss = 5;
-    public float staminaRegen = 5;
+    public float staminaLoss { get; private set; } = 20;
+    public float jumpStaminaLoss { get; private set; } = 5;
+    public float staminaRegen { get; private set; } = 5;
 
-    public float regenDelay = 15f;
-    public float regenInterval = 3f;
-    public float regenAmount = 3f;
+    [SerializeField] private float regenDelay = 10f;
+    [SerializeField] private float regenInterval = 3f;
+    [SerializeField] private float regenAmount = 5f;
 
     private float timeSinceLastDamage;
     private float regenTimer;

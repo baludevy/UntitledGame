@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -17,13 +16,20 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private float sunriseAngle = -90f;
     [SerializeField] private float sunsetAngle = 90f;
 
-    public float currentTimeOfDay;
-    public float timeOfDayNormalized;
+    private float currentTimeOfDay;
+    private float timeOfDayNormalized;
     private bool nightSpawnActive;
-    public int currentDay;
+    private bool wasNight;
+    private int currentDay;
     private float lastTimeOfDay;
+    
+    public static float CurrentTimeOfDay => Instance.currentTimeOfDay;
+    public static int CurrentDay => Instance.currentDay;
 
     public static DayNightCycle Instance;
+
+    public event Action OnDay;
+    public event Action OnNight;
 
     private void Awake()
     {
@@ -73,16 +79,27 @@ public class DayNightCycle : MonoBehaviour
         if (timeOfDayNormalized < lastTimeOfDay)
         {
             currentDay++;
-            Debug.Log("new day " + currentDay);
+            Debug.Log("[DayNight] New day started:" + currentDay);
+        }
+
+        if (IsNight() && !wasNight)
+        {
+            wasNight = true;
+            OnNight?.Invoke();
+        }
+        else if (!IsNight() && wasNight)
+        {
+            wasNight = false;
+            OnDay?.Invoke();
         }
 
         lastTimeOfDay = timeOfDayNormalized;
     }
 
-    public bool IsNight()
+    public static bool IsNight()
     {
         float nightStart = 0.5f;
         float nightEnd = 0.99f;
-        return timeOfDayNormalized >= nightStart && timeOfDayNormalized < nightEnd;
+        return Instance.timeOfDayNormalized >= nightStart && Instance.timeOfDayNormalized < nightEnd;
     }
 }

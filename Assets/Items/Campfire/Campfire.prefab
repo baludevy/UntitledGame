@@ -758,7 +758,6 @@ MonoBehaviour:
   infoText: {fileID: 8679756164057944336}
   bar: {fileID: 8424521939495856627}
   wasLit: 0
-  lit: 0
 --- !u!114 &815634349098441499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -771,14 +770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33e3ee86df74a90adca6b60a27294fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Campfire
-  description: fire fire fire
-  maxHealth: 30
-  currentHealth: 30
-  minDropAmount: 1
-  maxDropAmount: 1
-  canBeMinedWith: 1
-  dropPrefab: {fileID: 1948767809470562048, guid: 8ac2dc4eb6e35934ea8b5a598eb94923, type: 3}
+  data: {fileID: 11400000, guid: eab6f19892919d547a640c7b9568f180, type: 2}
   canBeMined: 1
 --- !u!1 &7632787157234652290
 GameObject:

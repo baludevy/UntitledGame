@@ -1,4 +1,4 @@
-public interface IMineable : IDamageable
+public interface IMineable
 {
     string Name { get; set; }
     string Description { get; set; }
@@ -6,8 +6,6 @@ public interface IMineable : IDamageable
     DroppedItem DropPrefab { get; }
     int MinDropAmount { get; }
     int MaxDropAmount { get; }
-    
-    bool CanBeMined { get; }
 
     void DropLoot();
 }

@@ -2,65 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class BaseMineable : MonoBehaviour, IMineable
+public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 {
-    [Header("Info")] [SerializeField] private string itemName;
-    [SerializeField] private string description;
+    [Header("Data")] 
+    
+    [SerializeField] private MineableData data;
+    
+    private float currentHealth;
+    private Vector3 originalScale;
 
     public string Name
     {
-        get => itemName;
-        set => itemName = value;
+        get => data.Name;
+        set => data.Name = value;
     }
 
     public string Description
     {
-        get => description;
-        set => description = value;
+        get => data.Description;
+        set => data.Description = value;
     }
 
-    [Header("Mineable data")]
-    
-    [SerializeField] private int maxHealth;
-    [SerializeField] int currentHealth;
-    
-    public int MaxHealth { get => maxHealth; set => maxHealth = value; }
-    public int CurrentHealth
+    public ToolType CanBeMinedWith => data.CanBeMinedWith;
+    public DroppedItem DropPrefab => data.DropPrefab;
+    public int MinDropAmount => data.MinDropAmount;
+    public int MaxDropAmount => data.MaxDropAmount;
+
+    public float MaxHealth
+    {
+        get => data.MaxHealth;
+        set { }
+    }
+
+    public float CurrentHealth
     {
         get => currentHealth;
-        set => currentHealth = Mathf.Clamp(value, 0, maxHealth);
+        set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
     }
 
-    [Header("Drop")] [SerializeField] private int minDropAmount;
-    [SerializeField] private int maxDropAmount;
-    [SerializeField] private ToolType canBeMinedWith;
-    [SerializeField] private DroppedItem dropPrefab;
-    public bool canBeMined = true;
-
-    public ToolType CanBeMinedWith => canBeMinedWith;
-    public DroppedItem DropPrefab => dropPrefab;
-    public int MinDropAmount => minDropAmount;
-    public int MaxDropAmount => maxDropAmount;
+    public bool canBeMined;
     
-    public bool CanBeMined => canBeMined;
-        
-    private Vector3 originalScale;
-
     private void Start()
     {
         originalScale = transform.localScale;
-        currentHealth = maxHealth;
+        currentHealth = MaxHealth;
         canBeMined = true;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        
+
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
 
-        if (currentHealth <= 0 && dropPrefab != null)
+        if (currentHealth <= 0 && DropPrefab != null)
             DropLoot();
     }
 
@@ -86,14 +82,14 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
             transform.localScale = Vector3.Lerp(target, start, eased);
             yield return null;
         }
-        
+
         transform.localScale = start;
     }
 
     public void DropLoot()
     {
-        int amount = Random.Range(minDropAmount, maxDropAmount);
-        DroppedItem dropped = Instantiate(dropPrefab, transform.position, Quaternion.identity);
+        int amount = Random.Range(MinDropAmount, MaxDropAmount);
+        DroppedItem dropped = Instantiate(DropPrefab, transform.position, Quaternion.identity);
 
         if (dropped.itemData is ToolItem toolData)
         {
@@ -103,7 +99,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable
         {
             dropped.Initialize(new ItemInstance(dropped.itemData, amount), false);
         }
-        
+
         Destroy(gameObject);
     }
 }

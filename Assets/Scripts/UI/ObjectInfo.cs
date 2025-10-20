@@ -33,7 +33,7 @@ public class ObjectInfo : MonoBehaviour
         }
     }
     
-    public void SetObject(IMineable mineable)
+    public void SetObject(BaseMineable mineable)
     {
         ItemData item = mineable.DropPrefab.itemData;
         
@@ -41,6 +41,6 @@ public class ObjectInfo : MonoBehaviour
         itemDescription.text = item.Description;
         itemIcon.sprite = item.Icon;
         
-        healthBar.fillAmount = (float)mineable.CurrentHealth / (float)mineable.MaxHealth;
+        healthBar.fillAmount = mineable.CurrentHealth / mineable.MaxHealth;
     }
 }
