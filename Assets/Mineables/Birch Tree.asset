@@ -16,6 +16,7 @@ MonoBehaviour:
   description: ugly wood
   canBeMinedWith: 1
   dropPrefab: {fileID: 1948767809470562048, guid: 5ddc721f0fd2d384795dc6a75ea7e24b, type: 3}
-  minDropAmount: 64
-  maxDropAmount: 64
-  maxHealth: 1
+  minDropAmount: 2
+  maxDropAmount: 4
+  maxHealth: 35
+  sound: 1

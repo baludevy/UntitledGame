@@ -79,7 +79,6 @@ public class DayNightCycle : MonoBehaviour
         if (timeOfDayNormalized < lastTimeOfDay)
         {
             currentDay++;
-            Debug.Log("[DayNight] New day started:" + currentDay);
         }
 
         if (IsNight() && !wasNight)

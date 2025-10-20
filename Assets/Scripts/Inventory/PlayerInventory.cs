@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -15,6 +16,8 @@ public class PlayerInventory : MonoBehaviour
     public int TotalSlots => rows * columns;
     public int activeHotbarSlot;
     public bool inventoryOpen;
+    
+    public List<ItemData> startingItems;
 
     private void Awake()
     {
@@ -28,6 +31,24 @@ public class PlayerInventory : MonoBehaviour
     {
         UIManager = PlayerUIManager.Instance;
         SwitchToHotbarSlot(0);
+        AddStartingItems();
+    }
+
+    private void AddStartingItems()
+    {
+        if(startingItems.Count == 0) return;
+
+        foreach (ItemData item in startingItems)
+        {
+            if (item is ToolItem tool)
+            {
+                AddItem(new ToolInstance(tool));
+
+                continue;
+            }
+            
+            AddItem(new ItemInstance(item));
+        }
     }
 
     private void Update()

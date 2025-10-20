@@ -54,6 +54,8 @@ public class PlayerMovement : MonoBehaviour
     private float staminaRegenTimer = 0f;
     private bool canRegenStamina;
 
+    private float footstepTimer;
+    private float footstepInterval = 0.45f;
 
     private PlayerStatistics statistics;
 

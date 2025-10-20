@@ -11,7 +11,8 @@ public class MineableData : ScriptableObject, IMineable
     [SerializeField] private int minDropAmount;
     [SerializeField] private int maxDropAmount;
     [SerializeField] private float maxHealth;
-
+    [SerializeField] private int sound = -1;
+    
     public string Name
     {
         get => mineableName;
@@ -29,7 +30,9 @@ public class MineableData : ScriptableObject, IMineable
     public int MinDropAmount => minDropAmount;
     public int MaxDropAmount => maxDropAmount;
     
-    public float MaxHealth  => maxHealth;
+    public float MaxHealth => maxHealth;
+    
+    public int Sound => sound;
 
     public void DropLoot()
     {

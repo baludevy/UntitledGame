@@ -6,6 +6,8 @@ public interface IMineable
     DroppedItem DropPrefab { get; }
     int MinDropAmount { get; }
     int MaxDropAmount { get; }
+    
+    int Sound { get; }
 
     void DropLoot();
 }

@@ -27,6 +27,8 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public DroppedItem DropPrefab => data.DropPrefab;
     public int MinDropAmount => data.MinDropAmount;
     public int MaxDropAmount => data.MaxDropAmount;
+    
+    public int Sound => data.Sound;
 
     public float MaxHealth
     {
@@ -52,6 +54,9 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        
+        if (Sound > -1)
+            PlayerAudioManager.Instance.PlaySound(Sound);
 
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
@@ -89,7 +94,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public void DropLoot()
     {
         int amount = Random.Range(MinDropAmount, MaxDropAmount);
-        DroppedItem dropped = Instantiate(DropPrefab, transform.position, Quaternion.identity);
+        DroppedItem dropped = Instantiate(DropPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
 
         if (dropped.itemData is ToolItem toolData)
         {
@@ -97,7 +102,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
         }
         else
         {
-            dropped.Initialize(new ItemInstance(dropped.itemData, amount), false);
+            dropped.Initialize(new ItemInstance(dropped.itemData, amount), true);
         }
 
         Destroy(gameObject);

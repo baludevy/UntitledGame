@@ -20,4 +20,4 @@ MonoBehaviour:
   floorPrefab: {fileID: 1949016491754248376, guid: 289cf72797c571347ad5a0c2eb0b82e8, type: 3}
   heldPrefab: {fileID: 2328842768290734269, guid: 6bec5fee84ec0bc4f982464488be4559, type: 3}
   resourceType: 0
-  value: 2
+  value: 5

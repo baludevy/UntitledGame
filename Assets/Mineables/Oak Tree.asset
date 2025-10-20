@@ -18,4 +18,5 @@ MonoBehaviour:
   dropPrefab: {fileID: 1948767809470562048, guid: 289cf72797c571347ad5a0c2eb0b82e8, type: 3}
   minDropAmount: 2
   maxDropAmount: 5
-  maxHealth: 50
+  maxHealth: 30
+  sound: 1

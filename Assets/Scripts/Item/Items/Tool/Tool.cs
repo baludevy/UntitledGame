@@ -16,7 +16,7 @@ public class Tool : MonoBehaviour
     public void Use()
     {
         ToolItem data = (ToolItem)instance.data;
-        
+
         if (data.type == ToolType.Sword)
         {
             Vector3 origin = PlayerCamera.Instance.transform.position;
@@ -28,30 +28,38 @@ public class Tool : MonoBehaviour
             foreach (var slashHit in hits)
             {
                 if (slashHit.collider.TryGetComponent(out BaseEnemy enemy))
-                {
                     enemy.TakeDamage(data.damage);
-                }
             }
-            
+
             return;
         }
-        
+
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
-            if (hit.collider.gameObject.GetComponent<IMineable>() != null)
+            BaseMineable mineable = GetMineable(hit.collider.transform);
+            if (mineable != null && mineable.canBeMined)
             {
-                BaseMineable mineable = hit.collider.GetComponent<BaseMineable>();
-                
-                if(!mineable.canBeMined) return;
-                
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
-                
-                /* if(damage > 0) 
+                /* if (damage > 0)
                     instance.TakeDurability(); */
                 
                 mineable.TakeDamage(damage);
             }
         }
+    }
+
+    private BaseMineable GetMineable(Transform t)
+    {
+        while (t != null)
+        {
+            var m = t.GetComponent<BaseMineable>();
+            if (m != null)
+                return m;
+
+            t = t.parent;
+        }
+
+        return null;
     }
 
     public void Break()

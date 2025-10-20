@@ -16,6 +16,7 @@ MonoBehaviour:
   description: fire fire fire
   canBeMinedWith: 1
   dropPrefab: {fileID: 1948767809470562048, guid: 8ac2dc4eb6e35934ea8b5a598eb94923, type: 3}
-  minDropAmount: 0
-  maxDropAmount: 0
-  maxHealth: 0
+  minDropAmount: 1
+  maxDropAmount: 1
+  maxHealth: 10
+  sound: -1

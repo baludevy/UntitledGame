@@ -6,18 +6,17 @@ using Random = UnityEngine.Random;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public Collider spawnPlaneCollider;
+    public float minSpawnDistance = 10f;
+    public float maxSpawnDistance = 20f;
 
     public static EnemySpawner Instance;
 
-    private void Awake()
+    void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
-        {
             Destroy(gameObject);
-        }
     }
 
     public void StartSpawn(float duration, int enemiesPerSession)
@@ -27,34 +26,29 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemies(float duration, int enemiesPerSession)
     {
-        if (enemiesPerSession <= 0)
-        {
-            yield break;
-        }
+        if (enemiesPerSession <= 0) yield break;
         
         float timeBetweenSpawns = duration / enemiesPerSession;
 
         for (int i = 0; i < enemiesPerSession; i++)
         {
-            if (i > 0)
-            {
-                yield return new WaitForSeconds(timeBetweenSpawns);
-            }
-            
-            Bounds bounds = spawnPlaneCollider.bounds;
+            if (i > 0) yield return new WaitForSeconds(timeBetweenSpawns);
 
-            float randomX = Random.Range(bounds.min.x, bounds.max.x);
-            float randomZ = Random.Range(bounds.min.z, bounds.max.z);
-        
-            Vector3 randomPosition = new Vector3(randomX, bounds.max.y + 0.1f, randomZ);
+            if (PlayerMovement.Instance == null) yield break;
 
-            if (randomPosition != Vector3.zero)
-            {
-                Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
-            }
+            Vector3 center = PlayerMovement.Instance.transform.position;
+
+            float angle = Random.Range(0f, 360f);
+            float distance = Random.Range(minSpawnDistance, maxSpawnDistance);
+            Vector3 offset = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), 0, Mathf.Sin(angle * Mathf.Deg2Rad)) * distance;
+
+            Vector3 spawnPos = center + offset;
+            spawnPos.y += 0.1f;
+
+            Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
         }
     }
-    
+
     public void StopSpawn()
     {
         StopAllCoroutines();

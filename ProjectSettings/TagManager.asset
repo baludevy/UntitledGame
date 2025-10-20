@@ -7,6 +7,7 @@ TagManager:
   - Mineable
   - Item
   - Interactable
+  - Terrain
   layers:
   - Default
   - TransparentFX

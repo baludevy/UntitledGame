@@ -6,9 +6,9 @@ public class PlayerStatistics : MonoBehaviour
     public float health { get; private set; }= 100;
     public float stamina= 100f;
 
-    public float staminaLoss { get; private set; } = 20;
-    public float jumpStaminaLoss { get; private set; } = 5;
-    public float staminaRegen { get; private set; } = 5;
+    public float staminaLoss { get; private set; } = 10;
+    public float jumpStaminaLoss { get; private set; } = 7;
+    public float staminaRegen { get; private set; } = 6;
 
     [SerializeField] private float regenDelay = 10f;
     [SerializeField] private float regenInterval = 3f;
