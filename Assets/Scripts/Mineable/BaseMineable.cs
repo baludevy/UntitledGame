@@ -54,9 +54,6 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        
-        if (Sound > -1)
-            PlayerAudioManager.Instance.PlaySound(Sound);
 
         StopAllCoroutines();
         StartCoroutine(HitAnimation());

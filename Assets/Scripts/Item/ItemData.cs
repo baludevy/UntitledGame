@@ -8,7 +8,7 @@ public class ItemData : ScriptableObject, IItem
     [SerializeField] Sprite icon;
     
     [Header("Stacking")]
-    [SerializeField] int maxStack = 1;
+    [SerializeField] int maxStack = 64;
     [SerializeField] bool stackable = true;
     
     public GameObject floorPrefab;

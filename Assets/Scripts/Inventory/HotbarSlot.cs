@@ -14,8 +14,6 @@ public class HotbarSlot : BaseSlot
     {
         isActive = active;
         frame.color = new Color(frame.color.r, frame.color.g, frame.color.b, active ? 1f : 0.2f);
-        frame.transform.localPosition = active ? Vector3.up * 10 : Vector3.zero;
-        icon.transform.localPosition = active ? Vector3.up * 10 : Vector3.zero;
     }
 
     public void SetFrameFill(float fill)

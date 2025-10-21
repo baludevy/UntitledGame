@@ -47,6 +47,28 @@ public class PlayerUIManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+
+        hotbarSlots = new List<HotbarSlot>();
+        inventorySlots = new List<InventorySlot>();
+
+        for (int i = 0; i < hotbarSlotsParent.childCount; i++)
+        {
+            hotbarSlots.Add(hotbarSlotsParent.GetChild(i).GetComponent<HotbarSlot>());
+        }
+
+        for (int i = 0; i < inventorySlotsHolder.childCount; i++)
+        {
+            Transform row = inventorySlotsHolder.GetChild(i);
+            for (int j = 0; j < row.childCount; j++)
+            {
+                InventorySlot slot = row.GetChild(j).GetComponent<InventorySlot>();
+
+                slot.row = i;
+                slot.col = j;
+
+                inventorySlots.Add(slot);
+            }
+        }
     }
 
     private void Update()

@@ -15,7 +15,7 @@ MonoBehaviour:
   mineableName: Oak Wood
   description: real wood
   canBeMinedWith: 1
-  dropPrefab: {fileID: 1948767809470562048, guid: 289cf72797c571347ad5a0c2eb0b82e8, type: 3}
+  dropPrefab: {fileID: 9105593225940294769, guid: 0b8d3f11015ba6c45a8fbab1e25a1547, type: 3}
   minDropAmount: 2
   maxDropAmount: 5
   maxHealth: 30
