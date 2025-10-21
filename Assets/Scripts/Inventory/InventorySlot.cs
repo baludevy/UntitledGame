@@ -56,55 +56,6 @@ public class InventorySlot : BaseSlot
                 }
 
                 break;
-
-            case ContainerSlot slot:
-                if (PlayerUIManager.Instance.openedChest != null)
-                {
-                    var chest = PlayerUIManager.Instance.openedChest;
-
-                    if (dragData.splitting)
-                    {
-                        if (chest.GetItem(slot.row, slot.col) == null)
-                        {
-                            chest.SetItem(dragData.item, slot.row, slot.col);
-                        }
-                        else
-                        {
-                            if (PlayerInventory.Instance.CanMergeItem(dragData.item, chest.GetItem(slot.row, slot.col)))
-                            {
-                                chest.AddAmountToItem(chest.GetItem(slot.row, slot.col), dragData.item.stackAmount);
-                            }
-                            else
-                            {
-                                PlayerInventory.Instance.SetItem(chest.GetItem(slot.row, slot.col), row, col);
-                                chest.SetItem(dragData.item, slot.row, slot.col);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (chest.GetItem(slot.row, slot.col) == null)
-                        {
-                            chest.SetItem(dragData.item, slot.row, slot.col);
-                            PlayerInventory.Instance.RemoveItem(row, col);
-                        }
-                        else
-                        {
-                            if (PlayerInventory.Instance.CanMergeItem(dragData.item, chest.GetItem(slot.row, slot.col)))
-                            {
-                                chest.AddAmountToItem(chest.GetItem(slot.row, slot.col), dragData.item.stackAmount);
-                                PlayerInventory.Instance.RemoveItem(row, col);
-                            }
-                            else
-                            {
-                                PlayerInventory.Instance.SetItem(chest.GetItem(slot.row, slot.col), row, col);
-                                chest.SetItem(dragData.item, slot.row, slot.col);
-                            }
-                        }
-                    }
-                }
-
-                break;
         }
     }
 }

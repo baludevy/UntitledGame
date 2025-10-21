@@ -54,9 +54,6 @@ public class PlayerMovement : MonoBehaviour
     private float staminaRegenTimer = 0f;
     private bool canRegenStamina;
 
-    private float footstepTimer;
-    private float footstepInterval = 0.45f;
-
     private PlayerStatistics statistics;
 
     public static PlayerMovement Instance;
@@ -162,13 +159,6 @@ public class PlayerMovement : MonoBehaviour
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-
-        if (PlayerUIManager.Instance.containerOpen)
-        {
-            x = 0;
-            y = 0;
-        }
-
         jumping = Input.GetButton("Jump");
         sprinting = Input.GetButton("Sprint");
     }

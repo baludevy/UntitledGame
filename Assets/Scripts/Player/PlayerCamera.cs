@@ -45,9 +45,7 @@ public class PlayerCamera : MonoBehaviour
 
         UpdateBob();
         UpdateSpeedBob();
-        
-        if(!PlayerInventory.Instance.inventoryOpen)
-            UpdateWeaponSway();
+        UpdateWeaponSway();
 
         Vector3 finalPos = startPos + bobOffset;
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);

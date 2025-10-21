@@ -55,7 +55,7 @@ public class PlayerInventory : MonoBehaviour
     {
         HeldItemController.Instance.UpdateHeldItem(ActiveItem);
 
-        if (Input.GetButtonDown("Inventory") && !PlayerUIManager.Instance.containerOpen) ToggleInventory();
+        if (Input.GetButtonDown("Inventory")) ToggleInventory();
         if (Input.GetKeyDown(KeyCode.Q)) DropActiveItem();
 
         for (int i = 0; i < columns; i++)

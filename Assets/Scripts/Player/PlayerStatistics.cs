@@ -3,12 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class PlayerStatistics : MonoBehaviour
 {
-    public float health { get; private set; }= 100;
-    public float stamina= 100f;
+    public float health { get; private set; } = 100;
+    public float stamina = 100f;
 
-    public float staminaLoss { get; private set; } = 10;
-    public float jumpStaminaLoss { get; private set; } = 7;
-    public float staminaRegen { get; private set; } = 6;
+    public float staminaLoss = 10;
+    public float jumpStaminaLoss = 7;
+    public float staminaRegen = 6;
 
     [SerializeField] private float regenDelay = 10f;
     [SerializeField] private float regenInterval = 3f;
@@ -54,8 +54,6 @@ public class PlayerStatistics : MonoBehaviour
         timeSinceLastDamage = 0f;
         regenTimer = 0f;
 
-        if (flash)
-            PlayerUIManager.Instance.Flash(new Color(0.8f, 0f, 0f), 0.3f);
         if (health <= 0)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
