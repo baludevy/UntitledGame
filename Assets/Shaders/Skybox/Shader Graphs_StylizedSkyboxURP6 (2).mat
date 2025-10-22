@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 9
+  version: 10
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -87,7 +87,7 @@ Material:
     m_Colors:
     - Color_1EB49FED: {r: 0.3948217, g: 0.9056992, b: 2.3565924, a: 0}
     - Color_424F81E0: {r: 0.7951061, g: 0.76561946, b: 0.8773585, a: 0}
-    - Color_68FD0CD8: {r: 0.12459949, g: 0.3758852, b: 0.754717, a: 0}
+    - Color_68FD0CD8: {r: 0.26539695, g: 0.47621936, b: 0.7924528, a: 0}
     - Color_83CF459: {r: 0.036311854, g: 0.05855379, b: 0.1509434, a: 0}
     - Color_AB9D6D2F: {r: 0.02245749, g: 0.007843137, b: 0.05490196, a: 0}
     - Color_B54BEABE: {r: 0.9189517, g: 1.3868177, b: 1.4647952, a: 0}
