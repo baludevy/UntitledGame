@@ -18,6 +18,9 @@ public class ToolController : MonoBehaviour
 
     private void Update()
     {
+        if (useTimer > 0)
+            useTimer -= Time.deltaTime;
+        
         if (!PlayerInventory.Instance.inventoryOpen && currentTool != null)
         {
             currentTool.HandleInput();

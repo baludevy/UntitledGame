@@ -47,7 +47,7 @@ public class PlayerInventory : MonoBehaviour
                 continue;
             }
             
-            AddItem(new ItemInstance(item));
+            AddItem(new ItemInstance(item, 64));
         }
     }
 

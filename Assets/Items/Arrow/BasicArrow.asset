@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Arrow
   itemName: Arrow
   itemDescription: uhhh i think its an arrow
-  icon: {fileID: 21300000, guid: 113d04a4e5be65f4f9911d1bf11efec4, type: 3}
+  icon: {fileID: 21300000, guid: b5e6dd7c0194df6489064de54bc82b31, type: 3}
   maxStack: 64
   stackable: 1
   floorPrefab: {fileID: 2234034229809533675, guid: ddd048ee3eeca6f4abdb7313224271e7, type: 3}

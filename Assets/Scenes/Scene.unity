@@ -7621,7 +7621,8 @@ MonoBehaviour:
   columns: 6
   activeHotbarSlot: 0
   inventoryOpen: 0
-  startingItems: []
+  startingItems:
+  - {fileID: 11400000, guid: 25f72cb818a239d46a4d085437503200, type: 2}
 --- !u!136 &6825806028997029691
 CapsuleCollider:
   m_ObjectHideFlags: 0

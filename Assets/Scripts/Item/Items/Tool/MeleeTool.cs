@@ -49,9 +49,6 @@ public class MeleeTool : BaseTool
 
     public override void UpdateTool()
     {
-        if (toolController.useTimer > 0)
-            toolController.useTimer -= Time.deltaTime;
-
         if (checkAfterFrame && !usedDuringSwing)
         {
             var info = toolAnimator.GetCurrentAnimatorStateInfo(0);

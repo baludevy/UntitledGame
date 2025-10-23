@@ -100,6 +100,6 @@ Material:
     - _Horizon_Color_Night: {r: 0.013652531, g: 0.01059096, b: 0.13207549, a: 0}
     - _Moon_Offset: {r: 0.06, g: 0, b: 0, a: 0}
     - _Moon_Stars_Col: {r: 0.77563196, g: 1.5094882, b: 1.9811323, a: 0}
-    - _Sun_Color: {r: 3.259601, g: 2.2825313, b: 0.8456513, a: 0}
+    - _Sun_Color: {r: 8.703647, g: 5.0301867, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
