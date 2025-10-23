@@ -4,29 +4,40 @@ using TMPro;
 public class DamageMarker : MonoBehaviour
 {
     public TMP_Text text;
-    private float lifetime = 2f;
-    private float floatSpeed = 1f;
+    [SerializeField] private float lifetime = 3f;
+    [SerializeField] private float startFloatSpeed = 5f;
+    [SerializeField] private float endFloatSpeed = 0f;
+    [SerializeField] private float maxHeightOffset = 1f;
     private Color startColor;
     private float timer;
-    private float cameraOffset = 0.4f;
+    private readonly float cameraOffset = 0.4f;
+    private float initialY;
 
     private void Start()
     {
         startColor = text.color;
+        initialY = transform.position.y;
     }
 
     private void Update()
     {
         timer += Time.deltaTime;
+        float t = timer / lifetime;
+        
+        float easedT = t * t;
+        float currentSpeed = Mathf.Lerp(startFloatSpeed, endFloatSpeed, easedT);
+
+        transform.position += Vector3.up * currentSpeed * Time.deltaTime;
+        
+        float clampedY = Mathf.Clamp(transform.position.y, initialY, initialY + maxHeightOffset);
+        transform.position = new Vector3(transform.position.x, clampedY, transform.position.z);
 
         Transform playerCamera = PlayerCamera.Instance.transform;
-
-        transform.position += Vector3.up * floatSpeed * Time.deltaTime;
 
         Vector3 dir = (playerCamera.transform.position - transform.position).normalized;
         transform.position -= dir * -cameraOffset * Time.deltaTime;
 
-        float fade = 1f - (timer / lifetime);
+        float fade = 1f - t;
         text.color = new Color(startColor.r, startColor.g, startColor.b, fade);
 
         transform.LookAt(playerCamera.transform);

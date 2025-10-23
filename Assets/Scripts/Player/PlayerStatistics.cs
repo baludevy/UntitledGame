@@ -1,3 +1,4 @@
+using EZCameraShake;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -53,6 +54,8 @@ public class PlayerStatistics : MonoBehaviour
         health -= damage;
         timeSinceLastDamage = 0f;
         regenTimer = 0f;
+
+        CameraShaker.Instance.ShakeOnce(2f, 2.5f, 0.2f, 0.2f);
 
         if (health <= 0)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);

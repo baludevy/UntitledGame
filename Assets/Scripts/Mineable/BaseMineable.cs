@@ -4,10 +4,8 @@ using UnityEngine;
 
 public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 {
-    [Header("Data")] 
-    
-    [SerializeField] private MineableData data;
-    
+    [Header("Data")] [SerializeField] private MineableData data;
+
     private float currentHealth;
     private Vector3 originalScale;
 
@@ -43,7 +41,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     }
 
     public bool canBeMined;
-    
+
     private void Start()
     {
         originalScale = transform.localScale;
@@ -65,7 +63,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     private IEnumerator HitAnimation()
     {
         Vector3 start = originalScale;
-        Vector3 target = start * 0.9f;
+        Vector3 target = start * 0.85f;
 
         float t = 0f;
         while (t < 1f)

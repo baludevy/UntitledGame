@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8990123947146977683}
   - component: {fileID: 3494312675734181403}
-  - component: {fileID: 3067899660473762304}
   - component: {fileID: 7262343892956640681}
+  - component: {fileID: -5365471760195013297}
   m_Layer: 7
   m_Name: SwordHeld
   m_TagString: Untagged
@@ -48,19 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 861a28f92e425bc48b0c08eb2a1e90fd, type: 2}
---- !u!114 &3067899660473762304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6995731428221197024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bb63ec8a6934538bd33cb316b930de2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toolAnimator: {fileID: 7262343892956640681}
 --- !u!95 &7262343892956640681
 Animator:
   serializedVersion: 7
@@ -83,6 +70,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-5365471760195013297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995731428221197024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e9246f1e0854fe79d501ca21d45aa7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sword
+  toolAnimator: {fileID: 7262343892956640681}
 --- !u!1 &8036860195949668508
 GameObject:
   m_ObjectHideFlags: 0
