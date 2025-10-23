@@ -4,7 +4,7 @@ public class ToolInstance : ItemInstance
 {
     public float currentDurability;
 
-    public ToolInstance(ToolItem data, int count = 1) : base(data, count)
+    public ToolInstance(ToolData data, int count = 1) : base(data, count)
     {
         currentDurability = data.maxDurability;
     }
@@ -13,14 +13,14 @@ public class ToolInstance : ItemInstance
     {
         currentDurability -= 1;
 
-        ToolItem toolData = (ToolItem)data;
+        ToolData toolData = (ToolData)data;
         
         float durabilityNormalized = currentDurability / toolData.maxDurability;
         PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
         
         if (currentDurability <= 0)
         {
-            ToolController.Instance.currentBaseTool.Break();
+            ToolController.Instance.currentTool.Break();
         }
     }
 }

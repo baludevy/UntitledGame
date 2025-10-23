@@ -23,3 +23,4 @@ MonoBehaviour:
   cooldown: 1
   type: 2
   maxDurability: 1000
+  animate: 1

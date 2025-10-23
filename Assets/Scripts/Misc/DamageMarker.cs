@@ -46,10 +46,12 @@ public class DamageMarker : MonoBehaviour
         if (timer >= lifetime) Destroy(gameObject);
     }
 
-    public void ShowDamage(float newDamage)
+    public void ShowDamage(float newDamage, bool crit)
     {
         float currentDamage = float.Parse(text.text);
         currentDamage += newDamage;
         text.text = $"{currentDamage:F0}";
+        if (crit)
+            text.color = Color.yellow;
     }
 }

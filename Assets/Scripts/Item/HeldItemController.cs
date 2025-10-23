@@ -60,11 +60,11 @@ public class HeldItemController : MonoBehaviour
                 child.gameObject.layer = LayerMask.NameToLayer("HeldItem");
             }
 
-            if (item.data is ToolItem)
+            if (item.data is ToolData)
             {
-                BaseTool baseTool = currentItemObject.GetComponent<BaseTool>();
-                baseTool.instance = (ToolInstance)item;
-                ToolController.Instance.SetTool(baseTool);
+                MeleeTool meleeTool = currentItemObject.GetComponent<MeleeTool>();
+                meleeTool.instance = (ToolInstance)item;
+                ToolController.Instance.SetTool(meleeTool);
             }
         }
     }

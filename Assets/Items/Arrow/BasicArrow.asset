@@ -9,15 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49d7b01bf07e4a27a79b38fe9b6ccc95, type: 3}
-  m_Name: Arrow
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 35f20ac7e63a4d009a034c0512ac473f, type: 3}
+  m_Name: BasicArrow
+  m_EditorClassIdentifier: Assembly-CSharp::Arrow
   itemName: Arrow
-  itemDescription: uhh i think its an arrow
-  icon: {fileID: 21300000, guid: 90e44cfc01beb8a4581db98777da6f26, type: 3}
+  itemDescription: uhhh i think its an arrow
+  icon: {fileID: 21300000, guid: 113d04a4e5be65f4f9911d1bf11efec4, type: 3}
   maxStack: 64
   stackable: 1
   floorPrefab: {fileID: 2234034229809533675, guid: ddd048ee3eeca6f4abdb7313224271e7, type: 3}
   heldPrefab: {fileID: 4005678115189094498, guid: 5591d2aa321918b49ae338b1cbdaa91d, type: 3}
-  resourceType: 0
-  value: 5
+  projectilePrefab: {fileID: 0}

@@ -23,7 +23,7 @@ public class HotbarSlot : BaseSlot
 
     protected override void OnSetItem(ItemInstance newItem)
     {
-        if (newItem is ToolInstance tool && newItem.data is ToolItem toolData)
+        if (newItem is ToolInstance tool && newItem.data is ToolData toolData)
             SetFrameFill(tool.currentDurability / toolData.maxDurability);
         else
             SetFrameFill(1);

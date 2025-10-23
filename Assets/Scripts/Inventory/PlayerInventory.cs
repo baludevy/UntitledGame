@@ -40,7 +40,7 @@ public class PlayerInventory : MonoBehaviour
 
         foreach (ItemData item in startingItems)
         {
-            if (item is ToolItem tool)
+            if (item is ToolData tool)
             {
                 AddItem(new ToolInstance(tool));
 
@@ -106,6 +106,29 @@ public class PlayerInventory : MonoBehaviour
 
     public ItemInstance GetItem(int row, int col) =>
         (row >= 0 && row < rows && col >= 0 && col < columns) ? grid[row, col] : null;
+
+    public ItemInstance GetArrow()
+    {
+        ItemInstance arrowInstance = null;
+        
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                if (grid[row,col] != null && grid[row, col].data is Arrow)
+                {
+                    if(arrowInstance == null)
+                        arrowInstance = grid[row, col];
+                    else if(arrowInstance.stackAmount < grid[row, col].stackAmount)
+                    {
+                        arrowInstance = grid[row, col];
+                    }
+                }
+            }
+        }
+
+        return arrowInstance;
+    }
 
     private bool TryStackItem(ItemInstance newItem)
     {

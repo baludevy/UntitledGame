@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class Sword : BaseTool 
+public class Sword : MeleeTool
 {
-    public override void Use()
+    protected override void Use()
     {
-        ToolItem data = (ToolItem)instance.data;
+        ToolData data = (ToolData)instance.data;
         
         Vector3 origin = PlayerCamera.Instance.transform.position;
         Vector3 direction = PlayerCamera.Instance.transform.forward;
@@ -15,8 +15,26 @@ public class Sword : BaseTool
         foreach (var slashHit in hits)
         {
             if (slashHit.collider.TryGetComponent(out BaseEnemy enemy))
-                enemy.TakeDamage(data.damage);
-        }
+            {
+                bool crit = PlayerStatistics.Instance.RollCrit();
+                float damage = data.damage;
+                if (crit)
+                    damage *= PlayerStatistics.Instance.critMultiplier;
+                
+                GameObject damageMarker = Instantiate(
+                    PrefabManager.Instance.damageMarker,
+                    slashHit.point,
+                    Quaternion.LookRotation(slashHit.normal)
+                );
+                damageMarker.GetComponent<DamageMarker>().ShowDamage(damage, crit);
 
+                ParticleSystem ps = Instantiate(PrefabManager.Instance.hitEffect, slashHit.point, Quaternion.LookRotation(slashHit.normal))
+                    .GetComponent<ParticleSystem>();
+                if (crit)
+                    ps.startColor = Color.yellow;
+
+                enemy.TakeDamage(damage);
+            }
+        }
     }
 }

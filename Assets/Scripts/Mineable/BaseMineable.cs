@@ -91,7 +91,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
         int amount = Random.Range(MinDropAmount, MaxDropAmount);
         DroppedItem dropped = Instantiate(DropPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
 
-        if (dropped.itemData is ToolItem toolData)
+        if (dropped.itemData is ToolData toolData)
         {
             dropped.Initialize(new ToolInstance(toolData, amount), false);
         }

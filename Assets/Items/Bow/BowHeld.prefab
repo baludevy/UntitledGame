@@ -41,9 +41,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7376972000413411231}
-  - component: {fileID: 6789721059937635224}
-  - component: {fileID: 8769004379133729715}
   - component: {fileID: 6723397243833880721}
+  - component: {fileID: 6963078530947354617}
   m_Layer: 7
   m_Name: BowHeld
   m_TagString: Untagged
@@ -67,32 +66,6 @@ Transform:
   - {fileID: 2607134202915713330}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!114 &6789721059937635224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4003554679095211868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aab7befc162547dab1c2457ed7b9fea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 592054aa2a0880e458488bf68f07ff7d, type: 2}
---- !u!114 &8769004379133729715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4003554679095211868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bb63ec8a6934538bd33cb316b930de2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toolAnimator: {fileID: 6723397243833880721}
 --- !u!95 &6723397243833880721
 Animator:
   serializedVersion: 7
@@ -115,6 +88,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6963078530947354617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4003554679095211868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ce8cd50d384386827aa6a9d3cceb4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bow
+  toolAnimator: {fileID: 6723397243833880721}
 --- !u!1001 &621351123798251100
 PrefabInstance:
   m_ObjectHideFlags: 0

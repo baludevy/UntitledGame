@@ -15,6 +15,9 @@ public class PlayerStatistics : MonoBehaviour
     [SerializeField] private float regenInterval = 3f;
     [SerializeField] private float regenAmount = 5f;
 
+    public float critMultiplier = 1.2f;
+    [SerializeField] private float critChance = 0.05f;
+
     private float timeSinceLastDamage;
     private float regenTimer;
 
@@ -59,5 +62,10 @@ public class PlayerStatistics : MonoBehaviour
 
         if (health <= 0)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public bool RollCrit()
+    {
+        return Random.value <= critChance;
     }
 }
