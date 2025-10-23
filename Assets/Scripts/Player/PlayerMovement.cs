@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     public ParticleSystem ps;
     private ParticleSystem.EmissionModule emission;
-
+    
     private float staminaRegenDelay = 1.5f;
     private float staminaRegenTimer = 0f;
     private bool canRegenStamina;

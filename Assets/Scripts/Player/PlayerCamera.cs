@@ -10,6 +10,7 @@ public class PlayerCamera : MonoBehaviour
     public float bobMultiplier = 0.5f;
 
     [Header("Weapon Sway")] public float swayAmount = 0.05f;
+    public float swayPositionAmount = 0.03f;
     public float swaySmooth = 4f;
 
     public Camera cam;
@@ -17,7 +18,7 @@ public class PlayerCamera : MonoBehaviour
     public static PlayerCamera Instance;
 
     public Vector3 bobOffset { get; private set; }
-    
+
     private Vector3 desiredBob;
     private Vector3 speedBob;
 
@@ -33,12 +34,10 @@ public class PlayerCamera : MonoBehaviour
 
     private void Start()
     {
-        heldItemHolder.position = new Vector3(heldItemHolder.position.x,
-            heldItemHolder.position.y + PlayerMovement.Instance.playerHeight, heldItemHolder.position.z);
         startPos = heldItemHolder.localPosition;
         rb = PlayerMovement.Instance.rb;
     }
-    
+
     private void LateUpdate()
     {
         if (!target) return;
@@ -80,6 +79,9 @@ public class PlayerCamera : MonoBehaviour
         Quaternion targetRot = Quaternion.Euler(mouseY, -mouseX, 0);
         heldItemHolder.localRotation =
             Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);
+        Vector3 targetPos = new Vector3(-mouseX * swayPositionAmount, -mouseY * swayPositionAmount, 0);
+        heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, startPos + targetPos + bobOffset,
+            Time.deltaTime * swaySmooth);
     }
 
     private Vector3 ClampVector(Vector3 vec, float min, float max)

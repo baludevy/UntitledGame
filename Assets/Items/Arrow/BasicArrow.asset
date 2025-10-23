@@ -19,4 +19,4 @@ MonoBehaviour:
   stackable: 1
   floorPrefab: {fileID: 2234034229809533675, guid: ddd048ee3eeca6f4abdb7313224271e7, type: 3}
   heldPrefab: {fileID: 4005678115189094498, guid: 5591d2aa321918b49ae338b1cbdaa91d, type: 3}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 6170873785938585429, guid: f4f55382f77e7384082e9cbdf33fcd85, type: 3}

@@ -6,7 +6,7 @@ public abstract class BaseTool : MonoBehaviour
     public Animator toolAnimator;
     
     public abstract void HandleInput();
-    public abstract void UpdateTool(float deltaTime);
+    public abstract void UpdateTool();
     
     public void Break()
     {

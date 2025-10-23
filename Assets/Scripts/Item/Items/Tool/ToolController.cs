@@ -1,9 +1,12 @@
+using System;
 using EZCameraShake;
 using UnityEngine;
 
 public class ToolController : MonoBehaviour
 {
     public BaseTool currentTool;
+
+    [NonSerialized] public float useTimer;
 
     public static ToolController Instance;
 
@@ -22,7 +25,7 @@ public class ToolController : MonoBehaviour
 
         if (currentTool != null)
         {
-            currentTool.UpdateTool(Time.deltaTime);
+            currentTool.UpdateTool();
         }
     }
 

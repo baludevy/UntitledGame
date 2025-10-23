@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2689009817267101428}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalPosition: {x: -0.13, y: -0.01, z: 0.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59,7 +59,7 @@ Transform:
   m_GameObject: {fileID: 4003554679095211868}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000000008381903}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -101,6 +101,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bow
   toolAnimator: {fileID: 6723397243833880721}
+  bulletPos: {fileID: 0}
+  minShootForce: 15
+  maxShootForce: 50
 --- !u!1001 &621351123798251100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113,6 +116,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1309479896564096241, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540582206718137284, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4637006571197163125, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
       propertyPath: m_Name
       value: Bow
@@ -120,6 +131,18 @@ PrefabInstance:
     - target: {fileID: 4637006571197163125, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014294260023563501, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014294260023563501, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014294260023563501, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 5014294260023563501, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
       propertyPath: m_LocalPosition.x
@@ -162,6 +185,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5410459205691884118, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7366533637089370544, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647611457393664069, guid: a2881d14716ed2947835e361a9bbb983, type: 3}
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}

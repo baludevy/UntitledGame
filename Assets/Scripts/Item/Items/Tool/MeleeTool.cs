@@ -5,15 +5,18 @@ using EZCameraShake;
 
 public class MeleeTool : BaseTool
 {
-    private float useTimer;
     private bool wasSwinging;
     private bool swingingThisFrame;
     private bool usedDuringSwing;
     private bool checkAfterFrame;
     private readonly float swingTrigger = 0.2f;
 
+    private ToolController toolController;
+    
     private void Start()
     {
+        toolController = ToolController.Instance;
+        
         ToolData data = (ToolData)instance.data;
         float durabilityNormalized = instance.currentDurability / data.maxDurability;
         PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
@@ -23,7 +26,7 @@ public class MeleeTool : BaseTool
     {
         bool isSwinging = Input.GetMouseButton(0);
 
-        if (isSwinging && useTimer <= 0 && !swingingThisFrame)
+        if (isSwinging && toolController.useTimer <= 0 && !swingingThisFrame)
         {
             ToolData toolData = (ToolData)instance.data;
             float baseLength = 1f;
@@ -36,7 +39,7 @@ public class MeleeTool : BaseTool
 
             usedDuringSwing = false;
             checkAfterFrame = false;
-            useTimer = toolData.cooldown;
+            toolController.useTimer = toolData.cooldown;
             swingingThisFrame = true;
         }
 
@@ -44,10 +47,10 @@ public class MeleeTool : BaseTool
         swingingThisFrame = false;
     }
 
-    public override void UpdateTool(float deltaTime)
+    public override void UpdateTool()
     {
-        if (useTimer > 0)
-            useTimer -= deltaTime;
+        if (toolController.useTimer > 0)
+            toolController.useTimer -= Time.deltaTime;
 
         if (checkAfterFrame && !usedDuringSwing)
         {
