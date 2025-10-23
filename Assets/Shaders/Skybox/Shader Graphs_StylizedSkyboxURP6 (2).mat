@@ -85,7 +85,7 @@ Material:
     - _Secondary_Clouds_Smoothness: 0.02
     - _Stretch_Color_Lerp: 1
     m_Colors:
-    - Color_1EB49FED: {r: 0.3948217, g: 0.9056992, b: 2.3565924, a: 0}
+    - Color_1EB49FED: {r: 2.7306952, g: 1.8932192, b: 0.4250611, a: 0}
     - Color_424F81E0: {r: 0.7951061, g: 0.76561946, b: 0.8773585, a: 0}
     - Color_68FD0CD8: {r: 0.26539695, g: 0.47621936, b: 0.7924528, a: 0}
     - Color_83CF459: {r: 0.036311854, g: 0.05855379, b: 0.1509434, a: 0}

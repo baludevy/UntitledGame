@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Tool : MonoBehaviour
+public class BaseTool : MonoBehaviour
 {
     public ToolInstance instance;
     public Animator toolAnimator;
@@ -13,26 +13,9 @@ public class Tool : MonoBehaviour
         PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
     }
 
-    public void Use()
+    public virtual void Use()
     {
         ToolItem data = (ToolItem)instance.data;
-
-        if (data.type == ToolType.Sword)
-        {
-            Vector3 origin = PlayerCamera.Instance.transform.position;
-            Vector3 direction = PlayerCamera.Instance.transform.forward;
-            float slashRange = 2f;
-            float slashRadius = 3f;
-
-            RaycastHit[] hits = Physics.SphereCastAll(origin, slashRadius, direction, slashRange);
-            foreach (var slashHit in hits)
-            {
-                if (slashHit.collider.TryGetComponent(out BaseEnemy enemy))
-                    enemy.TakeDamage(data.damage);
-            }
-
-            return;
-        }
 
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
@@ -42,8 +25,10 @@ public class Tool : MonoBehaviour
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
                 /* if (damage > 0)
                     instance.TakeDurability(); */
-                
+
                 mineable.TakeDamage(damage);
+
+                Instantiate(PrefabManager.Instance.hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }
     }

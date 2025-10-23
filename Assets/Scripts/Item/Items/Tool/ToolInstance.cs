@@ -20,7 +20,7 @@ public class ToolInstance : ItemInstance
         
         if (currentDurability <= 0)
         {
-            ToolController.Instance.currentTool.Break();
+            ToolController.Instance.currentBaseTool.Break();
         }
     }
 }

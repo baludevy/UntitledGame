@@ -1,42 +1,63 @@
+using EZCameraShake;
 using UnityEngine;
 
 public class ToolController : MonoBehaviour
 {
-    public Tool currentTool;
+    public BaseTool currentBaseTool;
     private float useTimer;
     private bool wasSwinging;
     private bool swingingThisFrame;
-    
-    public static ToolController Instance;
-    private static readonly int Return = Animator.StringToHash("Return");
+    private bool usedDuringSwing;
+    private bool checkAfterFrame;
+    private readonly float swingTrigger = 0.2f;
 
-    void Awake()
+    public static ToolController Instance;
+
+    private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
-    void Update()
+    private void Update()
     {
-        if(!PlayerInventory.Instance.inventoryOpen)
+        if (!PlayerInventory.Instance.inventoryOpen)
             ToolUseInput();
+
+        if (currentBaseTool == null) return;
+
+        if (checkAfterFrame && !usedDuringSwing)
+        {
+            var info = currentBaseTool.toolAnimator.GetCurrentAnimatorStateInfo(0);
+            if (info.IsName("Swing") && info.normalizedTime >= swingTrigger)
+            {
+                UseTool();
+                usedDuringSwing = true;
+            }
+        }
+
+        checkAfterFrame = true;
     }
 
     private void ToolUseInput()
     {
-        if (currentTool == null) return;
+        if (currentBaseTool == null) return;
 
         bool isSwinging = Input.GetMouseButton(0);
-        
+
         if (isSwinging && useTimer <= 0 && !swingingThisFrame)
         {
-            currentTool.toolAnimator.Play("Swing", 0, 0f);
-            UseTool();
+            ToolItem toolData = (ToolItem)currentBaseTool.instance.data;
+            float baseLength = 1f;
+            float speedMultiplier = baseLength / toolData.cooldown;
+            currentBaseTool.toolAnimator.speed = speedMultiplier;
+            currentBaseTool.toolAnimator.Play("Swing", 0, 0f);
+
+            usedDuringSwing = false;
+            checkAfterFrame = false;
+            useTimer = toolData.cooldown;
             swingingThisFrame = true;
         }
-        
-        if (!isSwinging && wasSwinging)
-            currentTool.toolAnimator.SetTrigger(Return);
 
         if (useTimer > 0)
             useTimer -= Time.deltaTime;
@@ -47,13 +68,13 @@ public class ToolController : MonoBehaviour
 
     private void UseTool()
     {
-        ToolItem toolData = (ToolItem)currentTool.instance.data;
-        useTimer = toolData.cooldown;
-        currentTool.Use();
+        CameraShaker.Instance.ShakeOnce(2f, 2f, 0.15f, 0.2f);
+        currentBaseTool.Use();
     }
 
-    public void SetTool(Tool tool)
+
+    public void SetTool(BaseTool baseTool)
     {
-        currentTool = tool;
+        currentBaseTool = baseTool;
     }
 }

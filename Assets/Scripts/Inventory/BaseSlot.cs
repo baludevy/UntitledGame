@@ -50,6 +50,8 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (item == null) return;
         
+        Debug.Log("a");
+        
         GameObject drag = new GameObject("drag", typeof(RectTransform));
         dragData = drag.AddComponent<DragData>();
         drag.transform.SetParent(canvas.transform, false);

@@ -1,11 +1,9 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class DroppedItem : MonoBehaviour
 {
     public ItemData itemData;
-    public ItemInstance itemInstance;
+    private ItemInstance itemInstance;
 
     private Collider playerCollider;
     private float ignoreUntil;
