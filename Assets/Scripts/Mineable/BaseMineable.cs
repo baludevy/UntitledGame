@@ -27,7 +27,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public DroppedItem DropPrefab => data.DropPrefab;
     public int MinDropAmount => data.MinDropAmount;
     public int MaxDropAmount => data.MaxDropAmount;
-    
+
     public int Sound => data.Sound;
 
     public float MaxHealth

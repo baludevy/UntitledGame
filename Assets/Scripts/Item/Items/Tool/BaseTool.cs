@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BaseTool : MonoBehaviour
 {
@@ -23,11 +24,19 @@ public class BaseTool : MonoBehaviour
             if (mineable != null && mineable.canBeMined)
             {
                 int damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
-                /* if (damage > 0)
-                    instance.TakeDurability(); */
 
+                GameObject damageMarker = Instantiate(
+                    PrefabManager.Instance.damageMarker,
+                    hit.point,
+                    Quaternion.LookRotation(hit.normal)
+                );
+
+                damageMarker.GetComponent<DamageMarker>().ShowDamage(damage);
                 mineable.TakeDamage(damage);
+            }
 
+            if (hit.collider.GetComponent<IDamageable>() != null)
+            {
                 Instantiate(PrefabManager.Instance.hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }

@@ -24,7 +24,6 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         get => currentHealth;
         set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
     }
-
     private Vector3 originalScale;
     private Vector3 weaponOriginalScale;
 
