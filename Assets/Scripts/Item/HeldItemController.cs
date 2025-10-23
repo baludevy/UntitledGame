@@ -62,9 +62,9 @@ public class HeldItemController : MonoBehaviour
 
             if (item.data is ToolData)
             {
-                MeleeTool meleeTool = currentItemObject.GetComponent<MeleeTool>();
-                meleeTool.instance = (ToolInstance)item;
-                ToolController.Instance.SetTool(meleeTool);
+                BaseTool baseTool = currentItemObject.GetComponent<BaseTool>();
+                baseTool.instance = (ToolInstance)item;
+                ToolController.Instance.SetTool(baseTool);
             }
         }
     }
