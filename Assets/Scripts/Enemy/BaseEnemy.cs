@@ -54,7 +54,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         agent.destination = PlayerMovement.Instance.transform.position;
 
         Vector3 playerPos = PlayerMovement.Instance.transform.position;
-        Vector3 playerVel = PlayerMovement.Instance.GetComponent<Rigidbody>().linearVelocity;
+        Vector3 playerVel = PlayerMovement.Instance.GetComponent<Rigidbody>().velocity;
         Vector3 startPos = weapon.transform.position;
 
         // done by ai ----------------
@@ -110,7 +110,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         GameObject bullet = Instantiate(bulletPrefab, startPos, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.useGravity = true;
-        rb.linearVelocity = velocity;
+        rb.velocity = velocity;
 
         StartCoroutine(ReloadWeapon());
         attackTimer = attackCooldown;

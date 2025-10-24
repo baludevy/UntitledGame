@@ -6,7 +6,7 @@ QualitySettings:
   serializedVersion: 5
   m_CurrentQuality: 0
   m_QualitySettings:
-  - serializedVersion: 4
+  - serializedVersion: 3
     name: Level 1
     pixelLightCount: 0
     shadows: 0
@@ -28,11 +28,8 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     useLegacyDetailDistribution: 1
-    adaptiveVsync: 0
     vSyncCount: 1
     realtimeGICPUUsage: 25
-    adaptiveVsyncExtraA: 0
-    adaptiveVsyncExtraB: 0
     lodBias: 2
     maximumLODLevel: 0
     enableLODCrossFade: 1
@@ -47,7 +44,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 1de5a68c2a7b3db488bf364e4446f832, type: 2}
+    customRenderPipeline: {fileID: 0}
     terrainQualityOverrides: 0
     terrainPixelError: 1
     terrainDetailDensityScale: 1

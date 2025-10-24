@@ -9,13 +9,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2931841721532488214, guid: 9615ce2457d31254dbcfe005faa82354, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
+      propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 61f549d65528f3c468ec96f7240af75a, type: 2}
+      objectReference: {fileID: 2100000, guid: abf607a3e54d3594380ddb8fb558d61b, type: 2}
     - target: {fileID: 6555643449038461324, guid: 9615ce2457d31254dbcfe005faa82354, type: 3}
       propertyPath: m_Name
       value: Birch Tree Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6759768392778731121, guid: 9615ce2457d31254dbcfe005faa82354, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: aa935c14f099739438544bd51cd00c7b, type: 2}
+    - target: {fileID: 7615747851974879295, guid: 9615ce2457d31254dbcfe005faa82354, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: aa935c14f099739438544bd51cd00c7b, type: 2}
     - target: {fileID: 8505876975272282479, guid: 9615ce2457d31254dbcfe005faa82354, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.56

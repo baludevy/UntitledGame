@@ -67,7 +67,7 @@ public class PlayerCamera : MonoBehaviour
     {
         if (!rb) return;
         Vector2 relativeVel = PlayerMovement.Instance.FindVelRelativeToLook();
-        Vector3 v = new Vector3(relativeVel.x, rb.linearVelocity.y, relativeVel.y) * -0.01f;
+        Vector3 v = new Vector3(relativeVel.x, rb.velocity.y, relativeVel.y) * -0.01f;
         v = Vector3.ClampMagnitude(v, 0.6f);
         speedBob = Vector3.Lerp(speedBob, v, Time.deltaTime * 10f);
     }
