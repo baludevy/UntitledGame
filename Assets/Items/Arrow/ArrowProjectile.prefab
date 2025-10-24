@@ -228,7 +228,7 @@ MonoBehaviour:
   rb: {fileID: 6433738984078925407}
   speed: 20
   lifeTime: 5
-  impactPrefab: {fileID: 7575024564574123892, guid: 9cc2641facfa1f943a2f217bc302bdd9, type: 3}
+  impactPrefab: {fileID: 5768131047672314653, guid: 48684cc5d25011148b293a9f2560531c, type: 3}
 --- !u!54 &6433738984078925407
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -54,7 +54,7 @@ public class PlayerStatistics : MonoBehaviour
 
     public void TakeDamage(float damage, bool flash = true)
     {
-        health -= damage;
+        // health -= damage;
         timeSinceLastDamage = 0f;
         regenTimer = 0f;
 

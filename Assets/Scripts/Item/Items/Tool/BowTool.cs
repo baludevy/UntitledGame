@@ -50,10 +50,10 @@ public class BowTool : BaseTool
         ToolData data = (ToolData)instance.data;
 
         toolController.useTimer += data.cooldown;
-        
+
         ItemInstance arrow = PlayerInventory.Instance.GetArrow();
         if (arrow == null) return;
-        
+
         Arrow arrowData = (Arrow)arrow.data;
 
         Ray ray = PlayerCamera.GetRay();
@@ -65,7 +65,8 @@ public class BowTool : BaseTool
         GameObject arrowObj =
             Instantiate(arrowData.projectilePrefab, shootPos, Quaternion.LookRotation(shootDirection));
         Rigidbody rb = arrowObj.GetComponent<Rigidbody>();
-        
+
+
         PlayerInventory.Instance.SubtractAmountFromItem(arrow, 1);
 
         float force = Mathf.Lerp(minShootForce, maxShootForce, charge);

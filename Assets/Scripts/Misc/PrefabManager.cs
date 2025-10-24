@@ -7,7 +7,7 @@ public class PrefabManager : MonoBehaviour
 
     public GameObject hitEffect;
     public GameObject damageMarker;
-    
+
     private void Awake()
     {
         if (Instance == null)
@@ -16,7 +16,26 @@ public class PrefabManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         DontDestroyOnLoad(this);
+    }
+
+    public void SpawnDamageMarker(Vector3 pos, Quaternion rot, float damage, bool crit)
+    {
+        GameObject marker = Instantiate(damageMarker, pos, rot);
+
+        marker.GetComponent<DamageMarker>().ShowDamage(damage, crit);
+    }
+
+    public void SpawnSparkles(Vector3 pos, Quaternion rot, bool crit)
+    {
+        ParticleSystem ps =
+            Instantiate(hitEffect, pos, rot)
+                .GetComponent<ParticleSystem>();
+
+        if (crit)
+        {
+            ps.startColor = Color.yellow;
+        }
     }
 }

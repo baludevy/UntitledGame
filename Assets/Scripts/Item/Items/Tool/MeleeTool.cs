@@ -12,11 +12,11 @@ public class MeleeTool : BaseTool
     private readonly float swingTrigger = 0.2f;
 
     private ToolController toolController;
-    
+
     private void Start()
     {
         toolController = ToolController.Instance;
-        
+
         ToolData data = (ToolData)instance.data;
         float durabilityNormalized = instance.currentDurability / data.maxDurability;
         PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
@@ -71,43 +71,42 @@ public class MeleeTool : BaseTool
         {
             bool crit = PlayerStatistics.Instance.RollCrit();
 
-            BaseMineable mineable = GetMineable(hit.collider.transform);
-            if (mineable != null && mineable.canBeMined)
+            IDamageable damageable = GetTarget(hit.collider.transform);
+
+            if (damageable is BaseMineable mineable)
             {
+                if (!mineable.canBeMined) return;
                 float damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
-                
+
                 if (crit)
                     damage *= PlayerStatistics.Instance.critMultiplier;
 
-                GameObject damageMarker = Instantiate(
-                    PrefabManager.Instance.damageMarker,
-                    hit.point,
-                    Quaternion.LookRotation(hit.normal)
-                );
+                PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
+                    crit);
+                PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
 
-                damageMarker.GetComponent<DamageMarker>().ShowDamage(damage, crit);
                 mineable.TakeDamage(damage);
-            }
-
-            if (hit.collider.GetComponent<IDamageable>() != null)
+            } else if (damageable is BaseEnemy enemy)
             {
-                ParticleSystem ps =
-                    Instantiate(PrefabManager.Instance.hitEffect, hit.point, Quaternion.LookRotation(hit.normal))
-                        .GetComponent<ParticleSystem>();
-
-                if (crit)
-                {
-                    ps.startColor = Color.yellow;
-                }
+                float damage = data.damage;
+                
+                if(crit)
+                    damage *= PlayerStatistics.Instance.critMultiplier;
+                
+                PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
+                    crit);
+                PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
+                
+                enemy.TakeDamage(damage);
             }
-        }
+        } 
     }
 
-    private static BaseMineable GetMineable(Transform target)
+    private static IDamageable GetTarget(Transform target)
     {
         while (target != null)
         {
-            var m = target.GetComponent<BaseMineable>();
+            var m = target.GetComponent<IDamageable>();
             if (m != null)
                 return m;
 

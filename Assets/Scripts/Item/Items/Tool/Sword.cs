@@ -5,33 +5,30 @@ public class Sword : MeleeTool
     protected override void Use()
     {
         ToolData data = (ToolData)instance.data;
-        
+
         Vector3 origin = PlayerCamera.Instance.transform.position;
         Vector3 direction = PlayerCamera.Instance.transform.forward;
         float slashRange = 2f;
         float slashRadius = 3f;
 
-        RaycastHit[] hits = Physics.SphereCastAll(origin, slashRadius, direction, slashRange);
-        foreach (var slashHit in hits)
+        Collider[] hits = Physics.OverlapSphere(origin + direction * slashRange * 0.5f, slashRadius);
+        foreach (var hit in hits)
         {
-            if (slashHit.collider.TryGetComponent(out BaseEnemy enemy))
+            if (hit.TryGetComponent(out BaseEnemy enemy))
             {
                 bool crit = PlayerStatistics.Instance.RollCrit();
                 float damage = data.damage;
                 if (crit)
                     damage *= PlayerStatistics.Instance.critMultiplier;
-                
-                GameObject damageMarker = Instantiate(
-                    PrefabManager.Instance.damageMarker,
-                    slashHit.point,
-                    Quaternion.LookRotation(slashHit.normal)
-                );
-                damageMarker.GetComponent<DamageMarker>().ShowDamage(damage, crit);
 
-                ParticleSystem ps = Instantiate(PrefabManager.Instance.hitEffect, slashHit.point, Quaternion.LookRotation(slashHit.normal))
-                    .GetComponent<ParticleSystem>();
-                if (crit)
-                    ps.startColor = Color.yellow;
+                Vector3 hitPoint = hit.ClosestPoint(origin);
+                Vector3 hitNormal = (hitPoint - origin).normalized;
+
+                hitPoint += -hitNormal * 0.25f;
+                Quaternion rot = Quaternion.LookRotation(hitNormal);
+
+                PrefabManager.Instance.SpawnDamageMarker(hitPoint, rot, damage, crit);
+                PrefabManager.Instance.SpawnSparkles(hitPoint, rot, crit);
 
                 enemy.TakeDamage(damage);
             }
