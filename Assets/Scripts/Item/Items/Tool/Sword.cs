@@ -30,7 +30,7 @@ public class Sword : MeleeTool
                 PrefabManager.Instance.SpawnDamageMarker(hitPoint, rot, damage, crit);
                 PrefabManager.Instance.SpawnSparkles(hitPoint, rot, crit);
 
-                enemy.TakeDamage(damage);
+                // enemy.TakeDamage(damage);
             }
         }
     }

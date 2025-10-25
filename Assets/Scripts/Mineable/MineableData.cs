@@ -7,7 +7,6 @@ public class MineableData : ScriptableObject, IMineable
     [SerializeField] private string mineableName;
     [SerializeField] private string description;
     [SerializeField] private ToolType canBeMinedWith;
-    [SerializeField] private DroppedItem dropPrefab;
     [SerializeField] private int minDropAmount;
     [SerializeField] private int maxDropAmount;
     [SerializeField] private float maxHealth;
@@ -26,7 +25,6 @@ public class MineableData : ScriptableObject, IMineable
     }
 
     public ToolType CanBeMinedWith => canBeMinedWith;
-    public DroppedItem DropPrefab => dropPrefab;
     public int MinDropAmount => minDropAmount;
     public int MaxDropAmount => maxDropAmount;
     

@@ -51,7 +51,7 @@ public class BowTool : BaseTool
 
         toolController.useTimer += data.cooldown;
 
-        ItemInstance arrow = PlayerInventory.Instance.GetArrow();
+        /* // ItemInstance arrow = PlayerInventory.Instance.GetArrow();
         if (arrow == null) return;
 
         Arrow arrowData = (Arrow)arrow.data;
@@ -70,6 +70,6 @@ public class BowTool : BaseTool
         PlayerInventory.Instance.SubtractAmountFromItem(arrow, 1);
 
         float force = Mathf.Lerp(minShootForce, maxShootForce, charge);
-        rb.AddForce(shootDirection * force, ForceMode.Impulse);
+        rb.AddForce(shootDirection * force, ForceMode.Impulse); */
     }
 }

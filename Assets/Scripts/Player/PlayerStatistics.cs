@@ -18,6 +18,10 @@ public class PlayerStatistics : MonoBehaviour
     public float critMultiplier = 1.2f;
     [SerializeField] private float critChance = 0.05f;
 
+    private float xp;
+    private float xpToNextLevel = 50;
+    private int level = 1;
+
     private float timeSinceLastDamage;
     private float regenTimer;
 
@@ -28,7 +32,6 @@ public class PlayerStatistics : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -50,6 +53,11 @@ public class PlayerStatistics : MonoBehaviour
                 regenTimer = 0f;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            GainXP(10);
+        }
     }
 
     public void TakeDamage(float damage, bool flash = true)
@@ -68,4 +76,25 @@ public class PlayerStatistics : MonoBehaviour
     {
         return Random.value <= critChance;
     }
+    
+    public void GainXP(float amount)
+    {
+        xp += amount;
+        while (xp >= xpToNextLevel)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        xp -= xpToNextLevel;
+        xpToNextLevel *= 1.2f;
+        xpToNextLevel = Mathf.Floor(xpToNextLevel);
+        level += 1;
+    }
+
+    public float GetXP() => xp;
+    public float GetXPNeededForNextLevel() => xpToNextLevel;
+    public float GetXPLevel() => level;
 }

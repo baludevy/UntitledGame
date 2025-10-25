@@ -30,9 +30,6 @@ public class MapGenerator : MonoBehaviour
     public Material waterMaterial;
     public float waterLevel = 2f;
     public Vector2 uvScale = new Vector2(1f, 1f);
-
-    public GrassComputeScript grassSystem;
-    public SO_GrassSettings grassSettings;
     public float grassDensity = 0.35f;
 
     public TreeSpawn[] treePrefabs;
@@ -131,8 +128,7 @@ public class MapGenerator : MonoBehaviour
         {
             meshRenderer.sharedMaterial = terrainMaterial;
         }
-
-        MakeGrass(vertices, mesh.normals);
+        
         SpawnTrees(vertices);
     }
 
@@ -166,49 +162,6 @@ public class MapGenerator : MonoBehaviour
         MeshRenderer meshRenderer = water.GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = waterMaterial;
         DestroyImmediate(water.GetComponent<MeshCollider>());
-    }
-
-    private void MakeGrass(Vector3[] vertices, Vector3[] normals)
-    {
-        if (grassSystem == null || grassSettings == null)
-        {
-            return;
-        }
-
-        grassSystem.currentPresets = grassSettings;
-
-        List<GrassData> grassDataList = new List<GrassData>(vertices.Length);
-        Vector3 upVector = Vector3.up;
-        Color topColor = grassSettings.topTint;
-        Vector2 lengthRange = new Vector2(grassSettings.MinHeight, grassSettings.MaxHeight);
-
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            if (vertices[i].y < waterLevel)
-            {
-                continue;
-            }
-
-            if (Random.value > grassDensity)
-            {
-                continue;
-            }
-
-            GrassData grassData = new GrassData
-            {
-                position = transform.TransformPoint(vertices[i]),
-                normal = normals[i].sqrMagnitude > 0f ? normals[i] : upVector,
-                length = new Vector2(
-                    Random.Range(lengthRange.x, lengthRange.y),
-                    Random.Range(lengthRange.x, lengthRange.y)),
-                color = new Vector3(topColor.r, topColor.g, topColor.b)
-            };
-
-            grassDataList.Add(grassData);
-        }
-
-        grassSystem.SetGrassPaintedDataList = grassDataList;
-        grassSystem.Reset();
     }
 
     private void SpawnTrees(Vector3[] vertices)

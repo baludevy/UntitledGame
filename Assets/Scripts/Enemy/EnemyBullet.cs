@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 public class EnemyBullet : MonoBehaviour
 {
     public Rigidbody rb;
-    [SerializeField] private float speed = 20f;
     [SerializeField] private float lifeTime = 5f;
 
     [SerializeField] private ParticleSystem impactPrefab;

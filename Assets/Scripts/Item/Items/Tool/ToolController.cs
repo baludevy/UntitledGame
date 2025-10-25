@@ -21,7 +21,7 @@ public class ToolController : MonoBehaviour
         if (useTimer > 0)
             useTimer -= Time.deltaTime;
         
-        if (!PlayerInventory.Instance.inventoryOpen && currentTool != null)
+        if (currentTool != null)
         {
             currentTool.HandleInput();
         }

@@ -35,7 +35,8 @@ public class PrefabManager : MonoBehaviour
 
         if (crit)
         {
-            ps.startColor = Color.yellow;
+            ParticleSystem.MainModule main = ps.main;
+            main.startColor = Color.yellow;
         }
     }
 }

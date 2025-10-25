@@ -10,7 +10,6 @@ public abstract class BaseTool : MonoBehaviour
     
     public void Break()
     {
-        PlayerInventory.Instance.RemoveItemByID(instance.id);
         Destroy(gameObject);
     }
 }

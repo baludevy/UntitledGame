@@ -5,16 +5,18 @@ public class DayNightCycle : MonoBehaviour
 {
     [SerializeField] private Light sunLight;
 
-    [Header("Day-Night cycle settings")] 
-    [SerializeField] private float startTime;
-    [SerializeField] private float speed;
-    [Tooltip("In Minutes")] [SerializeField] public float cycleDuration;
+    [Header("Day-Night cycle settings")] [SerializeField]
+    private float startTime;
 
-    [Header("Lighting settings")] 
-    [SerializeField] private float lightIntensityNight = 0f;
+    [SerializeField] private float speed;
+
+    [Tooltip("In Minutes")] [SerializeField]
+    public float cycleDuration;
+
+    [Header("Lighting settings")] [SerializeField]
+    private float lightIntensityNight = 0f;
+
     [SerializeField] private float lightIntensityDay = 1f;
-    [SerializeField] private float sunriseAngle = -90f;
-    [SerializeField] private float sunsetAngle = 90f;
 
     private float currentTimeOfDay;
     private float timeOfDayNormalized;
@@ -22,7 +24,7 @@ public class DayNightCycle : MonoBehaviour
     private bool wasNight;
     private int currentDay;
     private float lastTimeOfDay;
-    
+
     public static float CurrentTimeOfDay => Instance.currentTimeOfDay;
     public static int CurrentDay => Instance.currentDay;
 
@@ -75,7 +77,7 @@ public class DayNightCycle : MonoBehaviour
 
             nightSpawnActive = false;
         }
-        
+
         if (timeOfDayNormalized < lastTimeOfDay)
         {
             currentDay++;

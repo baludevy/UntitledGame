@@ -22,7 +22,6 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     }
 
     public ToolType CanBeMinedWith => data.CanBeMinedWith;
-    public DroppedItem DropPrefab => data.DropPrefab;
     public int MinDropAmount => data.MinDropAmount;
     public int MaxDropAmount => data.MaxDropAmount;
 
@@ -56,7 +55,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
 
-        if (currentHealth <= 0 && DropPrefab != null)
+        if (currentHealth <= 0)
             DropLoot();
     }
 
@@ -88,18 +87,6 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
     public void DropLoot()
     {
-        int amount = Random.Range(MinDropAmount, MaxDropAmount);
-        DroppedItem dropped = Instantiate(DropPrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
-
-        if (dropped.itemData is ToolData toolData)
-        {
-            dropped.Initialize(new ToolInstance(toolData, amount), false);
-        }
-        else
-        {
-            dropped.Initialize(new ItemInstance(dropped.itemData, amount), true);
-        }
-
         Destroy(gameObject);
     }
 }

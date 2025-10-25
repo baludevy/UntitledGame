@@ -18,8 +18,6 @@ public class MeleeTool : BaseTool
         toolController = ToolController.Instance;
 
         ToolData data = (ToolData)instance.data;
-        float durabilityNormalized = instance.currentDurability / data.maxDurability;
-        PlayerInventory.Instance.GetActiveHotbarSlot().SetFrameFill(durabilityNormalized);
     }
 
     public override void HandleInput()
@@ -97,7 +95,7 @@ public class MeleeTool : BaseTool
                     crit);
                 PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
                 
-                enemy.TakeDamage(damage);
+                // enemy.TakeDamage(damage);
             }
         } 
     }
