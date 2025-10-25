@@ -7,6 +7,4 @@ public class ToolData : ItemData
     public float damage;
     public float cooldown;
     public ToolType type;
-    public float maxDurability;
-    public bool animate = true;
 }

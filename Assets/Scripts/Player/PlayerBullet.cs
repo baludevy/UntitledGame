@@ -22,7 +22,7 @@ public class PlayerBullet : MonoBehaviour
 
         Vector3 spawnPoint = contact.point + contact.normal * 0.05f;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        /* if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             BaseEnemy enemy = collision.gameObject.GetComponent<BaseEnemy>();
             NavMeshAgent agent = enemy != null ? enemy.GetComponent<NavMeshAgent>() : null;
@@ -39,7 +39,7 @@ public class PlayerBullet : MonoBehaviour
             if (enemy != null) enemy.TakeDamage(damage);
 
             PrefabManager.Instance.SpawnDamageMarker(spawnPoint, rotation, damage, crit);
-        }
+        } */
 
         if (collision.gameObject.GetComponent<IDamageable>() != null)
             PrefabManager.Instance.SpawnSparkles(spawnPoint, rotation, crit);

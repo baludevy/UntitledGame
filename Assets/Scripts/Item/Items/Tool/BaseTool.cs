@@ -7,9 +7,4 @@ public abstract class BaseTool : MonoBehaviour
     
     public abstract void HandleInput();
     public abstract void UpdateTool();
-    
-    public void Break()
-    {
-        Destroy(gameObject);
-    }
 }

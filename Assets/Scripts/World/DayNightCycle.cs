@@ -60,24 +60,6 @@ public class DayNightCycle : MonoBehaviour
         float intensityFactor = Mathf.Clamp01(Mathf.Sin(timeOfDayNormalized * Mathf.PI * 2f));
         sunLight.intensity = Mathf.Lerp(lightIntensityNight, lightIntensityDay, intensityFactor);
 
-        if (IsNight() && !nightSpawnActive)
-        {
-            float sessionDuration = cycleDurationSeconds / 2f;
-
-            if (EnemySpawner.Instance != null)
-            {
-                EnemySpawner.Instance.StartSpawn(sessionDuration, ProgressiveDifficulty.enemiesPerNight);
-                nightSpawnActive = true;
-            }
-        }
-        else if (!IsNight() && nightSpawnActive)
-        {
-            if (EnemySpawner.Instance != null)
-                EnemySpawner.Instance.StopSpawn();
-
-            nightSpawnActive = false;
-        }
-
         if (timeOfDayNormalized < lastTimeOfDay)
         {
             currentDay++;

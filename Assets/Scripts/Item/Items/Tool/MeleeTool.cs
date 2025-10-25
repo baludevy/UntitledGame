@@ -29,11 +29,9 @@ public class MeleeTool : BaseTool
             ToolData toolData = (ToolData)instance.data;
             float baseLength = 1f;
             float speedMultiplier = baseLength / toolData.cooldown;
-            if (toolData.animate)
-            {
-                toolAnimator.speed = speedMultiplier;
-                toolAnimator.Play("Swing", 0, 0f);
-            }
+
+            toolAnimator.speed = speedMultiplier;
+            toolAnimator.Play("Swing", 0, 0f);
 
             usedDuringSwing = false;
             checkAfterFrame = false;
@@ -84,20 +82,20 @@ public class MeleeTool : BaseTool
                 PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
 
                 mineable.TakeDamage(damage);
-            } else if (damageable is BaseEnemy enemy)
+            } /* else if (damageable is BaseEnemy enemy)
             {
                 float damage = data.damage;
-                
+
                 if(crit)
                     damage *= PlayerStatistics.Instance.critMultiplier;
-                
+
                 PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
                     crit);
                 PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
-                
+
                 // enemy.TakeDamage(damage);
-            }
-        } 
+            } */
+        }
     }
 
     private static IDamageable GetTarget(Transform target)

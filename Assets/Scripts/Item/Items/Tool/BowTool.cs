@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BowTool : BaseTool
 {
-    [SerializeField] private float minShootForce = 10f;
-    [SerializeField] private float maxShootForce = 50f;
+    /* [SerializeField] private float minShootForce = 10f;
+    [SerializeField] private float maxShootForce = 50f; */
     [SerializeField] private float maxChargeTime = 1f;
     [SerializeField] private Vector3 pulledLocalPos = new Vector3(0f, 0.6f, -0.8f);
     [SerializeField] private float returnSpeed = 8f;

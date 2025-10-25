@@ -14,7 +14,7 @@ public class Sword : MeleeTool
         Collider[] hits = Physics.OverlapSphere(origin + direction * slashRange * 0.5f, slashRadius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent(out BaseEnemy enemy))
+            /* if (hit.TryGetComponent(out BaseEnemy enemy))
             {
                 bool crit = PlayerStatistics.Instance.RollCrit();
                 float damage = data.damage;
@@ -31,7 +31,7 @@ public class Sword : MeleeTool
                 PrefabManager.Instance.SpawnSparkles(hitPoint, rot, crit);
 
                 // enemy.TakeDamage(damage);
-            }
+            } */
         }
     }
 }

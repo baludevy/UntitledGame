@@ -77,9 +77,12 @@ public class PlayerCamera : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * swayAmount;
         float mouseY = Input.GetAxis("Mouse Y") * swayAmount * 0.5f;
         Quaternion targetRot = Quaternion.Euler(mouseY, -mouseX, 0);
+
         heldItemHolder.localRotation =
             Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);
+
         Vector3 targetPos = new Vector3(-mouseX * swayPositionAmount, -mouseY * swayPositionAmount, 0);
+
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, startPos + targetPos + bobOffset,
             Time.deltaTime * swaySmooth);
     }
