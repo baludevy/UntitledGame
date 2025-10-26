@@ -3,7 +3,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using EZCameraShake;
 
-public class MeleeTool : BaseTool
+public class MeleeTool : Tool
 {
     private bool wasSwinging;
     private bool swingingThisFrame;
@@ -16,8 +16,6 @@ public class MeleeTool : BaseTool
     private void Start()
     {
         toolController = ToolController.Instance;
-
-        ToolData data = (ToolData)instance.data;
     }
 
     public override void HandleInput()
@@ -26,16 +24,15 @@ public class MeleeTool : BaseTool
 
         if (isSwinging && toolController.useTimer <= 0 && !swingingThisFrame)
         {
-            ToolData toolData = (ToolData)instance.data;
             float baseLength = 1f;
-            float speedMultiplier = baseLength / toolData.cooldown;
+            float speedMultiplier = baseLength / data.cooldown;
 
             toolAnimator.speed = speedMultiplier;
             toolAnimator.Play("Swing", 0, 0f);
 
             usedDuringSwing = false;
             checkAfterFrame = false;
-            toolController.useTimer = toolData.cooldown;
+            toolController.useTimer = data.cooldown;
             swingingThisFrame = true;
         }
 
@@ -61,11 +58,9 @@ public class MeleeTool : BaseTool
 
     protected virtual void Use()
     {
-        ToolData data = (ToolData)instance.data;
-
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
-            bool crit = PlayerStatistics.Instance.RollCrit();
+            bool crit = PlayerStatistics.Instance.Combat.RollCrit();
 
             IDamageable damageable = GetTarget(hit.collider.transform);
 
@@ -75,7 +70,7 @@ public class MeleeTool : BaseTool
                 float damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
 
                 if (crit)
-                    damage *= PlayerStatistics.Instance.critMultiplier;
+                    damage *= PlayerStatistics.Instance.Combat.GetCritMultiplier();
 
                 PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
                     crit);

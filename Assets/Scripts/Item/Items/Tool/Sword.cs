@@ -4,8 +4,6 @@ public class Sword : MeleeTool
 {
     protected override void Use()
     {
-        ToolData data = (ToolData)instance.data;
-
         Vector3 origin = PlayerCamera.Instance.transform.position;
         Vector3 direction = PlayerCamera.Instance.transform.forward;
         float slashRange = 2f;

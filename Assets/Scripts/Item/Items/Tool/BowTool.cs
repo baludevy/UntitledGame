@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BowTool : BaseTool
+public class BowTool : Tool
 {
     /* [SerializeField] private float minShootForce = 10f;
     [SerializeField] private float maxShootForce = 50f; */
@@ -47,8 +47,6 @@ public class BowTool : BaseTool
 
     private void ShootArrow()
     {
-        ToolData data = (ToolData)instance.data;
-
         toolController.useTimer += data.cooldown;
 
         /* // ItemInstance arrow = PlayerInventory.Instance.GetArrow();

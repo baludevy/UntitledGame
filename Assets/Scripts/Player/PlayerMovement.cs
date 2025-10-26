@@ -1,38 +1,36 @@
 using UnityEngine;
 using System;
 using EZCameraShake;
-using Unity.VisualScripting;
 
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody rb;
 
-    [Header("Movement Properties")] [SerializeField]
-    private float speed = 1000f;
-
+    [Header("Movement Properties")]
+    [SerializeField] private float speed = 1000f;
     [SerializeField] private float sprintSpeed = 1750f;
-
     [SerializeField] private float jumpForce = 300f;
-    [SerializeField] private float groundDrag = 1;
+    [SerializeField] private float groundDrag = 1f;
     [SerializeField] private float airMultiplier = 0.6f;
     [SerializeField] public float playerHeight = 2f;
     [SerializeField] private LayerMask whatIsGround;
 
     private bool readyToJump = true;
     private bool grounded;
-
     private bool surfing;
     private const float jumpCooldown = 0.25f;
     private Vector3 normalVector;
     private const float maxSlopeAngle = 35f;
     private float fallSpeed;
 
-    [Header("Input")] private float x;
+    [Header("Input")]
+    private float x;
     private float y;
     private bool jumping;
     private bool sprinting;
 
-    [Header("Mouse Look")] public float sensitivity = 50f;
+    [Header("Mouse Look")]
+    public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation = 0f;
     public float desiredX;
@@ -40,21 +38,19 @@ public class PlayerMovement : MonoBehaviour
     public Transform camTransform;
     public bool canLook = true;
 
-    [Header("Camera")] public float defaultFOV = 85f;
+    [Header("Camera")]
+    public float defaultFOV = 85f;
     public float sprintFOV = 95f;
 
-    [Header("Effects")] private float walkBobTimer = 0f;
+    [Header("Effects")]
+    private float walkBobTimer = 0f;
     private float bobSpeed = 8f;
     private const float bobAmount = 0.8f;
 
     public ParticleSystem ps;
     private ParticleSystem.EmissionModule emission;
-    
-    private float staminaRegenDelay = 1.5f;
-    private float staminaRegenTimer = 0f;
-    private bool canRegenStamina;
 
-    private PlayerStatistics statistics;
+    private PlayerStamina stamina;
 
     public static PlayerMovement Instance;
 
@@ -78,25 +74,24 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 120;
-
         desiredX = orientation.localEulerAngles.y;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         emission = ps.emission;
-        statistics = PlayerStatistics.Instance;
+        stamina = PlayerStatistics.Instance.Stamina;
     }
 
     private void Update()
     {
         fallSpeed = rb.velocity.y;
-
         GetInput();
         HandleDrag();
         HandleLook();
         WalkBob();
 
-        if (readyToJump && grounded && jumping && statistics.stamina > statistics.jumpStaminaLoss)
+        if (readyToJump && grounded && jumping && stamina.GetStamina() >= stamina.GetJumpStaminaLoss())
         {
             readyToJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);
@@ -116,27 +111,19 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         float speed = horizontalVel.magnitude;
 
-        if (speed > 0.1f)
+        if (speed > 0.1f && PlayerCamera.Instance != null)
         {
             walkBobTimer += Time.deltaTime * bobSpeed;
             float xBob = Mathf.Sin(walkBobTimer) * bobAmount;
             float yBob = Mathf.Cos(walkBobTimer * 2f) * bobAmount;
-
-            if (PlayerCamera.Instance != null)
-                PlayerCamera.Instance.BobOnce(new Vector3(xBob, yBob, 0f));
+            PlayerCamera.Instance.BobOnce(new Vector3(xBob, yBob, 0f));
         }
     }
 
     private void HandleLook()
     {
-        float mouseX = 0f;
-        float mouseY = 0f;
-
-        if (canLook)
-        {
-            mouseX = Input.GetAxis("Mouse X") * sensitivity * sensMultiplier;
-            mouseY = Input.GetAxis("Mouse Y") * sensitivity * sensMultiplier;
-        }
+        float mouseX = canLook ? Input.GetAxis("Mouse X") * sensitivity * sensMultiplier : 0f;
+        float mouseY = canLook ? Input.GetAxis("Mouse Y") * sensitivity * sensMultiplier : 0f;
 
         desiredX += mouseX;
         desiredX = Mathf.Repeat(desiredX, 360f);
@@ -177,39 +164,19 @@ public class PlayerMovement : MonoBehaviour
         float moveSpeed = speed;
 
         bool isMoving = x != 0 || y != 0;
-        bool isAttemptingSprint = sprinting && isMoving;
-        bool canSprint = isAttemptingSprint && statistics.stamina > 0;
+        bool isSprinting = sprinting && isMoving && stamina.GetStamina() > 0f;
 
-        if (canSprint)
-        {
-            staminaRegenTimer = staminaRegenDelay;
-        }
-        else if (staminaRegenTimer > 0f)
-        {
-            staminaRegenTimer -= Time.deltaTime;
-        }
-
-        bool canRegenStaminaNow = !canSprint && staminaRegenTimer <= 0f;
-
-        if (canSprint)
+        if (isSprinting)
         {
             moveSpeed = sprintSpeed;
-            statistics.stamina -= statistics.staminaLoss * Time.deltaTime;
-            if (statistics.stamina < 0f) statistics.stamina = 0f;
-
+            stamina.UseStamina(stamina.GetStaminaLoss() * Time.deltaTime);
             SpeedLines();
             FovEffect();
         }
         else
         {
             ResetSprintingEffects();
-            if (canRegenStaminaNow)
-            {
-                statistics.stamina += statistics.staminaRegen * Time.deltaTime;
-                if (statistics.stamina > 100f) statistics.stamina = 100f;
-            }
         }
-
 
         if (x > 0f && xVelLook > maxSpeed) x = 0f;
         if (x < 0f && xVelLook < -maxSpeed) x = 0f;
@@ -232,7 +199,6 @@ public class PlayerMovement : MonoBehaviour
     private void ResetSprintingEffects()
     {
         emission.rateOverTimeMultiplier = 0;
-
         if (!sprinting)
         {
             Camera cam = PlayerCamera.Instance.cam;
@@ -250,7 +216,6 @@ public class PlayerMovement : MonoBehaviour
     {
         float angle = Vector3.Angle(rb.velocity, PlayerCamera.Instance.transform.forward);
         float angleFactor = Mathf.Max(angle, 0.1f);
-
         float targetRate = rb.velocity.magnitude / angleFactor * 10f;
         targetRate = Mathf.Min(targetRate, 30f);
 
@@ -265,11 +230,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (grounded || surfing)
         {
-            statistics.stamina -= statistics.jumpStaminaLoss;
-            staminaRegenTimer = staminaRegenDelay;
+            stamina.UseJumpStamina();
 
             Vector3 velocity = rb.velocity;
-
             rb.AddForce(Vector3.up * (jumpForce * 1.5f));
             rb.AddForce(normalVector * (jumpForce * 0.5f));
 
@@ -282,8 +245,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void ResetJump() => readyToJump = true;
 
-
-    // used the help I got on the internet for this
     private void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!grounded || jumping) return;
@@ -293,19 +254,16 @@ public class PlayerMovement : MonoBehaviour
         float moveSpeed = speed;
         const float runSpeed = 20f;
 
-        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) ||
-            (mag.x > threshold && x < 0f))
+        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) || (mag.x > threshold && x < 0f))
             rb.AddForce(orientation.right * (moveSpeed * Time.deltaTime * -mag.x * multiplier));
 
-        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) ||
-            (mag.y > threshold && y < 0f))
+        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) || (mag.y > threshold && y < 0f))
             rb.AddForce(orientation.forward * (moveSpeed * Time.deltaTime * -mag.y * multiplier));
 
         if (Mathf.Abs(x) < 0.05f && Mathf.Abs(y) < 0.05f)
         {
             if (Mathf.Abs(rb.velocity.x) < threshold) rb.velocity = new Vector3(0, rb.velocity.y, 0);
-            if (Mathf.Abs(rb.velocity.z) < threshold)
-                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
+            if (Mathf.Abs(rb.velocity.z) < threshold) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
         }
 
         if (new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude > runSpeed)
@@ -316,7 +274,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // got this from forums, I know nothing about trigonometry :(
     public Vector2 FindVelRelativeToLook()
     {
         float currentY = orientation.eulerAngles.y;
@@ -340,11 +297,8 @@ public class PlayerMovement : MonoBehaviour
         if ((int)whatIsGround != ((int)whatIsGround | (1 << layer)))
             return;
 
-        if (IsFloor(normal))
-        {
-            if (PlayerCamera.Instance != null)
-                PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
-        }
+        if (IsFloor(normal) && PlayerCamera.Instance != null)
+            PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
     }
 
     private void OnCollisionStay(Collision collision)

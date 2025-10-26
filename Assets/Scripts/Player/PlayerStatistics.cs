@@ -1,31 +1,13 @@
-using EZCameraShake;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerStatistics : MonoBehaviour
 {
-    public float health { get; private set; } = 100;
-    public float stamina = 100f;
-
-    public float staminaLoss = 10;
-    public float jumpStaminaLoss = 7;
-    public float staminaRegen = 6;
-
-    [SerializeField] private float regenDelay = 10f;
-    [SerializeField] private float regenInterval = 3f;
-    [SerializeField] private float regenAmount = 5f;
-
-    public float critMultiplier = 1.2f;
-    [SerializeField] private float critChance = 0.05f;
-
-    private float xp;
-    private float xpToNextLevel = 50;
-    private int level = 1;
-
-    private float timeSinceLastDamage;
-    private float regenTimer;
-
     public static PlayerStatistics Instance;
+
+    public PlayerHealth Health { get; private set; }
+    public PlayerStamina Stamina { get; private set; }
+    public PlayerExperience Experience { get; private set; }
+    public PlayerCombatStats Combat { get; private set; }
 
     private void Awake()
     {
@@ -36,65 +18,12 @@ public class PlayerStatistics : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-    }
-
-    private void Update()
-    {
-        timeSinceLastDamage += Time.deltaTime;
-
-        if (timeSinceLastDamage >= regenDelay && health < 100)
-        {
-            regenTimer += Time.deltaTime;
-            if (regenTimer >= regenInterval)
-            {
-                health += regenAmount;
-                if (health > 100) health = 100;
-                regenTimer = 0f;
-            }
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            GainXP(10);
-        }
+        Health = GetComponent<PlayerHealth>();
+        Stamina = GetComponent<PlayerStamina>();
+        Experience = GetComponent<PlayerExperience>();
+        Combat = GetComponent<PlayerCombatStats>();
     }
-
-    public void TakeDamage(float damage, bool flash = true)
-    {
-        // health -= damage;
-        timeSinceLastDamage = 0f;
-        regenTimer = 0f;
-
-        CameraShaker.Instance.ShakeOnce(2f, 2.5f, 0.2f, 0.2f);
-
-        if (health <= 0)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public bool RollCrit()
-    {
-        return Random.value <= critChance;
-    }
-    
-    public void GainXP(float amount)
-    {
-        xp += amount;
-        while (xp >= xpToNextLevel)
-        {
-            LevelUp();
-        }
-    }
-
-    private void LevelUp()
-    {
-        xp -= xpToNextLevel;
-        xpToNextLevel *= 1.2f;
-        xpToNextLevel = Mathf.Floor(xpToNextLevel);
-        level += 1;
-    }
-
-    public float GetXP() => xp;
-    public float GetXPNeededForNextLevel() => xpToNextLevel;
-    public float GetXPLevel() => level;
 }

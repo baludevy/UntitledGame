@@ -1,9 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Tool")]
+[CreateAssetMenu(menuName = "Tool")]
 public class ToolData : ItemData
 {
-    [Header("Tool properties")]
+    public GameObject toolPrefab;
     public float damage;
     public float cooldown;
     public ToolType type;
