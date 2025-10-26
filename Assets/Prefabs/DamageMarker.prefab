@@ -59,10 +59,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageMarker
   text: {fileID: 6668434846701544101}
-  lifetime: 2.5
+  lifetime: 1.5
   startFloatSpeed: 5
   endFloatSpeed: 0
   maxHeightOffset: 1.5
+  startScale: {x: 1, y: 1, z: 1}
+  endScale: {x: 0, y: 0, z: 0}
 --- !u!1 &8178501908587359710
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +122,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1092489710148232874, guid: 182ab790b7310d54d9c05fb14eae5999, type: 2}
+  - {fileID: -5149749472654718547, guid: 2fab082749f703049b0d225638aa7e93, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -164,8 +166,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 182ab790b7310d54d9c05fb14eae5999, type: 2}
-  m_sharedMaterial: {fileID: 1092489710148232874, guid: 182ab790b7310d54d9c05fb14eae5999, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2fab082749f703049b0d225638aa7e93, type: 2}
+  m_sharedMaterial: {fileID: -5149749472654718547, guid: 2fab082749f703049b0d225638aa7e93, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

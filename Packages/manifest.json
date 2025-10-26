@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "com.daniel-geo.unityhackatime": "file:F:/unity-hackatimea/Assets/com.daniel-geo.unityhackatime",
+    "com.unity.2d.pixel-perfect": "5.1.1",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "1.1.7",
     "com.unity.collab-proxy": "2.10.0",
@@ -41,7 +43,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.daniel-geo.unityhackatime": "file:F:/unity-hackatimea/Assets/com.daniel-geo.unityhackatime"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

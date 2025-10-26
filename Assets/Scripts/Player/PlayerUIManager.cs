@@ -90,13 +90,13 @@ public class PlayerUIManager : MonoBehaviour
 
     public void AddToolToToolbar(Tool tool)
     {
-        foreach (ToolbarSlot slot in toolbarSlots)
+        for (int j = toolbarSlots.Count - 1; j >= 0; j--)
         {
-            if (slot.GetTool() != null) continue;
-
-            slot.SetTool(tool);
-
-            return;
+            if (toolbarSlots[j].GetTool() == null)
+            {
+                toolbarSlots[j].SetTool(tool);
+                return;
+            }
         }
     }
 

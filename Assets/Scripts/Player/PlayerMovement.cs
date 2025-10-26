@@ -76,8 +76,8 @@ public class PlayerMovement : MonoBehaviour
         Application.targetFrameRate = 120;
         desiredX = orientation.localEulerAngles.y;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         emission = ps.emission;
         stamina = PlayerStatistics.Instance.Stamina;

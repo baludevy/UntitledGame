@@ -58,22 +58,25 @@ Shader "Custom/UIOutline"
             fixed4 frag(v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv) * _Color;
-                float alpha = col.a;
+                if (col.a > 0.001)
+                    return col;
 
-                if (alpha <= 0.001)
-                {
-                    float2 offset = _MainTex_TexelSize.xy * _OutlineThickness;
-                    float neighborAlpha = 0;
-                    neighborAlpha += tex2D(_MainTex, i.uv + float2(offset.x, 0)).a;
-                    neighborAlpha += tex2D(_MainTex, i.uv - float2(offset.x, 0)).a;
-                    neighborAlpha += tex2D(_MainTex, i.uv + float2(0, offset.y)).a;
-                    neighborAlpha += tex2D(_MainTex, i.uv - float2(0, offset.y)).a;
+                float2 offset = _MainTex_TexelSize.xy * _OutlineThickness;
+                float alpha = 0;
+                
+                alpha += tex2D(_MainTex, i.uv + float2(offset.x, 0)).a;
+                alpha += tex2D(_MainTex, i.uv - float2(offset.x, 0)).a;
+                alpha += tex2D(_MainTex, i.uv + float2(0, offset.y)).a;
+                alpha += tex2D(_MainTex, i.uv - float2(0, offset.y)).a;
+                alpha += tex2D(_MainTex, i.uv + offset).a;
+                alpha += tex2D(_MainTex, i.uv - offset).a;
+                alpha += tex2D(_MainTex, i.uv + float2(offset.x, -offset.y)).a;
+                alpha += tex2D(_MainTex, i.uv + float2(-offset.x, offset.y)).a;
 
-                    if (neighborAlpha > 0)
-                        return _OutlineColor;
-                }
+                if (alpha > 0)
+                    return _OutlineColor;
 
-                return col;
+                return 0;
             }
             ENDCG
         }

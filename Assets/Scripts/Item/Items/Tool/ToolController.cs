@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using EZCameraShake;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ToolController : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class ToolController : MonoBehaviour
     [SerializeField] private Animator itemRootAnimator;
     private GameObject currentHeldObject;
 
+    [FormerlySerializedAs("test")] public Tool testTool;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -54,6 +57,11 @@ public class ToolController : MonoBehaviour
             if (i < tools.Count && Input.GetKeyDown(KeyCode.Alpha1 + i) && tools[i] != null &&
                 tools[i].data != currentTool?.data)
                 SwitchToTool(tools[i]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            AddTool(testTool);
         }
     }
 
