@@ -6,13 +6,17 @@ using UnityEngine;
 public class ToolController : MonoBehaviour
 {
     public Tool currentTool;
-
     [NonSerialized] public float useTimer;
 
     public static ToolController Instance;
 
     public int maxTools = 6;
-    public List<Tool> tools;
+    public List<Tool> startingTools = new();
+    private List<Tool> tools = new();
+
+    [SerializeField] private Transform heldToolTransform;
+    [SerializeField] private Animator itemRootAnimator;
+    private GameObject currentHeldObject;
 
     private void Awake()
     {
@@ -24,10 +28,14 @@ public class ToolController : MonoBehaviour
 
     private void Start()
     {
-        foreach (Tool tool in tools)
-        {
+        if (heldToolTransform != null)
+            itemRootAnimator = heldToolTransform.GetComponent<Animator>();
+
+        foreach (Tool tool in startingTools)
             AddTool(tool);
-        }
+
+        if (tools.Count > 0)
+            SwitchToTool(tools[0]);
     }
 
     private void Update()
@@ -38,29 +46,54 @@ public class ToolController : MonoBehaviour
         if (currentTool != null)
         {
             currentTool.HandleInput();
+            currentTool.UpdateTool();
         }
 
-        if (currentTool != null)
+        for (int i = 0; i < maxTools; i++)
         {
-            currentTool.UpdateTool();
+            if (i < tools.Count && Input.GetKeyDown(KeyCode.Alpha1 + i) && tools[i] != null &&
+                tools[i].data != currentTool?.data)
+                SwitchToTool(tools[i]);
+        }
+    }
+
+    private void SwitchToTool(Tool targetTool)
+    {
+        if (targetTool == null || targetTool.data == currentTool?.data) return;
+
+        if (currentHeldObject != null)
+            Destroy(currentHeldObject);
+
+        if (targetTool.data != null && targetTool.data.toolPrefab != null)
+        {
+            itemRootAnimator?.SetTrigger("Equip");
+
+            currentHeldObject = Instantiate(targetTool.data.toolPrefab, heldToolTransform);
+
+            SetHeldItemLayers(currentHeldObject.transform);
+
+            currentTool = currentHeldObject.GetComponent<Tool>();
+        }
+        else
+        {
+            currentTool = null;
+        }
+
+        PlayerUIManager.Instance.SetActiveTool(currentTool?.data);
+    }
+
+    private void SetHeldItemLayers(Transform obj)
+    {
+        foreach (Transform child in obj)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("HeldItem");
         }
     }
 
     public void AddTool(Tool tool)
     {
-        if (tool == null || tools.Contains(tool)) return;
-
-        tools.Add(tool);
+        if (tool == null || tools.Contains(tool) || tools.Count == maxTools) return;
+        tools.Insert(0, tool);
         PlayerUIManager.Instance.AddToolToToolbar(tool);
-    }
-
-    private void SwitchTool(Tool tool)
-    {
-        if (tool == null || tool == currentTool) return;
-    }
-
-    private void SetTool(Tool tool)
-    {
-        currentTool = tool;
     }
 }

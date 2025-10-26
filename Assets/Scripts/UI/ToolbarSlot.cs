@@ -4,15 +4,13 @@ using UnityEngine.UI;
 
 public class ToolbarSlot : MonoBehaviour
 {
-    [NonSerialized] public Tool tool;
+    private Tool tool;
     public RawImage icon;
+    [SerializeField] private Material outlineMaterial;
 
-    private void Start()
+    private void OnEnable()
     {
-        if (tool == null)
-        {
-            icon.enabled = false;
-        }
+        icon.enabled = tool != null;
     }
 
     public void SetTool(Tool newTool)
@@ -23,10 +21,19 @@ public class ToolbarSlot : MonoBehaviour
             return;
         }
 
-        Debug.Log(newTool.data.Name);
-        
         icon.enabled = true;
         tool = newTool;
         icon.texture = newTool.data.Icon.texture;
+    }
+
+    public void SetActiveSlot(bool active)
+    {
+        Debug.Log(active);
+        icon.material = active ? outlineMaterial : null;
+    }
+
+    public Tool GetTool()
+    {
+        return tool;
     }
 }

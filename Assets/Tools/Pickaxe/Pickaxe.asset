@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09cdc3e88fe4d21a8f627977daaf2a8, type: 3}
-  m_Name: Axe
+  m_Name: Pickaxe
   m_EditorClassIdentifier: 
-  itemName: Axe
-  itemDescription: chop chop chop
-  icon: {fileID: 21300000, guid: 11af0fefe4c06b949a2d607249d13c1f, type: 3}
-  toolPrefab: {fileID: 6499007990128292854, guid: 93f5f3d5094fae340b2070c4c0e06a91, type: 3}
+  itemName: Pickaxe
+  itemDescription: mine mine mine
+  icon: {fileID: 21300000, guid: 6d3872d4bb3a9534c82aaba6b5092c94, type: 3}
+  toolPrefab: {fileID: 6499007990128292854, guid: a014d1c42312c954f93eacaa1b43229a, type: 3}
   damage: 5
   cooldown: 1
-  type: 1
+  type: 2

@@ -20,10 +20,25 @@ public class MeleeTool : Tool
 
     public override void HandleInput()
     {
+        if (toolController == null)
+            toolController = ToolController.Instance;
+
         bool isSwinging = Input.GetMouseButton(0);
 
         if (isSwinging && toolController.useTimer <= 0 && !swingingThisFrame)
         {
+            if (toolAnimator == null)
+            {
+                Debug.LogError("toolAnimator is NULL! Check prefab setup or GetComponent in Tool.Awake().", this);
+                return;  // Bail early
+            }
+
+            if (toolAnimator.runtimeAnimatorController == null)
+            {
+                Debug.LogError("runtimeAnimatorController is NULL on toolAnimator! Prefab lost its Controller at runtime.", toolAnimator);
+                return;  // Bail—won't play anyway
+            }
+            
             float baseLength = 1f;
             float speedMultiplier = baseLength / data.cooldown;
 
@@ -40,8 +55,34 @@ public class MeleeTool : Tool
         swingingThisFrame = false;
     }
 
+
     public override void UpdateTool()
     {
+        if (toolAnimator == null)
+        {
+            Debug.LogError($"Animator is NULL on {name}", this);
+            return;
+        }
+
+        if (!toolAnimator.isActiveAndEnabled)
+        {
+            Debug.LogError($"Animator is DISABLED on {toolAnimator.name}", toolAnimator);
+            return;
+        }
+
+        if (toolAnimator.runtimeAnimatorController == null)
+        {
+            Debug.LogError($"Animator CONTROLLER is NULL on {toolAnimator.name}", toolAnimator);
+            return;
+        }
+
+        if (!toolAnimator.hasBoundPlayables)
+        {
+            Debug.LogError($"Animator has NO BOUND PLAYABLES on {toolAnimator.name}", toolAnimator);
+            return;
+        }
+
+        
         if (checkAfterFrame && !usedDuringSwing)
         {
             var info = toolAnimator.GetCurrentAnimatorStateInfo(0);

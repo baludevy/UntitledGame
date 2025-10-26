@@ -20,7 +20,7 @@ public class PlayerUIManager : MonoBehaviour
     private List<ToolbarSlot> toolbarSlots = new List<ToolbarSlot>();
 
     private PlayerStatistics statistics;
-    
+
     public static PlayerUIManager Instance;
 
     private void Awake()
@@ -29,12 +29,13 @@ public class PlayerUIManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+
+        InitializeToolbarSlots();
     }
 
     private void Start()
     {
         statistics = PlayerStatistics.Instance;
-        InitializeToolbarSlots();
     }
 
     private void InitializeToolbarSlots()
@@ -60,10 +61,10 @@ public class PlayerUIManager : MonoBehaviour
             Debug.LogWarning("No stamina bar or text assigned");
             return;
         }
-        
+
         float stamina = statistics.Stamina.GetStamina();
         float maxStamina = statistics.Stamina.GetMaxStamina();
-        
+
         staminaText.text = $"{stamina:F0}/{maxStamina:F0}";
         staminaBar.fillAmount = stamina / maxStamina;
     }
@@ -82,7 +83,7 @@ public class PlayerUIManager : MonoBehaviour
         healthText.text = $"{health:F0}/{maxHealth:F0}";
         healthBar.fillAmount = health / maxHealth;
     }
-    
+
     #endregion
 
     #region Toolbar
@@ -91,9 +92,20 @@ public class PlayerUIManager : MonoBehaviour
     {
         foreach (ToolbarSlot slot in toolbarSlots)
         {
-            if (slot.tool != null || slot.tool == tool) continue;
+            if (slot.GetTool() != null) continue;
 
             slot.SetTool(tool);
+
+            return;
+        }
+    }
+
+    public void SetActiveTool(ToolData toolData)
+    {
+        foreach (ToolbarSlot slot in toolbarSlots)
+        {
+            Tool slotTool = slot.GetTool();
+            slot.SetActiveSlot(slotTool != null && slotTool.data == toolData);
         }
     }
 
@@ -101,9 +113,7 @@ public class PlayerUIManager : MonoBehaviour
     {
         foreach (ToolbarSlot slot in toolbarSlots)
         {
-            if (slot.tool == null) continue;
-            
-            if (slot.tool == tool)
+            if (slot.GetTool() == tool)
                 slot.SetTool(null);
         }
     }
