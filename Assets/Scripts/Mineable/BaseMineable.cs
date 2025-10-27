@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 {
@@ -24,9 +23,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public ToolType CanBeMinedWith => data.CanBeMinedWith;
     public int MinDropAmount => data.MinDropAmount;
     public int MaxDropAmount => data.MaxDropAmount;
-
     public ItemData DroppedItem => data.DroppedItem;
-
     public AudioClip Sound => data.Sound;
 
     public float MaxHealth
@@ -53,12 +50,9 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
-        
-        AudioManager.Play3D(Sound, transform.position, 0.8f, 1.2f);
-
+        AudioManager.Play(Sound, transform.position, 0.8f, 1.2f);
         if (currentHealth <= 0)
             DropLoot();
     }
@@ -67,7 +61,6 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     {
         Vector3 start = originalScale;
         Vector3 target = start * 0.85f;
-
         float t = 0f;
         while (t < 1f)
         {
@@ -76,7 +69,6 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
             transform.localScale = Vector3.Lerp(start, target, eased);
             yield return null;
         }
-
         t = 0f;
         while (t < 1f)
         {
@@ -85,7 +77,6 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
             transform.localScale = Vector3.Lerp(target, start, eased);
             yield return null;
         }
-
         transform.localScale = start;
     }
 
@@ -94,9 +85,9 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
         if (DroppedItem != null)
         {
             ItemInstance droppedItem = new ItemInstance(DroppedItem, Random.Range(MinDropAmount, MaxDropAmount));
-            PlayerInventory.Instance.AddItem(droppedItem);
+            GameObject dropped = Instantiate(PrefabManager.Instance.droppedResourcePrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+            dropped.GetComponent<DroppedResource>().SetItem(droppedItem);
         }
-
         Destroy(gameObject);
     }
 }

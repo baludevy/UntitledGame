@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: b026621cd7abc33418a78b720fd3fe53, type: 2}
   toolAnimator: {fileID: 6937003651539921330}
+  swingAudio: {fileID: 8300000, guid: 4f04afd7c53680142b3376a45e1ee0d4, type: 3}
 --- !u!95 &6937003651539921330
 Animator:
   serializedVersion: 5

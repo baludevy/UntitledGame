@@ -8,7 +8,7 @@ public class PrefabManager : MonoBehaviour
     public GameObject hitEffect;
     public GameObject damageMarker;
     public GameObject audioPrefab;
-    public GameObject footStepAudio;
+    public GameObject droppedResourcePrefab;
 
     private void Awake()
     {
@@ -39,6 +39,7 @@ public class PrefabManager : MonoBehaviour
         {
             ParticleSystem.MainModule main = ps.main;
             main.startColor = Color.yellow;
+            ps.transform.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
         }
     }
 }

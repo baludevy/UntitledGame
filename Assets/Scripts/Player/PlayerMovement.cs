@@ -45,7 +45,10 @@ public class PlayerMovement : MonoBehaviour
     private const float bobAmount = 0.8f;
 
     [Header("Footsteps")] [SerializeField] private float footstepInterval = 0.4f;
+    private float adjustedFootstepInterval;
     private float footstepTimer;
+
+    [Header("Misc")] public Transform itemPickup;
 
     public ParticleSystem ps;
     private ParticleSystem.EmissionModule emission;
@@ -103,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         float moveSpeed = horizontalVel.magnitude;
 
-        if (moveSpeed > 0.1f && PlayerCamera.Instance != null)
+        if (moveSpeed > 0.01f && PlayerCamera.Instance != null)
         {
             walkBobTimer += Time.deltaTime * bobSpeed;
             float xBob = Mathf.Sin(walkBobTimer) * bobAmount;
@@ -114,9 +117,8 @@ public class PlayerMovement : MonoBehaviour
             if (footstepTimer <= 0f)
             {
                 AudioClip clip = GetCurrentFootstepClip();
-                Debug.Log(clip.name);
-                if (clip != null) AudioManager.Play3D(clip, transform.position, 0.7f, 1.3f, 0.3f);
-                footstepTimer = footstepInterval;
+                if (clip != null) AudioManager.Play(clip, transform.position, 0.7f, 1.3f, 0.1f, false);
+                footstepTimer = adjustedFootstepInterval;
             }
         }
     }
@@ -124,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
     private AudioClip GetCurrentFootstepClip()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+        if (Physics.Raycast(ray, out RaycastHit hit, 10f, whatIsGround))
         {
             GroundSurface surface = hit.collider.GetComponent<GroundSurface>();
             if (surface != null) return surface.footstepClip;
@@ -192,9 +194,11 @@ public class PlayerMovement : MonoBehaviour
             stamina.UseStamina(stamina.GetStaminaLoss() * Time.deltaTime);
             SpeedLines();
             FovEffect();
+            adjustedFootstepInterval = footstepInterval / 1.25f;
         }
         else
         {
+            adjustedFootstepInterval = footstepInterval;
             ResetSprintingEffects();
         }
 
@@ -334,8 +338,6 @@ public class PlayerMovement : MonoBehaviour
                 return;
             }
         }
-        
-        Debug.Log(grounded);
     }
 
     private void OnCollisionExit() => grounded = false;

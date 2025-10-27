@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8199967582712855576}
   - component: {fileID: 6811244416160363813}
   - component: {fileID: 8174850962841733585}
+  - component: {fileID: 2433728167129396758}
   m_Layer: 0
   m_Name: HitCircle
   m_TagString: Untagged
@@ -106,6 +107,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2433728167129396758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6626007491367953347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd96e0d5ae7e4c24ad90a8b5a02beb9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7776842582623595503
 GameObject:
   m_ObjectHideFlags: 0

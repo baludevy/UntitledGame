@@ -11,6 +11,8 @@ public class MeleeTool : Tool
     private bool checkAfterFrame;
     private readonly float swingTrigger = 0.2f;
 
+    [SerializeField] private AudioClip swingAudio;
+
     private ToolController toolController;
 
     private void Start()
@@ -27,23 +29,12 @@ public class MeleeTool : Tool
 
         if (isSwinging && toolController.useTimer <= 0 && !swingingThisFrame)
         {
-            if (toolAnimator == null)
-            {
-                Debug.LogError("toolAnimator is NULL! Check prefab setup or GetComponent in Tool.Awake().", this);
-                return;  // Bail early
-            }
-
-            if (toolAnimator.runtimeAnimatorController == null)
-            {
-                Debug.LogError("runtimeAnimatorController is NULL on toolAnimator! Prefab lost its Controller at runtime.", toolAnimator);
-                return;  // Bail—won't play anyway
-            }
-            
             float baseLength = 1f;
             float speedMultiplier = baseLength / data.cooldown;
 
             toolAnimator.speed = speedMultiplier;
             toolAnimator.Play("Swing", 0, 0f);
+            AudioManager.Play(swingAudio, Vector3.zero, 0.8f, 1.2f, 0.3f, false);
 
             usedDuringSwing = false;
             checkAfterFrame = false;

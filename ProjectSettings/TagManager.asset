@@ -8,6 +8,7 @@ TagManager:
   - Item
   - Interactable
   - Terrain
+  - ItemPickup
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Preview
   - EnemyBullet
   - Enemy
-  - 
+  - ItemPickup
   - 
   - 
   - 
