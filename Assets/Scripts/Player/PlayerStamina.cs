@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerStamina : MonoBehaviour
@@ -11,6 +12,11 @@ public class PlayerStamina : MonoBehaviour
     [SerializeField] private float regenDelay = 1.5f;
 
     private float regenTimer;
+
+    private void Start()
+    {
+        stamina = maxStamina;
+    }
 
     private void Update()
     {

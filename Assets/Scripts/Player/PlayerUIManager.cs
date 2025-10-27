@@ -78,7 +78,7 @@ public class PlayerUIManager : MonoBehaviour
         float stamina = statistics.Stamina.GetStamina();
         float maxStamina = statistics.Stamina.GetMaxStamina();
         
-        staminaText.text = $"{stamina:F0}/{stamina:F0}";
+        staminaText.text = $"{stamina:F0}/{maxStamina:F0}";
         staminaBar.fillAmount = stamina / maxStamina;
     }
 
@@ -90,11 +90,11 @@ public class PlayerUIManager : MonoBehaviour
             return;
         }
 
-        float stamina = statistics.Stamina.GetStamina();
-        float maxStamina = statistics.Stamina.GetMaxStamina();
+        float health = statistics.Health.GetHealth();
+        float maxHealth = statistics.Health.GetMaxHealth();
         
-        healthText.text = $"{stamina:F0}/{stamina:F0}";
-        healthBar.fillAmount = stamina / maxStamina;
+        healthText.text = $"{health:F0}/{maxHealth:F0}";
+        healthBar.fillAmount = health / maxHealth;
     }
     
     public void SetInventoryState(bool state)
