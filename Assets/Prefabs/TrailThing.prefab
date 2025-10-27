@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4783187267722401824}
   - component: {fileID: -7791240533905756030}
   m_Layer: 9
-  m_Name: Dropped
+  m_Name: TrailThing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b03e9ce03275f47a828df8bbce2800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 5
+  acceleration: 10
   baseSpeed: 15
   moveToPlayer: 0
 --- !u!54 &-428681936237481725
@@ -171,13 +171,13 @@ TrailRenderer:
         inWeight: 0.79592013
         outWeight: 0.121212125
       - serializedVersion: 3
-        time: 1
+        time: 0.8560791
         value: 0
-        inSlope: -0.39975417
-        outSlope: -0.39975417
+        inSlope: -0.34601113
+        outSlope: -0.34601113
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.32323235
+        inWeight: 0.13276209
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -219,7 +219,7 @@ TrailRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 1
   m_MaskInteraction: 0
   m_Autodestruct: 0
   m_Emitting: 1

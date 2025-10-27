@@ -13,7 +13,7 @@ public class DamageMarker : MonoBehaviour
 
     private Color startColor;
     private float timer;
-    private readonly float cameraOffset = 0.4f;
+    private readonly float cameraOffset = 0.6f;
     private float initialY;
 
     private void Start()

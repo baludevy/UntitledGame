@@ -84,9 +84,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     {
         if (DroppedItem != null)
         {
-            ItemInstance droppedItem = new ItemInstance(DroppedItem, Random.Range(MinDropAmount, MaxDropAmount));
-            GameObject dropped = Instantiate(PrefabManager.Instance.droppedResourcePrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
-            dropped.GetComponent<DroppedResource>().SetItem(droppedItem);
+            
         }
         Destroy(gameObject);
     }

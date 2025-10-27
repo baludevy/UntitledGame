@@ -4,22 +4,23 @@ using UnityEngine;
 public class ItemInstance
 {
     public readonly ItemData data;
-    public int amount;
+    public int stackAmount;
+    public Guid id;
 
     public ItemInstance(ItemData data, int count = 1)
     {
         this.data = data;
-        amount = count;
+        stackAmount = count;
+        id = Guid.NewGuid();
+    }
+    
+    public void OnUse()
+    {
+        data.OnUse();
     }
 
-    public override bool Equals(object obj)
+    public void OnPickup()
     {
-        if (obj is not ItemInstance other) return false;
-        return data == other.data && amount == other.amount;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(data, amount);
+        data.OnPickup();
     }
 }
