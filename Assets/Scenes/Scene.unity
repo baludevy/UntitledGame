@@ -521,6 +521,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PrefabManager
   hitEffect: {fileID: 7776842582623595503, guid: 48684cc5d25011148b293a9f2560531c, type: 3}
   damageMarker: {fileID: 7780389980816550722, guid: 836e3947cd027f44f85dec1904de4484, type: 3}
+  audioPrefab: {fileID: 2391150139543264443, guid: 5403584a99ae92747aca6d9539ee159c, type: 3}
+  footStepAudio: {fileID: 0}
 --- !u!1 &89699933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2658,6 +2660,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1962525206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &488567545
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 488567546}
+  - component: {fileID: 488567547}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &488567546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488567545}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &488567547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488567545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 348c6ac4653049da9ddfc63690972d13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &499709590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2673,6 +2719,7 @@ GameObject:
   - component: {fileID: 499709592}
   - component: {fileID: 499709591}
   - component: {fileID: 499709597}
+  - component: {fileID: 499709598}
   m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
@@ -2988,6 +3035,19 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: d613f91aae0fefc4890d265d98c8500c, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &499709598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499709590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6245545e1de486cadbc7ffa439f6cf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepClip: {fileID: 8300000, guid: 2dbd0324a493b8844b177a281d981807, type: 3}
 --- !u!1001 &526858222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7239,6 +7299,7 @@ MonoBehaviour:
   canLook: 1
   defaultFOV: 90
   sprintFOV: 100
+  footstepInterval: 0.4
   ps: {fileID: 8298269594920238252}
 --- !u!20 &4692589708366088623
 Camera:
@@ -13216,3 +13277,4 @@ SceneRoots:
   - {fileID: 1542729562}
   - {fileID: 213988364}
   - {fileID: 1206135156}
+  - {fileID: 488567546}

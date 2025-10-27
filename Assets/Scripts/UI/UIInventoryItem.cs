@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIInventoryItem : MonoBehaviour
 {
@@ -28,6 +29,17 @@ public class UIInventoryItem : MonoBehaviour
 
     public void Discard(int amount)
     {
+        if (item == null || amount <= 0) return;
+
         PlayerInventory.Instance.SubtractFromItem(item, amount);
+        StartCoroutine(PunchAnimation());
+    }
+
+    private IEnumerator PunchAnimation()
+    {
+        Vector3 original = transform.localScale;
+        transform.localScale = original * 0.95f;
+        yield return new WaitForSeconds(0.1f);
+        transform.localScale = original;
     }
 }

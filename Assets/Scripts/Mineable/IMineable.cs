@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public interface IMineable
 {
     string Name { get; set; }
@@ -8,7 +10,7 @@ public interface IMineable
     
     ItemData DroppedItem { get; }
     
-    int Sound { get; }
+    AudioClip Sound { get; }
 
     void DropLoot();
 }

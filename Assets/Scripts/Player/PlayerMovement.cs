@@ -6,8 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody rb;
 
-    [Header("Movement Properties")]
-    [SerializeField] private float speed = 1000f;
+    [Header("Movement Properties")] [SerializeField]
+    private float speed = 1000f;
+
     [SerializeField] private float sprintSpeed = 1750f;
     [SerializeField] private float jumpForce = 300f;
     [SerializeField] private float groundDrag = 1f;
@@ -23,14 +24,12 @@ public class PlayerMovement : MonoBehaviour
     private const float maxSlopeAngle = 35f;
     private float fallSpeed;
 
-    [Header("Input")]
-    private float x;
+    [Header("Input")] private float x;
     private float y;
     private bool jumping;
     private bool sprinting;
 
-    [Header("Mouse Look")]
-    public float sensitivity = 50f;
+    [Header("Mouse Look")] public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation = 0f;
     public float desiredX;
@@ -38,14 +37,15 @@ public class PlayerMovement : MonoBehaviour
     public Transform camTransform;
     public bool canLook = true;
 
-    [Header("Camera")]
-    public float defaultFOV = 85f;
+    [Header("Camera")] public float defaultFOV = 85f;
     public float sprintFOV = 95f;
 
-    [Header("Effects")]
-    private float walkBobTimer = 0f;
+    [Header("Effects")] private float walkBobTimer = 0f;
     private float bobSpeed = 8f;
     private const float bobAmount = 0.8f;
+
+    [Header("Footsteps")] [SerializeField] private float footstepInterval = 0.4f;
+    private float footstepTimer;
 
     public ParticleSystem ps;
     private ParticleSystem.EmissionModule emission;
@@ -59,26 +59,18 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        if (orientation == null)
-            orientation = transform;
-
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-
-        if (camTransform == null && Camera.main != null)
-            camTransform = Camera.main.transform;
+        if (orientation == null) orientation = transform;
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+        if (camTransform == null && Camera.main != null) camTransform = Camera.main.transform;
     }
 
     private void Start()
     {
         Application.targetFrameRate = 120;
         desiredX = orientation.localEulerAngles.y;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         emission = ps.emission;
         stamina = PlayerStatistics.Instance.Stamina;
     }
@@ -109,15 +101,36 @@ public class PlayerMovement : MonoBehaviour
         if (!grounded) return;
 
         Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        float speed = horizontalVel.magnitude;
+        float moveSpeed = horizontalVel.magnitude;
 
-        if (speed > 0.1f && PlayerCamera.Instance != null)
+        if (moveSpeed > 0.1f && PlayerCamera.Instance != null)
         {
             walkBobTimer += Time.deltaTime * bobSpeed;
             float xBob = Mathf.Sin(walkBobTimer) * bobAmount;
             float yBob = Mathf.Cos(walkBobTimer * 2f) * bobAmount;
             PlayerCamera.Instance.BobOnce(new Vector3(xBob, yBob, 0f));
+
+            footstepTimer -= Time.deltaTime;
+            if (footstepTimer <= 0f)
+            {
+                AudioClip clip = GetCurrentFootstepClip();
+                Debug.Log(clip.name);
+                if (clip != null) AudioManager.Play3D(clip, transform.position, 0.7f, 1.3f, 0.3f);
+                footstepTimer = footstepInterval;
+            }
         }
+    }
+
+    private AudioClip GetCurrentFootstepClip()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+        {
+            GroundSurface surface = hit.collider.GetComponent<GroundSurface>();
+            if (surface != null) return surface.footstepClip;
+        }
+
+        return null;
     }
 
     private void HandleLook()
@@ -131,9 +144,7 @@ public class PlayerMovement : MonoBehaviour
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        if (camTransform != null)
-            camTransform.localRotation = Quaternion.Euler(xRotation, desiredX, 0f);
-
+        if (camTransform != null) camTransform.localRotation = Quaternion.Euler(xRotation, desiredX, 0f);
         orientation.Rotate(Vector3.up * mouseX);
     }
 
@@ -144,17 +155,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInput()
     {
-        // if inventory is open lock all inputs
         if (PlayerUIManager.Instance.GetInventoryState())
         {
             x = 0;
             y = 0;
             jumping = false;
             sprinting = false;
-            
             return;
         }
-        
+
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         jumping = Input.GetButton("Jump");
@@ -265,10 +274,12 @@ public class PlayerMovement : MonoBehaviour
         float moveSpeed = speed;
         const float runSpeed = 20f;
 
-        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) || (mag.x > threshold && x < 0f))
+        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) ||
+            (mag.x > threshold && x < 0f))
             rb.AddForce(orientation.right * (moveSpeed * Time.deltaTime * -mag.x * multiplier));
 
-        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) || (mag.y > threshold && y < 0f))
+        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) ||
+            (mag.y > threshold && y < 0f))
             rb.AddForce(orientation.forward * (moveSpeed * Time.deltaTime * -mag.y * multiplier));
 
         if (Mathf.Abs(x) < 0.05f && Mathf.Abs(y) < 0.05f)
@@ -323,6 +334,8 @@ public class PlayerMovement : MonoBehaviour
                 return;
             }
         }
+        
+        Debug.Log(grounded);
     }
 
     private void OnCollisionExit() => grounded = false;

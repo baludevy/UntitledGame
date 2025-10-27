@@ -7,6 +7,8 @@ public class PrefabManager : MonoBehaviour
 
     public GameObject hitEffect;
     public GameObject damageMarker;
+    public GameObject audioPrefab;
+    public GameObject footStepAudio;
 
     private void Awake()
     {

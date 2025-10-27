@@ -24,10 +24,10 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public ToolType CanBeMinedWith => data.CanBeMinedWith;
     public int MinDropAmount => data.MinDropAmount;
     public int MaxDropAmount => data.MaxDropAmount;
-    
+
     public ItemData DroppedItem => data.DroppedItem;
 
-    public int Sound => data.Sound;
+    public AudioClip Sound => data.Sound;
 
     public float MaxHealth
     {
@@ -56,6 +56,8 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
+        
+        AudioManager.Play3D(Sound, transform.position, 0.8f, 1.2f);
 
         if (currentHealth <= 0)
             DropLoot();
@@ -89,9 +91,12 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
     public void DropLoot()
     {
-        ItemInstance droppedItem = new ItemInstance(DroppedItem, Random.Range(MinDropAmount, MaxDropAmount));
-        PlayerInventory.Instance.AddItem(droppedItem);
-        
+        if (DroppedItem != null)
+        {
+            ItemInstance droppedItem = new ItemInstance(DroppedItem, Random.Range(MinDropAmount, MaxDropAmount));
+            PlayerInventory.Instance.AddItem(droppedItem);
+        }
+
         Destroy(gameObject);
     }
 }

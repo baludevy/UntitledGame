@@ -15,8 +15,8 @@ MonoBehaviour:
   mineableName: Birch Wood
   description: ugly wood
   canBeMinedWith: 1
-  dropPrefab: {fileID: 9105593225940294769, guid: 0b8d3f11015ba6c45a8fbab1e25a1547, type: 3}
   minDropAmount: 2
   maxDropAmount: 4
   maxHealth: 35
-  sound: 1
+  sound: {fileID: 8300000, guid: 8b00206f32df4b74d87ae3aef3f79536, type: 3}
+  droppedItem: {fileID: 0}
