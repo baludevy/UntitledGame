@@ -48,7 +48,9 @@ public class ToolController : MonoBehaviour
 
         if (currentTool != null)
         {
-            currentTool.HandleInput();
+            if(!PlayerUIManager.Instance.GetInventoryState())
+                currentTool.HandleInput();
+            
             currentTool.UpdateTool();
         }
 

@@ -6,6 +6,8 @@ public interface IMineable
     int MinDropAmount { get; }
     int MaxDropAmount { get; }
     
+    ItemData DroppedItem { get; }
+    
     int Sound { get; }
 
     void DropLoot();

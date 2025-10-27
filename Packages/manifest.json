@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.daniel-geo.unityhackatime": "file:F:/unity-hackatimea/Assets/com.daniel-geo.unityhackatime",
+    "com.daniel-geo.unityhackatime": "https://github.com/daniel-geo/unity-hackatime.git#package",
     "com.unity.2d.pixel-perfect": "5.1.1",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "1.1.7",

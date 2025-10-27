@@ -1,10 +1,11 @@
 {
   "dependencies": {
     "com.daniel-geo.unityhackatime": {
-      "version": "file:F:/unity-hackatimea/Assets/com.daniel-geo.unityhackatime",
+      "version": "https://github.com/daniel-geo/unity-hackatime.git#package",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "5ac210a9a287428cb876ce9ea4ef14fe31e115b7"
     },
     "com.unity.2d.pixel-perfect": {
       "version": "5.1.1",

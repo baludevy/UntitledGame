@@ -76,8 +76,8 @@ public class PlayerMovement : MonoBehaviour
         Application.targetFrameRate = 120;
         desiredX = orientation.localEulerAngles.y;
 
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         emission = ps.emission;
         stamina = PlayerStatistics.Instance.Stamina;
@@ -144,6 +144,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInput()
     {
+        // if inventory is open lock all inputs
+        if (PlayerUIManager.Instance.GetInventoryState())
+        {
+            x = 0;
+            y = 0;
+            jumping = false;
+            sprinting = false;
+            
+            return;
+        }
+        
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         jumping = Input.GetButton("Jump");

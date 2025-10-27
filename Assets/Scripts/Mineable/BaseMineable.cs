@@ -24,6 +24,8 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public ToolType CanBeMinedWith => data.CanBeMinedWith;
     public int MinDropAmount => data.MinDropAmount;
     public int MaxDropAmount => data.MaxDropAmount;
+    
+    public ItemData DroppedItem => data.DroppedItem;
 
     public int Sound => data.Sound;
 
@@ -87,6 +89,9 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
     public void DropLoot()
     {
+        ItemInstance droppedItem = new ItemInstance(DroppedItem, Random.Range(MinDropAmount, MaxDropAmount));
+        PlayerInventory.Instance.AddItem(droppedItem);
+        
         Destroy(gameObject);
     }
 }
