@@ -12,30 +12,29 @@ Shader "Custom/GrassShader"
 
     SubShader
     {
-        Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout" }
-        LOD 200
+        Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout" "IgnoreProjector"="True" }
+        LOD 100
+        
         Cull Off
+        
+        Offset 0, 1
 
         Pass
         {
+            Tags { "LightMode"="ForwardBase" }
+            
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fog
+            #pragma multi_compile_instancing
             #include "UnityCG.cginc"
-
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-            float4 _TopColor;
-            float4 _BottomColor;
-            float _WindStrength;
-            float _WindSpeed;
-            float _Cutoff;
 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -44,15 +43,35 @@ Shader "Custom/GrassShader"
                 float height : TEXCOORD1;
                 UNITY_FOG_COORDS(2)
                 float4 vertex : SV_POSITION;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            
+            UNITY_INSTANCING_BUFFER_START(Props)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _TopColor)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _BottomColor)
+                UNITY_DEFINE_INSTANCED_PROP(float, _WindStrength)
+                UNITY_DEFINE_INSTANCED_PROP(float, _WindSpeed)
+                UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
+            UNITY_INSTANCING_BUFFER_END(Props)
 
             v2f vert (appdata v)
             {
                 v2f o;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
+                
+                float windStrength = UNITY_ACCESS_INSTANCED_PROP(Props, _WindStrength);
+                float windSpeed = UNITY_ACCESS_INSTANCED_PROP(Props, _WindSpeed);
+                
                 float3 pos = v.vertex.xyz;
-                float wind = sin((pos.x + _Time.y * _WindSpeed) * 0.5) * _WindStrength;
-                pos.x += wind;
-                o.vertex = UnityObjectToClipPos(float4(pos, 1));
+                float wind = sin((pos.x + pos.z + _Time.y * windSpeed)) * windStrength * v.vertex.y;
+                pos.x += wind * 0.1;
+                pos.z += wind * 0.05;
+                
+                o.vertex = UnityObjectToClipPos(pos);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.height = saturate(v.vertex.y);
                 UNITY_TRANSFER_FOG(o, o.vertex);
@@ -61,15 +80,24 @@ Shader "Custom/GrassShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 texColor = tex2D(_MainTex, i.uv);
-                clip(texColor.a - _Cutoff);
-                fixed4 gradient = lerp(_BottomColor, _TopColor, i.height);
+                UNITY_SETUP_INSTANCE_ID(i);
+                
+                float2 paddedUV = i.uv * 0.98 + 0.01;
+                fixed4 texColor = tex2D(_MainTex, paddedUV);
+                
+                float cutoff = UNITY_ACCESS_INSTANCED_PROP(Props, _Cutoff) + 0.1;
+                clip(texColor.a - cutoff);
+                
+                float4 topColor = UNITY_ACCESS_INSTANCED_PROP(Props, _TopColor);
+                float4 bottomColor = UNITY_ACCESS_INSTANCED_PROP(Props, _BottomColor);
+                fixed4 gradient = lerp(bottomColor, topColor, i.height);
                 fixed4 col = texColor * gradient;
+                
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
             }
             ENDCG
         }
     }
-    FallBack "Transparent/Cutout/Diffuse"
+    FallBack "Transparent/Cutout/VertexLit"
 }
