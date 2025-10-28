@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed29f7c5e2a646e7b90232c16832d251, type: 3}
+  m_Name: StoneWall
+  m_EditorClassIdentifier: 
+  itemName: Stone Wall
+  itemDescription: we need to build a wall
+  icon: {fileID: 21300000, guid: c6806c9b36551974cb845d1a363bc15c, type: 3}
+  maxStack: 64
+  stackable: 1
+  floorPrefab: {fileID: 8023892222117748466, guid: 7fe56013a3bd5a64389aaf896ef3a73d, type: 3}
+  heldPrefab: {fileID: 6996371248291672319, guid: 0fc0362b693bde449b27b68dc684be5e, type: 3}
+  placeablePrefab: {fileID: 7725958924899749338, guid: 86ecbf5874f8dc040a9c9090bcdfb9b7, type: 3}
+  previewPrefab: {fileID: 7725958924899749338, guid: ac94956fda7908a47a08ea3937711e4b, type: 3}

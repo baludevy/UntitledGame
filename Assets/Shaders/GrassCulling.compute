@@ -5,7 +5,7 @@ AppendStructuredBuffer<float4> visiblePositions;
 
 float3 _CameraPos;
 float _MaxDistance;
-int _InstanceCount;
+uint _InstanceCount;
 
 [numthreads(64, 1, 1)]
 void CSMain (uint3 id : SV_DispatchThreadID)

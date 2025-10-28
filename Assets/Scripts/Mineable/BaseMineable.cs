@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
+public class BaseMineable : MonoBehaviour, IMineable, IDamageable
 {
     [Header("Data")] [SerializeField] private MineableData data;
 
@@ -52,7 +52,8 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
         currentHealth -= damage;
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
-        AudioManager.Play(Sound, transform.position, 0.8f, 1.2f);
+        if(Sound != null)
+            AudioManager.Play(Sound, transform.position, 0.8f, 1.2f);
         if (currentHealth <= 0)
             DropLoot();
     }
@@ -84,7 +85,7 @@ public sealed class BaseMineable : MonoBehaviour, IMineable, IDamageable
     {
         if (DroppedItem != null)
         {
-            
+            Instantiate(DroppedItem.floorPrefab, transform.position, transform.rotation);
         }
         Destroy(gameObject);
     }

@@ -18,7 +18,7 @@ public class HeldItemController : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        
+
         itemRootAnimator = transform.GetChild(0).GetComponent<Animator>();
     }
 
@@ -41,7 +41,7 @@ public class HeldItemController : MonoBehaviour
             ClearHeldItem();
             return;
         }
-    
+
         if (lastItem == item) return;
 
         if (currentItemObject != null)
@@ -52,7 +52,6 @@ public class HeldItemController : MonoBehaviour
         if (item.data.heldPrefab != null && heldItemHolder.childCount > 0)
         {
             itemRootAnimator.SetTrigger("Equip");
-            
             currentItemObject = Instantiate(item.data.heldPrefab, itemRootAnimator.transform);
 
             foreach (Transform child in currentItemObject.transform)
@@ -65,6 +64,14 @@ public class HeldItemController : MonoBehaviour
                 Tool tool = currentItemObject.GetComponent<Tool>();
                 tool.instance = (ToolInstance)item;
                 ToolController.Instance.SetTool(tool);
+                PlaceableController.Instance.SetPlaceable(null);
+            }
+            else if (item.data is PlaceableData)
+            {
+                Placeable placeable = currentItemObject.GetComponent<Placeable>();
+                placeable.instance = (PlaceableInstance)item;
+                PlaceableController.Instance.SetPlaceable(placeable);
+                ToolController.Instance.SetTool(null);
             }
         }
     }

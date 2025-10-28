@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f9d4de02484d1792097f8ad5167aa8, type: 3}
+  m_Name: StoneWallMineable
+  m_EditorClassIdentifier: 
+  mineableName: Stone Wall
+  description: DESTROY THE WALL
+  canBeMinedWith: 2
+  minDropAmount: 1
+  maxDropAmount: 1
+  maxHealth: 10
+  sound: {fileID: 8300000, guid: 53d962f66110aeb44bfe506cc57dde5f, type: 3}
+  droppedItem: {fileID: 11400000, guid: 38c31b3c31720bb4594579214db8ee52, type: 2}
