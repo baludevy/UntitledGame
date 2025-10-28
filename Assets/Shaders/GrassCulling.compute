@@ -1,0 +1,24 @@
+#pragma kernel CSMain
+
+StructuredBuffer<float4> allPositions;
+AppendStructuredBuffer<float4> visiblePositions;
+
+float3 _CameraPos;
+float _MaxDistance;
+int _InstanceCount;
+
+[numthreads(64, 1, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint index = id.x;
+    if (index >= _InstanceCount) return;
+
+    float4 p = allPositions[index];
+    float3 pos = p.xyz;
+    float dist = distance(pos, _CameraPos);
+
+    if (dist <= _MaxDistance)
+    {
+        visiblePositions.Append(p);
+    }
+}

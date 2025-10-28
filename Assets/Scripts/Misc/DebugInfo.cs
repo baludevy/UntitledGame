@@ -12,7 +12,7 @@ public class DebugInfo : MonoBehaviour
 
     private void Start()
     {
-        
+        Application.targetFrameRate = 1000;
         
         style = new GUIStyle();
         style.fontSize = 24;
