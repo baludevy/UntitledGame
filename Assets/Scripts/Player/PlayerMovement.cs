@@ -6,10 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody rb;
 
-    [Header("Movement Properties")] [SerializeField]
-    private float speed = 1000f;
+    [Header("Movement Properties")]
+    public float speed = 1000f;
 
-    [SerializeField] private float sprintSpeed = 1750f;
+    public float sprintSpeed = 1750f;
     [SerializeField] private float jumpForce = 300f;
     [SerializeField] private float groundDrag = 1f;
     [SerializeField] private float slideDrag = 0.5f;
@@ -386,6 +386,13 @@ public class PlayerMovement : MonoBehaviour
         if ((int)whatIsGround != ((int)whatIsGround | (1 << layer))) return;
         if (IsFloor(normal) && PlayerCamera.Instance != null)
             PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
+        
+        if (IsFloor(normal)) OnPlayerLanded();
+    }
+    
+    private void OnPlayerLanded()
+    {
+        AbilityController.Instance.OnPlayerLanded();
     }
 
     private void OnCollisionStay(Collision collision)

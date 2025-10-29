@@ -759,7 +759,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25588
+  m_Name: pb_Mesh117976
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9097,7 +9097,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxStamina: 500
-  staminaLoss: 10
+  staminaLoss: 0
   jumpStaminaLoss: 7
   staminaRegen: 6
   regenDelay: 1.5
@@ -9147,6 +9147,7 @@ GameObject:
   - component: {fileID: 4447053444308302569}
   - component: {fileID: 5472971783163097698}
   - component: {fileID: 8637464560610953881}
+  - component: {fileID: 8637464560610953882}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -14607,6 +14608,20 @@ MonoBehaviour:
   startingItems:
   - {fileID: 11400000, guid: b64818c39f9343249967772e0e580396, type: 2}
   - {fileID: 11400000, guid: b026621cd7abc33418a78b720fd3fe53, type: 2}
+--- !u!114 &8637464560610953882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6379734132170021401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b64b72fe6644d10b15386556a52fb06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryAbility: {fileID: 11400000, guid: 1e5c5c776334925408d4fafba87c18f9, type: 2}
+  secondaryAbility: {fileID: 11400000, guid: b82558654595f1b4f824a3d5e07fddee, type: 2}
 --- !u!1 &8708441365999354908
 GameObject:
   m_ObjectHideFlags: 0
