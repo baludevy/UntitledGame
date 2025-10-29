@@ -49,31 +49,6 @@ public class MeleeTool : Tool
 
     public override void UpdateTool()
     {
-        if (toolAnimator == null)
-        {
-            Debug.LogError($"Animator is NULL on {name}", this);
-            return;
-        }
-
-        if (!toolAnimator.isActiveAndEnabled)
-        {
-            Debug.LogError($"Animator is DISABLED on {toolAnimator.name}", toolAnimator);
-            return;
-        }
-
-        if (toolAnimator.runtimeAnimatorController == null)
-        {
-            Debug.LogError($"Animator CONTROLLER is NULL on {toolAnimator.name}", toolAnimator);
-            return;
-        }
-
-        if (!toolAnimator.hasBoundPlayables)
-        {
-            Debug.LogError($"Animator has NO BOUND PLAYABLES on {toolAnimator.name}", toolAnimator);
-            return;
-        }
-
-        
         if (checkAfterFrame && !usedDuringSwing)
         {
             var info = toolAnimator.GetCurrentAnimatorStateInfo(0);

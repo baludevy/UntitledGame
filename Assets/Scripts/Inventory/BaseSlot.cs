@@ -25,6 +25,8 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void SetItem(ItemInstance newItem)
     {
         item = newItem;
+        
+        // determine if the item has an icon
         bool hasItem = item != null && item.data.Icon != null;
         icon.gameObject.SetActive(hasItem);
         icon.sprite = hasItem ? item.data.Icon : null;
@@ -40,11 +42,7 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         SetItem(null);
     }
-
-    protected virtual void SubtractAmount(int amount)
-    {
-        PlayerInventory.Instance.SubtractAmountFromItem(item, amount);
-    }
+    
 
     public virtual void OnBeginDrag(PointerEventData e)
     {
@@ -60,8 +58,11 @@ public class BaseSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (split)
         {
             int half = item.stackAmount / 2;
+            
+            // make a new instance with half the amount of the original item
             dragData.item = new ItemInstance(item.data, half);
-            SubtractAmount(half);
+            
+            PlayerInventory.Instance.SubtractAmountFromItem(item, half);
             stackText.text = item.data.Stackable ? item.stackAmount.ToString() : "";
             dragData.splitting = true;
         }

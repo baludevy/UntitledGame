@@ -4615,14 +4615,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c8beb8abc854b23b91a3ef3f13eddcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: 10
-  tileSize: 16
-  maxHeight: 4
-  heightMultiplier: 10
-  noiseScale: 0.1
-  noiseSeed: 0
-  generateSlope: 1
-  grassMaterial: {fileID: 2100000, guid: 9eb12839494464c439fa62598bbb8218, type: 2}
 --- !u!23 &1171423774
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8683,9 +8675,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  speed: 1500
-  sprintSpeed: 3500
-  jumpForce: 300
+  speed: 1250
+  sprintSpeed: 3000
+  jumpForce: 350
   groundDrag: 3
   slideDrag: 0.5
   airMultiplier: 0.7
@@ -8693,9 +8685,10 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
-  slideForce: 500
+  slideForce: 7
   slideCounterMovement: 0.2
   crouchScale: {x: 2, y: 2.25, z: 2}
+  slideCooldown: 0.2
   sensitivity: 1
   sensMultiplier: 1
   desiredX: 0
