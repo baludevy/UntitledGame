@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5484600568431579787}
   - component: {fileID: 8209405316339351391}
   - component: {fileID: 558862051607443169}
-  - component: {fileID: -6415685779132623661}
   - component: {fileID: -6725108782767706356}
-  m_Layer: 3
+  - component: {fileID: 2145481440017712205}
+  m_Layer: 19
   m_Name: WallPlaced
   m_TagString: Mineable
   m_Icon: {fileID: 0}
@@ -378,20 +378,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footstepClip: {fileID: 8300000, guid: 6dcc5e9ae2fecfc4c9ce11e519f42973, type: 3}
---- !u!114 &-6415685779132623661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7725958924899749338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f33e3ee86df74a90adca6b60a27294fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 616ae8479c7195c429d01ef166d68656, type: 2}
-  canBeMined: 1
 --- !u!65 &-6725108782767706356
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -413,3 +399,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5, y: 5, z: 0.25}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2145481440017712205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7725958924899749338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd42c7d9caa74111ba19241cac605676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 616ae8479c7195c429d01ef166d68656, type: 2}
+  canBeMined: 1

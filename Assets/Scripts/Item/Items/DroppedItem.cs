@@ -10,6 +10,8 @@ public class DroppedItem : MonoBehaviour
 
     private void Awake()
     {
+        if(itemInstance != null) return;
+        
         if (itemData is ToolData tool)
             itemInstance = new ToolInstance(tool);
         else if(itemData is PlaceableData placeable)

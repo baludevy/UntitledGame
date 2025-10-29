@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sprintSpeed = 1750f;
     [SerializeField] private float jumpForce = 300f;
     [SerializeField] private float groundDrag = 1f;
+    [SerializeField] private float slideDrag = 0.5f;
     [SerializeField] private float airMultiplier = 0.6f;
     [SerializeField] public float playerHeight = 2f;
     [SerializeField] private LayerMask whatIsGround;
@@ -19,15 +20,23 @@ public class PlayerMovement : MonoBehaviour
     private bool readyToJump = true;
     private bool grounded;
     private bool surfing;
+    private bool sliding;
     private const float jumpCooldown = 0.25f;
     private Vector3 normalVector;
     private const float maxSlopeAngle = 35f;
     private float fallSpeed;
 
+    [Header("Slide Properties")] [SerializeField]
+    private float slideForce = 400f;
+    [SerializeField] private float slideCounterMovement = 0.2f;
+    [SerializeField] private Vector3 crouchScale = new Vector3(1f, 0.5f, 1f);
+    private Vector3 playerScale;
+
     [Header("Input")] private float x;
     private float y;
     private bool jumping;
     private bool sprinting;
+    private bool crouching;
 
     [Header("Mouse Look")] public float sensitivity = 50f;
     public float sensMultiplier = 1f;
@@ -48,10 +57,9 @@ public class PlayerMovement : MonoBehaviour
     private float adjustedFootstepInterval;
     private float footstepTimer;
 
-    [Header("Misc")] public Transform itemPickup;
-
     public ParticleSystem ps;
     private ParticleSystem.EmissionModule emission;
+    private float drag;
 
     private PlayerStamina stamina;
 
@@ -61,7 +69,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
         if (orientation == null) orientation = transform;
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
@@ -70,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        playerScale = transform.localScale;
         desiredX = orientation.localEulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -91,6 +99,11 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
             Jump();
         }
+        
+        
+
+        if (Input.GetKeyDown(KeyCode.LeftControl)) StartSlide();
+        if (Input.GetKeyUp(KeyCode.LeftControl)) StopSlide();
     }
 
     private void FixedUpdate()
@@ -98,20 +111,37 @@ public class PlayerMovement : MonoBehaviour
         Movement();
     }
 
+    private void StartSlide()
+    {
+        crouching = true;
+        transform.localScale = crouchScale;
+        transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+        if (rb.velocity.magnitude > 0.5f && grounded)
+        {
+            rb.AddForce(orientation.forward * slideForce);
+            sliding = true;
+        }
+    }
+
+    private void StopSlide()
+    {
+        crouching = false;
+        sliding = false;
+        transform.localScale = playerScale;
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+    }
+
     private void WalkBob()
     {
         if (!grounded) return;
-
         Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         float moveSpeed = horizontalVel.magnitude;
-
-        if (moveSpeed > 0.01f && PlayerCamera.Instance != null)
+        if (moveSpeed > 1f && PlayerCamera.Instance != null)
         {
             walkBobTimer += Time.deltaTime * bobSpeed;
             float xBob = Mathf.Sin(walkBobTimer) * bobAmount;
             float yBob = Mathf.Cos(walkBobTimer * 2f) * bobAmount;
             PlayerCamera.Instance.BobOnce(new Vector3(xBob, yBob, 0f));
-
             footstepTimer -= Time.deltaTime;
             if (footstepTimer <= 0f)
             {
@@ -130,7 +160,6 @@ public class PlayerMovement : MonoBehaviour
             GroundSurface surface = hit.collider.GetComponent<GroundSurface>();
             if (surface != null) return surface.footstepClip;
         }
-
         return null;
     }
 
@@ -138,20 +167,17 @@ public class PlayerMovement : MonoBehaviour
     {
         float mouseX = canLook ? Input.GetAxis("Mouse X") * sensitivity * sensMultiplier : 0f;
         float mouseY = canLook ? Input.GetAxis("Mouse Y") * sensitivity * sensMultiplier : 0f;
-
         desiredX += mouseX;
         desiredX = Mathf.Repeat(desiredX, 360f);
-
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
         if (camTransform != null) camTransform.localRotation = Quaternion.Euler(xRotation, desiredX, 0f);
         orientation.Rotate(Vector3.up * mouseX);
     }
 
     private void HandleDrag()
     {
-        rb.drag = grounded ? groundDrag : 0f;
+        rb.drag = grounded ? drag : 0f;
     }
 
     private void GetInput()
@@ -164,7 +190,6 @@ public class PlayerMovement : MonoBehaviour
             sprinting = false;
             return;
         }
-
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         jumping = Input.GetButton("Jump");
@@ -173,17 +198,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
+        drag = sliding ? slideDrag : groundDrag;
+        
         rb.AddForce(Vector3.down * (Time.deltaTime * 12.5f));
-
         Vector2 mag = FindVelRelativeToLook();
         float xVelLook = mag.x;
         float yVelLook = mag.y;
-
         CounterMovement(x, y, mag);
-
         float maxSpeed = 25f;
         float moveSpeed = speed;
-
         bool isMoving = x != 0 || y != 0;
         bool isSprinting = sprinting && isMoving && stamina.GetStamina() > 0f;
 
@@ -215,6 +238,13 @@ public class PlayerMovement : MonoBehaviour
             sideMultiplier = 0.3f;
         }
 
+        if (sliding && grounded)
+        {
+            rb.AddForce(-rb.velocity.normalized * moveSpeed * Time.deltaTime * slideCounterMovement);
+            rb.AddForce(Vector3.down * Time.deltaTime * 3000f);
+            return;
+        }
+
         rb.AddForce(orientation.forward * (y * moveSpeed * Time.deltaTime * sideMultiplier * forwardMultiplier));
         rb.AddForce(orientation.right * (x * moveSpeed * Time.deltaTime * sideMultiplier));
     }
@@ -241,12 +271,7 @@ public class PlayerMovement : MonoBehaviour
         float angleFactor = Mathf.Max(angle, 0.1f);
         float targetRate = rb.velocity.magnitude / angleFactor * 10f;
         targetRate = Mathf.Min(targetRate, 30f);
-
-        emission.rateOverTimeMultiplier = Mathf.Lerp(
-            emission.rateOverTimeMultiplier,
-            targetRate,
-            Time.deltaTime * 2f
-        );
+        emission.rateOverTimeMultiplier = Mathf.Lerp(emission.rateOverTimeMultiplier, targetRate, Time.deltaTime * 2f);
     }
 
     private void Jump()
@@ -254,15 +279,11 @@ public class PlayerMovement : MonoBehaviour
         if (grounded || surfing)
         {
             stamina.UseJumpStamina();
-
             Vector3 velocity = rb.velocity;
             rb.AddForce(Vector3.up * (jumpForce * 1.5f));
             rb.AddForce(normalVector * (jumpForce * 0.5f));
-
-            if (rb.velocity.y < 0.5f)
-                rb.velocity = new Vector3(velocity.x, 0f, velocity.z);
-            else if (rb.velocity.y > 0f)
-                rb.velocity = new Vector3(velocity.x, rb.velocity.y / 2f, velocity.z);
+            if (rb.velocity.y < 0.5f) rb.velocity = new Vector3(velocity.x, 0f, velocity.z);
+            else if (rb.velocity.y > 0f) rb.velocity = new Vector3(velocity.x, rb.velocity.y / 2f, velocity.z);
         }
     }
 
@@ -271,26 +292,24 @@ public class PlayerMovement : MonoBehaviour
     private void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!grounded || jumping) return;
-
         const float threshold = 0.09f;
         const float multiplier = 0.07f;
         float moveSpeed = speed;
         const float runSpeed = 20f;
-
-        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) ||
-            (mag.x > threshold && x < 0f))
+        if (crouching)
+        {
+            rb.AddForce(moveSpeed * Time.deltaTime * -rb.velocity.normalized * slideCounterMovement);
+            return;
+        }
+        if ((Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f) || (mag.x < -threshold && x > 0f) || (mag.x > threshold && x < 0f))
             rb.AddForce(orientation.right * (moveSpeed * Time.deltaTime * -mag.x * multiplier));
-
-        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) ||
-            (mag.y > threshold && y < 0f))
+        if ((Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f) || (mag.y < -threshold && y > 0f) || (mag.y > threshold && y < 0f))
             rb.AddForce(orientation.forward * (moveSpeed * Time.deltaTime * -mag.y * multiplier));
-
         if (Mathf.Abs(x) < 0.05f && Mathf.Abs(y) < 0.05f)
         {
             if (Mathf.Abs(rb.velocity.x) < threshold) rb.velocity = new Vector3(0, rb.velocity.y, 0);
             if (Mathf.Abs(rb.velocity.z) < threshold) rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
         }
-
         if (new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude > runSpeed)
         {
             float vertical = rb.velocity.y;
@@ -306,11 +325,7 @@ public class PlayerMovement : MonoBehaviour
         float deltaAngle = Mathf.DeltaAngle(currentY, targetY);
         float sideAngle = 90f - deltaAngle;
         float mag = new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
-
-        return new Vector2(
-            y: mag * Mathf.Cos(deltaAngle * Mathf.Deg2Rad),
-            x: mag * Mathf.Cos(sideAngle * Mathf.Deg2Rad)
-        );
+        return new Vector2(y: mag * Mathf.Cos(deltaAngle * Mathf.Deg2Rad), x: mag * Mathf.Cos(sideAngle * Mathf.Deg2Rad));
     }
 
     private bool IsFloor(Vector3 v) => Vector3.Angle(Vector3.up, v) < maxSlopeAngle;
@@ -319,11 +334,8 @@ public class PlayerMovement : MonoBehaviour
     {
         int layer = other.gameObject.layer;
         Vector3 normal = other.contacts[0].normal;
-        if ((int)whatIsGround != ((int)whatIsGround | (1 << layer)))
-            return;
-
-        if (IsFloor(normal) && PlayerCamera.Instance != null)
-            PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
+        if ((int)whatIsGround != ((int)whatIsGround | (1 << layer))) return;
+        if (IsFloor(normal) && PlayerCamera.Instance != null) PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
     }
 
     private void OnCollisionStay(Collision collision)

@@ -38,7 +38,7 @@ public class PlaceableController : MonoBehaviour
     {
         if (previewObject == null) return;
 
-        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 100f))
+        if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 10f))
         {
             previewObject.transform.position = hit.point + previewObject.transform.up * 2.5f;
 
@@ -51,14 +51,6 @@ public class PlaceableController : MonoBehaviour
 
     private void HandlePlacementInput()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            PlaceableData data = (PlaceableData)currentPlaceable.instance.data;
 
-            GameObject placed = Instantiate(data.placeablePrefab, previewObject.transform.position,
-                previewObject.transform.rotation);
-
-            PlayerInventory.Instance.SubtractAmountFromItem(currentPlaceable.instance, 1);
-        }
     }
 }

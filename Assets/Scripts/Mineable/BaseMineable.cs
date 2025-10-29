@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class BaseMineable : MonoBehaviour, IMineable, IDamageable
 {
@@ -40,11 +42,11 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
     public bool canBeMined;
 
-    private void Start()
+    private void Awake()
     {
-        originalScale = transform.localScale;
         currentHealth = MaxHealth;
         canBeMined = true;
+        originalScale = transform.localScale;
     }
 
     public void TakeDamage(float damage)
@@ -52,13 +54,13 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         currentHealth -= damage;
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
-        if(Sound != null)
+        if (Sound != null)
             AudioManager.Play(Sound, transform.position, 0.8f, 1.2f);
         if (currentHealth <= 0)
             DropLoot();
     }
 
-    private IEnumerator HitAnimation()
+    public IEnumerator HitAnimation()
     {
         Vector3 start = originalScale;
         Vector3 target = start * 0.85f;
@@ -70,6 +72,7 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
             transform.localScale = Vector3.Lerp(start, target, eased);
             yield return null;
         }
+
         t = 0f;
         while (t < 1f)
         {
@@ -78,15 +81,33 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
             transform.localScale = Vector3.Lerp(target, start, eased);
             yield return null;
         }
+
         transform.localScale = start;
     }
 
     public void DropLoot()
     {
-        if (DroppedItem != null)
+        if (DroppedItem?.floorPrefab != null)
         {
-            Instantiate(DroppedItem.floorPrefab, transform.position, transform.rotation);
+            int amount = Random.Range(MinDropAmount, MaxDropAmount);
+            DroppedItem dropped =
+                Instantiate(DroppedItem.floorPrefab, transform.position + Vector3.up * 1.5f, transform.rotation)
+                    .GetComponent<DroppedItem>();
+
+            if (dropped.itemData is ToolData toolData)
+            {
+                dropped.Initialize(new ToolInstance(toolData, amount), false);
+            }
+            else if (dropped.itemData is PlaceableData placeableData)
+            {
+                dropped.Initialize(new PlaceableInstance(placeableData, amount), false);
+            }
+            else
+            {
+                dropped.Initialize(new ItemInstance(dropped.itemData, amount), true);
+            }
         }
+
         Destroy(gameObject);
     }
 }

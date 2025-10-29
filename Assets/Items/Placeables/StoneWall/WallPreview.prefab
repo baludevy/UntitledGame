@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5484600568431579787}
   - component: {fileID: 8209405316339351391}
   - component: {fileID: 558862051607443169}
-  m_Layer: 3
+  m_Layer: 15
   m_Name: WallPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e23fcc97004fa094b98fb78bbbad402e, type: 2}
+  - {fileID: 2100000, guid: 9a416768472abfc4c9dbe9bb0f2653c2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
