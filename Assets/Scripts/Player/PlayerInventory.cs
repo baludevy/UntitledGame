@@ -68,7 +68,7 @@ public class PlayerInventory : MonoBehaviour
         inventoryOpen = !inventoryOpen;
         UIManager.SetInventoryState(inventoryOpen);
         CursorManager.SetCursorLock(!inventoryOpen);
-        PlayerMovement.Instance.canLook = !inventoryOpen;
+        PlayerMovement.Instance.SetCanLook(!inventoryOpen);
     }
 
     private void SwitchToHotbarSlot(int slot)

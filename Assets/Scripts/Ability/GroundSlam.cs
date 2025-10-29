@@ -1,66 +1,60 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 using EZCameraShake;
+
 
 [CreateAssetMenu(menuName = "Ability/Ground Slam")]
 public class GroundSlam : Ability
 {
-    public float slamForce = 25f;
-    public float slamSlowDuration = 0.4f;
-    public float slamSlowMultiplier = 0.2f;
+    public float force = 25f;
+    public float slowDuration = 0.4f;
+    public float slowMultiplier = 0.2f;
     public float minHeight = 10f;
 
+
     private bool slamming;
+
 
     public override bool Activate()
     {
         PlayerMovement player = PlayerMovement.Instance;
-        if (player == null || player.rb == null) return false;
+        Rigidbody rb = player.GetRigidbody();
 
-        if (!IsHighEnough(player)) return false;
-
+        if(!IsHighEnough(player)) return false;
+        
         slamming = true;
-        Rigidbody rb = player.rb;
+        
+        // cancel the player's velocity
         rb.velocity = Vector3.zero;
-        rb.AddForce(Vector3.down * slamForce, ForceMode.VelocityChange);
-        CameraShaker.Instance.ShakeOnce(2.5f, 2.5f, 0.1f, 0.2f);
-
+        
+        rb.AddForce(Vector3.down * force, ForceMode.VelocityChange);
+        
+        CameraShaker.Instance?.ShakeOnce(2f, 2.5f, 0.1f, 0.2f);
         return true;
     }
+
 
     public void OnLand()
     {
         if (!slamming) return;
         slamming = false;
-
-        var player = PlayerMovement.Instance;
-        if (player == null || player.rb == null) return;
-
-        var rb = player.rb;
+        
+        PlayerMovement player = PlayerMovement.Instance;
+        Rigidbody rb = player.GetRigidbody();
+        
         rb.velocity = new Vector3(0f, rb.velocity.y * 0.5f, 0f);
-        player.StartCoroutine(SlowdownRoutine(player));
-        CameraShaker.Instance.ShakeOnce(5f, 3f, 0.1f, 0.3f);
+        
+        //slow down the player for some time
+        player.ChangeSprintSpeed(slowMultiplier, slowDuration);
+        player.ChangeWalkSpeed(slowMultiplier, slowDuration);
+        
+        CameraShaker.Instance?.ShakeOnce(7f, 3f, 0.1f, 0.5f);
     }
+
 
     private bool IsHighEnough(PlayerMovement player)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(player.transform.position, Vector3.down, out hit, 100f))
-            return hit.distance >= minHeight;
-        return false;
-    }
-
-    private IEnumerator SlowdownRoutine(PlayerMovement player)
-    {
-        float originalSpeed = player.speed;
-        float originalSprintSpeed = player.sprintSpeed;
-
-        player.speed *= slamSlowMultiplier;
-        player.sprintSpeed *= slamSlowMultiplier;
-
-        yield return new WaitForSeconds(slamSlowDuration);
-
-        player.speed = originalSpeed;
-        player.sprintSpeed = originalSprintSpeed;
+        // shoot a raycast down to determine the height
+        return !Physics.Raycast(player.transform.position, Vector3.down, out var hit, 100f) || hit.distance >= minHeight;
     }
 }

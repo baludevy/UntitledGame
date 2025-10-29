@@ -1,46 +1,54 @@
-using System;
 using UnityEngine;
+
 
 public class AbilityController : MonoBehaviour
 {
     public Ability primaryAbility;
     public Ability secondaryAbility;
 
-    [NonSerialized] public float primaryTimer;
-    [NonSerialized] public float secondaryTimer;
+
+    private float primaryTimer;
+    private float secondaryTimer;
 
     public static AbilityController Instance;
 
+
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
+        if (Instance && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-            Destroy(this);
+        Instance = this;
     }
-
+    
     private void Update()
     {
-        if (primaryTimer > 0) primaryTimer -= Time.deltaTime;
-        if (secondaryTimer > 0) secondaryTimer -= Time.deltaTime;
+        primaryTimer = Mathf.Max(0f, primaryTimer - Time.deltaTime);
+        secondaryTimer = Mathf.Max(0f, secondaryTimer - Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.F) && primaryAbility != null && primaryTimer <= 0)
-        {
-            if(primaryAbility.Activate())
-                primaryTimer = primaryAbility.cooldown;
-        }
 
-        if (Input.GetKeyDown(KeyCode.C) && secondaryAbility != null && secondaryTimer <= 0)
-        {
-            if(secondaryAbility.Activate())
-                secondaryTimer = secondaryAbility.cooldown;
-        }
+        if (Input.GetKeyDown(KeyCode.F)) ActivatePrimary();
+        if (Input.GetKeyDown(KeyCode.C)) ActivateSecondary();
     }
-
+    
+    private void ActivatePrimary()
+    {
+        if (primaryAbility == null || primaryTimer > 0f) return;
+        if (primaryAbility.Activate()) primaryTimer = primaryAbility.cooldown;
+    }
+    
+    private void ActivateSecondary()
+    {
+        if (secondaryAbility == null || secondaryTimer > 0f) return;
+        if (secondaryAbility.Activate()) secondaryTimer = secondaryAbility.cooldown;
+    }
+    
     public void OnPlayerLanded()
     {
-        if (primaryAbility is GroundSlam gs1) gs1.OnLand();
-        if (secondaryAbility is GroundSlam gs2) gs2.OnLand();
+        (primaryAbility as GroundSlam)?.OnLand();
+        (secondaryAbility as GroundSlam)?.OnLand();
     }
 }

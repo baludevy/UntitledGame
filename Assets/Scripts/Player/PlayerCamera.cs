@@ -35,7 +35,7 @@ public class PlayerCamera : MonoBehaviour
     private void Start()
     {
         startPos = heldItemHolder.localPosition;
-        rb = PlayerMovement.Instance.rb;
+        rb = PlayerMovement.Instance.GetRigidbody();
     }
 
     private void LateUpdate()
@@ -45,7 +45,7 @@ public class PlayerCamera : MonoBehaviour
         UpdateBob();
         UpdateSpeedBob();
         
-        if(PlayerMovement.Instance.canLook)
+        if(PlayerMovement.Instance.GetCanLook())
             UpdateWeaponSway();
 
         Vector3 finalPos = startPos + bobOffset;

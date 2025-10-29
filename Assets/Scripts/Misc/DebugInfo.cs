@@ -9,7 +9,6 @@ public class DebugInfo : MonoBehaviour
     private float reservedMemory;
     private float monoMemory;
     private GUIStyle style;
-    private AbilityController abilityController;
 
     private void Start()
     {
@@ -17,14 +16,13 @@ public class DebugInfo : MonoBehaviour
         style = new GUIStyle();
         style.fontSize = 24;
         style.normal.textColor = Color.white;
-        abilityController = FindObjectOfType<AbilityController>();
     }
 
     private void Update()
     {
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         playerPosition = PlayerMovement.Instance.transform.position;
-        playerVelocity = PlayerMovement.Instance.rb.velocity;
+        playerVelocity = PlayerMovement.Instance.GetRigidbody().velocity;
         allocatedMemory = UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong() / (1024f * 1024f);
         reservedMemory = UnityEngine.Profiling.Profiler.GetTotalReservedMemoryLong() / (1024f * 1024f);
         monoMemory = UnityEngine.Profiling.Profiler.GetMonoUsedSizeLong() / (1024f * 1024f);
@@ -42,13 +40,5 @@ public class DebugInfo : MonoBehaviour
         GUI.Label(new Rect(10, 130, 800, 30), "mono mem: " + monoMemory.ToString("F2") + " mb", style);
         GUI.Label(new Rect(10, 160, 800, 30), "pos: " + playerPosition.ToString("F2"), style);
         GUI.Label(new Rect(10, 190, 800, 30), "vel: " + playerVelocity.ToString("F2"), style);
-
-        if (abilityController != null)
-        {
-            GUI.Label(new Rect(10, 220, 800, 30),
-                "p_ab cooldown: " + Mathf.Max(0, abilityController.primaryTimer).ToString("F2"), style);
-            GUI.Label(new Rect(10, 250, 800, 30),
-                "s_ab cooldown: " + Mathf.Max(0, abilityController.secondaryTimer).ToString("F2"), style);
-        }
     }
 }
