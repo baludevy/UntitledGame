@@ -237,7 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PrefabManager
   hitEffect: {fileID: 7776842582623595503, guid: 48684cc5d25011148b293a9f2560531c, type: 3}
   damageMarker: {fileID: 7780389980816550722, guid: 836e3947cd027f44f85dec1904de4484, type: 3}
-  critMarker: {fileID: 7780389980816550722, guid: ac39d8a20e14d7e4fb02ca273595d737, type: 3}
+  textMarker: {fileID: 7780389980816550722, guid: ac39d8a20e14d7e4fb02ca273595d737, type: 3}
   audioPrefab: {fileID: 2391150139543264443, guid: 5403584a99ae92747aca6d9539ee159c, type: 3}
 --- !u!1001 &36636181
 PrefabInstance:
@@ -10927,7 +10927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce338a782584a18a502f5163608bb0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  critChance: 1
+  critChance: 0.05
   critMultiplier: 1.2
 --- !u!1 &5977759840912064901
 GameObject:

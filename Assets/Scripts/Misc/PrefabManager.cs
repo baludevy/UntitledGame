@@ -7,7 +7,7 @@ public class PrefabManager : MonoBehaviour
 
     public GameObject hitEffect;
     public GameObject damageMarker;
-    public GameObject critMarker;
+    public GameObject textMarker;
     public GameObject audioPrefab;
 
     private void Awake()
@@ -40,8 +40,10 @@ public class PrefabManager : MonoBehaviour
         ps.transform.GetComponentInChildren<SpriteRenderer>().color = color;
     }
 
-    public void SpawnCritMarker(Vector3 pos, Quaternion rot)
+    public void SpawnTextMarker(Vector3 pos, Quaternion rot, String text, Color color)
     {
-        GameObject marker = Instantiate(critMarker, pos, rot);
+        GameObject marker = Instantiate(textMarker, pos, rot);
+
+        marker.GetComponent<DamageMarker>().ShowText(text, color);
     }
 }

@@ -10,8 +10,7 @@ public class DamageMarker : MonoBehaviour
     [SerializeField] private float maxHeightOffset = 1f;
     [SerializeField] private Vector3 startScale = Vector3.one;
     [SerializeField] private Vector3 endScale = Vector3.zero;
-    [SerializeField] priva
-    
+
     private Color startColor;
     private float timer;
     private readonly float cameraOffset = 0.6f;
@@ -53,6 +52,12 @@ public class DamageMarker : MonoBehaviour
         float currentDamage = float.Parse(text.text);
         currentDamage += newDamage;
         text.text = $"{currentDamage:F0}";
+        text.color = color;
+    }
+
+    public void ShowText(string showText, Color color)
+    {
+        text.text = showText;
         text.color = color;
     }
 }

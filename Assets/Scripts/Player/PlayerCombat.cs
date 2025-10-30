@@ -5,20 +5,25 @@ using Vector3 = UnityEngine.Vector3;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public static void DamageEnemy(float baseDamage, bool crit, BaseEnemy enemy, Vector3 hitPoint, Vector3 hitNormal)
+    public static void DamageEnemy(float baseDamage, bool crit, BaseEnemy enemy, Vector3 hitPoint,
+        Vector3 hitNormal, Element element = Element.Normal)
     {
         Color color = Color.white;
         if (crit)
         {
             color = Color.yellow;
-            PrefabManager.Instance.SpawnCritMarker(hitPoint + new Vector3(0.5f, -0.5f, 0f), Quaternion.LookRotation(hitNormal));
+            PrefabManager.Instance.SpawnTextMarker(hitPoint + new Vector3(Random.Range(-0.3f, 0.3f), -0.1f, 0f),
+                Quaternion.LookRotation(hitNormal), "CRIT!", color);
         }
 
-        HitEffectiveness eff = Combat.CalcEffectiveness(Element.Ground, enemy.Element);
+        HitEffectiveness eff = Combat.CalcEffectiveness(element, enemy.Element);
 
+        if(eff == HitEffectiveness.SuperEffective) color = Color.cyan;
+        
         float damage = Combat.CalculateDamage(baseDamage, crit, eff);
-
-        if (eff == HitEffectiveness.SuperEffective) color = Color.cyan;
+        
+        Debug.Log(damage);
+        Debug.Log(eff.ToString());
 
         PrefabManager.Instance.SpawnDamageMarker(hitPoint, Quaternion.LookRotation(hitNormal), damage, color);
         PrefabManager.Instance.SpawnSparkles(hitPoint, Quaternion.LookRotation(hitNormal), color);

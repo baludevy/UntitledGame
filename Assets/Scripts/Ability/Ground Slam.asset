@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Ground Slam
   m_EditorClassIdentifier: 
   cooldown: 1
+  damage: 50
+  slamRadius: 15
   force: 20
   slowDuration: 0.4
   slowMultiplier: 0.2

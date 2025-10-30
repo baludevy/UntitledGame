@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6107143735885369663}
   - component: {fileID: 5130228989148421300}
   m_Layer: 0
-  m_Name: CritMarker
+  m_Name: TextMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,11 +60,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DamageMarker
   text: {fileID: 6668434846701544101}
   lifetime: 1.5
-  startFloatSpeed: 3
+  startFloatSpeed: 0
   endFloatSpeed: 0
-  maxHeightOffset: 1
+  maxHeightOffset: 0
   startScale: {x: 1, y: 1, z: 1}
-  endScale: {x: 0, y: 0, z: 0}
+  endScale: {x: 1, y: 1, z: 1}
 --- !u!1 &8178501908587359710
 GameObject:
   m_ObjectHideFlags: 0
