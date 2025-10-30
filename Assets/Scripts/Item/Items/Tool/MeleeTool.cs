@@ -84,19 +84,27 @@ public class MeleeTool : Tool
                 PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
 
                 mineable.TakeDamage(damage, crit);
-            } /* else if (damageable is BaseEnemy enemy)
+            }
+            else if (damageable is BaseEnemy enemy)
             {
                 float damage = data.damage;
 
-                if(crit)
-                    damage *= PlayerStatistics.Instance.critMultiplier;
+                if (crit)
+                    damage *= PlayerStatistics.Instance.Combat.GetCritMultiplier();
 
                 PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
                     crit);
                 PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
 
-                // enemy.TakeDamage(damage);
-            } */
+                Rigidbody enemyRb = enemy.GetRigidbody();
+                if (enemyRb != null)
+                {
+                    Vector3 dir = (enemy.transform.position - PlayerCamera.Instance.transform.position).normalized;
+                    enemy.ApplyKnockback(dir, 20f);
+                }
+
+                enemy.TakeDamage(damage, crit);
+            }
         }
     }
 

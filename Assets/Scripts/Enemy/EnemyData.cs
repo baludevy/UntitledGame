@@ -1,17 +1,17 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(menuName = "Mineable")]
+[CreateAssetMenu(menuName = "Enemy")]
 public class EnemyData : ScriptableObject, IEnemy
 {
-    [SerializeField] private string mineableName;
+    [SerializeField] private string enemyName;
     [SerializeField] private string description;
     [SerializeField] private float maxHealth;
     
     public string Name
     {
-        get => mineableName;
-        set => mineableName = value;
+        get => enemyName;
+        set => enemyName = value;
     }
 
     public string Description
