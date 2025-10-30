@@ -1,11 +1,8 @@
-using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using EZCameraShake;
 
 public class MeleeTool : Tool
 {
-    private bool wasSwinging;
     private bool swingingThisFrame;
     private bool usedDuringSwing;
     private bool checkAfterFrame;
@@ -42,10 +39,8 @@ public class MeleeTool : Tool
             swingingThisFrame = true;
         }
 
-        wasSwinging = isSwinging;
         swingingThisFrame = false;
     }
-
 
     public override void UpdateTool()
     {
@@ -72,39 +67,9 @@ public class MeleeTool : Tool
             IDamageable damageable = GetTarget(hit.collider.transform);
 
             if (damageable is BaseMineable mineable)
-            {
-                if (!mineable.canBeMined) return;
-                float damage = data.type == mineable.CanBeMinedWith ? data.damage : 0;
-
-                if (crit)
-                    damage *= PlayerStatistics.Instance.Combat.GetCritMultiplier();
-
-                PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
-                    crit);
-                PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
-
-                mineable.TakeDamage(damage, crit);
-            }
+                PlayerCombat.DamageMineable(data.damage, crit, mineable, hit.point, hit.normal, data.type);
             else if (damageable is BaseEnemy enemy)
-            {
-                float damage = data.damage;
-
-                if (crit)
-                    damage *= PlayerStatistics.Instance.Combat.GetCritMultiplier();
-
-                PrefabManager.Instance.SpawnDamageMarker(hit.point, Quaternion.LookRotation(hit.normal), damage,
-                    crit);
-                PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
-
-                Rigidbody enemyRb = enemy.GetRigidbody();
-                if (enemyRb != null)
-                {
-                    Vector3 dir = (enemy.transform.position - PlayerCamera.Instance.transform.position).normalized;
-                    enemy.ApplyKnockback(dir, 20f);
-                }
-
-                enemy.TakeDamage(damage, crit);
-            }
+                PlayerCombat.DamageEnemy(data.damage, crit, enemy, hit.point, hit.normal);
         }
     }
 

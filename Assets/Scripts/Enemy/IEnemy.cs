@@ -2,6 +2,13 @@ using UnityEngine;
 
 public interface IEnemy
 {
-    string Name { get; set; }
-    string Description { get; set; }
+    string Name { get; }
+    string Description { get; }
+    
+    Element Element { get; }
+    
+    float MaxHealth { get; set; }
+    float CurrentHealth { get; set; }
+
+    void TakeDamage(float damage, Color color);
 }

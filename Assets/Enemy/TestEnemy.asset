@@ -15,3 +15,4 @@ MonoBehaviour:
   enemyName: Test
   description: test
   maxHealth: 100
+  element: 3

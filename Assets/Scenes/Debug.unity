@@ -237,6 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PrefabManager
   hitEffect: {fileID: 7776842582623595503, guid: 48684cc5d25011148b293a9f2560531c, type: 3}
   damageMarker: {fileID: 7780389980816550722, guid: 836e3947cd027f44f85dec1904de4484, type: 3}
+  critMarker: {fileID: 7780389980816550722, guid: ac39d8a20e14d7e4fb02ca273595d737, type: 3}
   audioPrefab: {fileID: 2391150139543264443, guid: 5403584a99ae92747aca6d9539ee159c, type: 3}
 --- !u!1001 &36636181
 PrefabInstance:
@@ -735,7 +736,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 802f5e7a83d415643af9ef9510097301, type: 2}
+  - {fileID: 2100000, guid: e99808cbb4f80ae4f989881dafae0f02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2066,6 +2067,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa6e4176200b465f981d56dffd61812a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &294082523
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721204843005898375, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814167005587942564, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
 --- !u!1 &320798182
 GameObject:
   m_ObjectHideFlags: 0
@@ -6940,7 +6998,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 802f5e7a83d415643af9ef9510097301, type: 2}
+  - {fileID: 2100000, guid: e99808cbb4f80ae4f989881dafae0f02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7750,7 +7808,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 802f5e7a83d415643af9ef9510097301, type: 2}
+  - {fileID: 2100000, guid: e99808cbb4f80ae4f989881dafae0f02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10869,7 +10927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce338a782584a18a502f5163608bb0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  critChance: 0.05
+  critChance: 1
   critMultiplier: 1.2
 --- !u!1 &5977759840912064901
 GameObject:
@@ -16444,3 +16502,4 @@ SceneRoots:
   - {fileID: 488567546}
   - {fileID: 1299070012}
   - {fileID: 846892325}
+  - {fileID: 294082523}

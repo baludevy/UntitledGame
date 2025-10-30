@@ -15,25 +15,25 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
     public string Name
     {
-        get => data.Name;
-        set => data.Name = value;
+        get => data.mineableName;
+        set => data.mineableName = value;
     }
 
     public string Description
     {
-        get => data.Description;
-        set => data.Description = value;
+        get => data.description;
+        set => data.description = value;
     }
 
-    public ToolType CanBeMinedWith => data.CanBeMinedWith;
-    public int MinDropAmount => data.MinDropAmount;
-    public int MaxDropAmount => data.MaxDropAmount;
-    public ItemData DroppedItem => data.DroppedItem;
-    public AudioClip Sound => data.Sound;
+    public ToolType CanBeMinedWith => data.canBeMinedWith;
+    public int MinDropAmount => data.minDropAmount;
+    public int MaxDropAmount => data.maxDropAmount;
+    public ItemData DroppedItem => data.droppedItem;
+    public AudioClip Sound => data.sound;
 
     public float MaxHealth
     {
-        get => data.MaxHealth;
+        get => data.maxHealth;
         set { }
     }
 
@@ -58,18 +58,8 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         {
             flash = false;
             MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-            foreach (var r in renderers) StartCoroutine(Flash(r));
+            StartCoroutine(Effects.Flash(renderers, flashColor));
         }
-    }
-
-    private IEnumerator Flash(MeshRenderer r)
-    {
-        Color[] originalColors = new Color[r.materials.Length];
-        for (int i = 0; i < r.materials.Length; i++) originalColors[i] = r.materials[i].color;
-
-        for (int i = 0; i < r.materials.Length; i++) r.materials[i].color = flashColor;
-        for (int i = 0; i < 3; i++) yield return null;
-        for (int i = 0; i < r.materials.Length; i++) r.materials[i].color = originalColors[i];
     }
 
     public void TakeDamage(float damage, bool crit)
@@ -80,37 +70,12 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         flash = true;
 
         StopAllCoroutines();
-        StartCoroutine(HitAnimation());
+        StartCoroutine(Effects.HitAnimation(originalScale, transform));
 
         if (Sound != null)
             AudioManager.Play(Sound, transform.position, 0.8f, 1.2f);
         if (currentHealth <= 0)
             DropLoot();
-    }
-
-    public IEnumerator HitAnimation()
-    {
-        Vector3 start = originalScale;
-        Vector3 target = start * 0.85f;
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / 0.2f;
-            float eased = t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
-            transform.localScale = Vector3.Lerp(start, target, eased);
-            yield return null;
-        }
-
-        t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / 0.2f;
-            float eased = t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
-            transform.localScale = Vector3.Lerp(target, start, eased);
-            yield return null;
-        }
-
-        transform.localScale = start;
     }
 
     public void DropLoot()

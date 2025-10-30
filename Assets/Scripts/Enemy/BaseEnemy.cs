@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BaseEnemy : MonoBehaviour, IDamageable
+public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 {
     public EnemyData data;
 
@@ -12,15 +12,23 @@ public class BaseEnemy : MonoBehaviour, IDamageable
     private float knockbackTimer;
     private readonly float knockbackDuration = 0.2f;
 
+    private bool flash;
+    private Color flashColor;
+
+    #region enemy properties
+
+    public string Name => data.name;
+    public string Description => data.description;
+    
+    public Element Element => data.element;
+
+    #endregion
+    
     #region damage stuff idk
 
-    public float MaxHealth
-    {
-        get => data.MaxHealth;
-        set { }
-    }
-
     private float currentHealth;
+
+    public float MaxHealth { get; set; }
 
     public float CurrentHealth
     {
@@ -60,6 +68,10 @@ public class BaseEnemy : MonoBehaviour, IDamageable
 
         if (distanceToPlayer.sqrMagnitude < 0.01f) return;
 
+        if (distanceToPlayer.sqrMagnitude < 5f)
+        {
+        }
+
         Vector3 targetVelocity = distanceToPlayer.normalized * moveSpeed;
         Vector3 current = rb.velocity;
         Vector3 change = new Vector3(
@@ -74,7 +86,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy")) return;
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Player")) return;
 
         foreach (ContactPoint contact in collision.contacts)
         {
@@ -98,9 +110,22 @@ public class BaseEnemy : MonoBehaviour, IDamageable
         knockbackTimer = knockbackDuration;
     }
 
-    public void TakeDamage(float damage, bool crit)
+    public void TakeDamage(float damage, Color color)
     {
-        Debug.Log($"{data.Name} took {damage}");
+        flashColor = color;
+        flash = true;
+
+        Debug.Log($"{data.enemyName} took {damage:F0}");
+    }
+
+    private void Update()
+    {
+        if (flash)
+        {
+            flash = false;
+            MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+            StartCoroutine(Effects.Flash(renderers, flashColor));
+        }
     }
 
     public Rigidbody GetRigidbody() => rb;

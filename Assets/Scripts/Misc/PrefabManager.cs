@@ -7,8 +7,9 @@ public class PrefabManager : MonoBehaviour
 
     public GameObject hitEffect;
     public GameObject damageMarker;
+    public GameObject critMarker;
     public GameObject audioPrefab;
-    
+
     private void Awake()
     {
         if (Instance == null)
@@ -21,24 +22,26 @@ public class PrefabManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void SpawnDamageMarker(Vector3 pos, Quaternion rot, float damage, bool crit)
+    public void SpawnDamageMarker(Vector3 pos, Quaternion rot, float damage, Color color)
     {
         GameObject marker = Instantiate(damageMarker, pos, rot);
 
-        marker.GetComponent<DamageMarker>().ShowDamage(damage, crit);
+        marker.GetComponent<DamageMarker>().ShowDamage(damage, color);
     }
 
-    public void SpawnSparkles(Vector3 pos, Quaternion rot, bool crit)
+    public void SpawnSparkles(Vector3 pos, Quaternion rot, Color color)
     {
         ParticleSystem ps =
             Instantiate(hitEffect, pos, rot)
                 .GetComponent<ParticleSystem>();
 
-        if (crit)
-        {
-            ParticleSystem.MainModule main = ps.main;
-            main.startColor = Color.yellow;
-            ps.transform.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
-        }
+        ParticleSystem.MainModule main = ps.main;
+        main.startColor = color;
+        ps.transform.GetComponentInChildren<SpriteRenderer>().color = color;
+    }
+
+    public void SpawnCritMarker(Vector3 pos, Quaternion rot)
+    {
+        GameObject marker = Instantiate(critMarker, pos, rot);
     }
 }

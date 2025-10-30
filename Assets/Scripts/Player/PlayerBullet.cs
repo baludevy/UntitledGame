@@ -41,9 +41,6 @@ public class PlayerBullet : MonoBehaviour
             PrefabManager.Instance.SpawnDamageMarker(spawnPoint, rotation, damage, crit);
         } */
 
-        if (collision.gameObject.GetComponent<IDamageable>() != null)
-            PrefabManager.Instance.SpawnSparkles(spawnPoint, rotation, crit);
-
         ParticleSystem fx = Instantiate(impactPrefab, spawnPoint, rotation);
         Destroy(fx.gameObject, 3f);
 

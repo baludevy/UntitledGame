@@ -7,19 +7,39 @@ public static class Combat
         return Random.value <= PlayerStatistics.Instance.Combat.critChance;
     }
 
-    public static HitEffectiveness CalcEffectiveness(Elements attElement, Elements oppElement)
+    public static HitEffectiveness CalcEffectiveness(Element attElement, Element oppElement)
     {
-        if (attElement == Elements.Fire && oppElement == Elements.Grass) return HitEffectiveness.SuperEffective;
-        if (attElement == Elements.Water && oppElement == Elements.Fire) return HitEffectiveness.SuperEffective;
-        if (attElement == Elements.Grass && oppElement == Elements.Water) return HitEffectiveness.SuperEffective;
-        if (attElement == Elements.Ground && oppElement == Elements.Rock) return HitEffectiveness.SuperEffective;
-        if (attElement == Elements.Ghost && oppElement == Elements.Ghost) return HitEffectiveness.SuperEffective;
+        if (attElement == Element.Fire && oppElement == Element.Grass) return HitEffectiveness.SuperEffective;
+        if (attElement == Element.Water && oppElement == Element.Fire) return HitEffectiveness.SuperEffective;
+        if (attElement == Element.Grass && oppElement == Element.Water) return HitEffectiveness.SuperEffective;
+        if (attElement == Element.Ground && oppElement == Element.Rock) return HitEffectiveness.SuperEffective;
+        if (attElement == Element.Ghost && oppElement == Element.Ghost) return HitEffectiveness.SuperEffective;
         
-        if (attElement == Elements.Fire && oppElement == Elements.Water) return HitEffectiveness.NotEffective;
-        if (attElement == Elements.Water && oppElement == Elements.Grass) return HitEffectiveness.NotEffective;
-        if (attElement == Elements.Grass && oppElement == Elements.Fire) return HitEffectiveness.NotEffective;
-        if (attElement == Elements.Rock && oppElement == Elements.Ground) return HitEffectiveness.NotEffective;
+        if (attElement == Element.Fire && oppElement == Element.Water) return HitEffectiveness.NotEffective;
+        if (attElement == Element.Water && oppElement == Element.Grass) return HitEffectiveness.NotEffective;
+        if (attElement == Element.Grass && oppElement == Element.Fire) return HitEffectiveness.NotEffective;
+        if (attElement == Element.Rock && oppElement == Element.Ground) return HitEffectiveness.NotEffective;
 
         return HitEffectiveness.Normal;
+    }
+
+    public static float CalculateDamage(float damage, bool crit, HitEffectiveness hitEffectiveness)
+    {
+        if(crit)
+            damage *= PlayerStatistics.Instance.Combat.critMultiplier;
+
+        switch (hitEffectiveness)
+        {
+            case HitEffectiveness.Normal:
+                break;
+            case HitEffectiveness.NotEffective:
+                damage *= 0.8f;
+                break;
+            case HitEffectiveness.SuperEffective:
+                damage *= 1.2f;
+                break;
+        }
+        
+        return damage;
     }
 }
