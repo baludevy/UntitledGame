@@ -83,7 +83,7 @@ public class MeleeTool : Tool
                     crit);
                 PrefabManager.Instance.SpawnSparkles(hit.point, Quaternion.LookRotation(hit.normal), crit);
 
-                mineable.TakeDamage(damage);
+                mineable.TakeDamage(damage, crit);
             } /* else if (damageable is BaseEnemy enemy)
             {
                 float damage = data.damage;

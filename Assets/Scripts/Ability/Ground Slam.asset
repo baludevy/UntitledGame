@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ground Slam
   m_EditorClassIdentifier: 
   cooldown: 1
-  slamForce: 100
-  slamSlowDuration: 1
-  slamSlowMultiplier: 0.2
+  force: 20
+  slowDuration: 0.4
+  slowMultiplier: 0.2
   minHeight: 10

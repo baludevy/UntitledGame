@@ -60,9 +60,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DamageMarker
   text: {fileID: 6668434846701544101}
   lifetime: 1.5
-  startFloatSpeed: 5
+  startFloatSpeed: 3
   endFloatSpeed: 0
-  maxHeightOffset: 1.5
+  maxHeightOffset: 1
   startScale: {x: 1, y: 1, z: 1}
   endScale: {x: 0, y: 0, z: 0}
 --- !u!1 &8178501908587359710

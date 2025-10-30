@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -44,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     public float sensitivity = 50f;
     public float sensMultiplier = 1f;
     private float xRotation;
-    public float desiredX;
+    private float desiredX;
     public Transform orientation;
     public Transform camTransform;
     public bool canLook = true;
@@ -149,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl)) StartSlide();
+        if (Input.GetKey(KeyCode.LeftControl) && (!crouching || !sliding)) StartSlide();
         if (Input.GetKeyUp(KeyCode.LeftControl) && crouching) StopSlide();
     }
 
@@ -452,23 +451,32 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void ChangeWalkSpeed(float newWalkSpeed) => walkSpeed = newWalkSpeed;
-    
+
     public void ResetWalkSpeed() => walkSpeed = startWalkSpeed;
-    
+
     public void ChangeSprintSpeed(float newSprintSpeed, float time)
     {
-        StartCoroutine(ChangeWalkSpeedTemporarily(newSprintSpeed, time));
+        StartCoroutine(ChangeSprintSpeedTemporarily(newSprintSpeed, time));
     }
 
-    private IEnumerator ChangeSprintSpeedTemporarily(float newWalkSpeed, float time)
+    private IEnumerator ChangeSprintSpeedTemporarily(float newSprintSpeed, float time)
     {
-        float originalSpeed = walkSpeed;
-        walkSpeed = newWalkSpeed;
+        float originalSpeed = sprintSpeed;
+        sprintSpeed = newSprintSpeed;
         yield return new WaitForSeconds(time);
-        walkSpeed = originalSpeed;
+        sprintSpeed = originalSpeed;
     }
 
     public void ChangeSprintSpeed(float newSprintSpeed) => walkSpeed = newSprintSpeed;
-    
-    public void ResetSprintSpeed() => walkSpeed = startWalkSpeed;
+
+    public void ResetSprintSpeed() => sprintSpeed = startSprintSpeed;
+
+    public Vector2 GetInputDirection()
+    {
+        return new Vector2(xInput, yInput);
+    }
+
+    public bool IsGrounded() => grounded;
+
+    public float GetDrag() => drag;
 }

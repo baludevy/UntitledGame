@@ -10,6 +10,9 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
     private float currentHealth;
     private Vector3 originalScale;
 
+    private bool flash;
+    private Color flashColor;
+
     public string Name
     {
         get => data.Name;
@@ -49,11 +52,36 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         originalScale = transform.localScale;
     }
 
-    public void TakeDamage(float damage)
+    private void Update()
+    {
+        if (flash)
+        {
+            flash = false;
+            MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+            foreach (var r in renderers) StartCoroutine(Flash(r));
+        }
+    }
+
+    private IEnumerator Flash(MeshRenderer r)
+    {
+        Color[] originalColors = new Color[r.materials.Length];
+        for (int i = 0; i < r.materials.Length; i++) originalColors[i] = r.materials[i].color;
+
+        for (int i = 0; i < r.materials.Length; i++) r.materials[i].color = flashColor;
+        for (int i = 0; i < 3; i++) yield return null;
+        for (int i = 0; i < r.materials.Length; i++) r.materials[i].color = originalColors[i];
+    }
+
+    public void TakeDamage(float damage, bool crit)
     {
         currentHealth -= damage;
+
+        flashColor = crit ? Color.yellow : Color.white;
+        flash = true;
+
         StopAllCoroutines();
         StartCoroutine(HitAnimation());
+
         if (Sound != null)
             AudioManager.Play(Sound, transform.position, 0.8f, 1.2f);
         if (currentHealth <= 0)

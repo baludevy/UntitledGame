@@ -30,7 +30,7 @@ public class AbilityController : MonoBehaviour
         secondaryTimer = Mathf.Max(0f, secondaryTimer - Time.deltaTime);
 
 
-        if (Input.GetKeyDown(KeyCode.F)) ActivatePrimary();
+        if (Input.GetKeyDown(KeyCode.Mouse3)) ActivatePrimary();
         if (Input.GetKeyDown(KeyCode.C)) ActivateSecondary();
     }
     

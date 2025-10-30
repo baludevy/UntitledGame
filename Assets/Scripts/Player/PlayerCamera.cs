@@ -6,10 +6,10 @@ public class PlayerCamera : MonoBehaviour
     public Transform target;
     public Transform heldItemHolder;
 
-    [Header("Bob Settings")] public float bobSpeed = 15f;
+   public float bobSpeed = 15f;
     public float bobMultiplier = 0.5f;
 
-    [Header("Weapon Sway")] public float swayAmount = 0.05f;
+    public float swayAmount = 0.05f;
     public float swayPositionAmount = 0.03f;
     public float swaySmooth = 4f;
 
@@ -17,8 +17,7 @@ public class PlayerCamera : MonoBehaviour
 
     public static PlayerCamera Instance;
 
-    public Vector3 bobOffset { get; private set; }
-
+    private Vector3 bobOffset;
     private Vector3 desiredBob;
     private Vector3 speedBob;
 
