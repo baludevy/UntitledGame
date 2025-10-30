@@ -18,7 +18,7 @@ public class PlayerBullet : MonoBehaviour
     {
         ContactPoint contact = collision.contacts[0];
         Quaternion rotation = Quaternion.LookRotation(contact.normal);
-        bool crit = PlayerStatistics.Instance.Combat.RollCrit();
+        bool crit = Combat.RollCrit();
 
         Vector3 spawnPoint = contact.point + contact.normal * 0.05f;
 

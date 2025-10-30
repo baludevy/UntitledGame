@@ -238,7 +238,6 @@ MonoBehaviour:
   hitEffect: {fileID: 7776842582623595503, guid: 48684cc5d25011148b293a9f2560531c, type: 3}
   damageMarker: {fileID: 7780389980816550722, guid: 836e3947cd027f44f85dec1904de4484, type: 3}
   audioPrefab: {fileID: 2391150139543264443, guid: 5403584a99ae92747aca6d9539ee159c, type: 3}
-  droppedResourcePrefab: {fileID: 1834034490072624780, guid: aa0df42c5dc4bee4aadb9915a0276948, type: 3}
 --- !u!1001 &36636181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4393,7 +4392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8814167005587942564, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
-  enemyCount: 1
+  enemyCount: 0
   spacing: 2
 --- !u!1 &851627398
 GameObject:
@@ -6284,7 +6283,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh228118
+  m_Name: pb_Mesh298296
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

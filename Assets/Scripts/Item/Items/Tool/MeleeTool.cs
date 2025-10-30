@@ -67,7 +67,7 @@ public class MeleeTool : Tool
     {
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
-            bool crit = PlayerStatistics.Instance.Combat.RollCrit();
+            bool crit = Combat.RollCrit();
 
             IDamageable damageable = GetTarget(hit.collider.transform);
 

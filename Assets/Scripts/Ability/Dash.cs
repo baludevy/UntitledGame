@@ -55,11 +55,10 @@ public class Dash : Ability
             targetDir = -PlayerCamera.Instance.transform.forward;
         }
 
-        // normalize so distance is consistent in all directions
-        targetDir = targetDir.normalized;
-        
         // flatten vertical tilt for consistent dash height
         targetDir.y = playerGrounded ? 0f : targetDir.y;
+
+        // normalize so distance is consistent in all directions
         targetDir = targetDir.normalized;
 
         //if the player is on the ground then multiply the force by the current drag

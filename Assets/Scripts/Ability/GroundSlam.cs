@@ -10,10 +10,10 @@ public class GroundSlam : Ability
     public float slowDuration = 0.4f;
     public float slowMultiplier = 0.2f;
     public float minHeight = 10f;
-
-
+    
     private bool slamming;
 
+    public GameObject groundSlamFX;
 
     public override bool Activate()
     {
@@ -47,6 +47,8 @@ public class GroundSlam : Ability
         //slow down the player for some time
         player.ChangeSprintSpeed(player.GetSprintSpeed() * slowMultiplier, slowDuration);
         player.ChangeWalkSpeed(player.GetWalkSpeed() * slowMultiplier, slowDuration);
+        
+        Instantiate(groundSlamFX, player.transform.position, player.transform.rotation);
         
         CameraShaker.Instance?.ShakeOnce(7f, 3f, 0.1f, 0.5f);
     }
