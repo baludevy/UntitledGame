@@ -20,8 +20,10 @@ public class Effects : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public static IEnumerator Flash(MeshRenderer[] renderers, Color color)
+    public static IEnumerator Flash(MeshRenderer[] renderers)
     {
+        Color color = Color.white;
+        
         List<Material[]> originalMaterials = new();
         Instance.flashMaterial.color = color;
 

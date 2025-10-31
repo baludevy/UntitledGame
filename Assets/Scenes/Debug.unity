@@ -5115,7 +5115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8814167005587942564, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
-  enemyCount: 300
+  enemyCount: 3
   spacing: 1
 --- !u!1 &851627398
 GameObject:
@@ -7056,7 +7056,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh667442
+  m_Name: pb_Mesh720746
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12665,6 +12665,8 @@ MonoBehaviour:
   swayAmount: 3
   swayPositionAmount: 0.03
   swaySmooth: 4
+  tiltAmount: 0.3
+  tiltSmooth: 2
   cam: {fileID: 4692589708366088623}
 --- !u!114 &1817745018118422035
 MonoBehaviour:
@@ -13520,7 +13522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce338a782584a18a502f5163608bb0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  critChance: 0.05
+  critChance: 0.1
   critMultiplier: 1.2
 --- !u!1 &5977759840912064901
 GameObject:

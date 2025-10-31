@@ -11,7 +11,6 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
     private Vector3 originalScale;
 
     private bool flash;
-    private Color flashColor;
 
     public string Name
     {
@@ -58,15 +57,14 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         {
             flash = false;
             MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-            StartCoroutine(Effects.Flash(renderers, flashColor));
+            StartCoroutine(Effects.Flash(renderers));
         }
     }
 
     public void TakeDamage(float damage, bool crit)
     {
         currentHealth -= damage;
-
-        flashColor = crit ? Color.yellow : Color.white;
+        
         flash = true;
 
         StopAllCoroutines();

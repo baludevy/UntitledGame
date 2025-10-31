@@ -12,8 +12,6 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
     private readonly float knockbackDuration = 0.2f;
 
     private bool flash;
-    private Color flashColor;
-
     public string Name => data.name;
     public string Description => data.description;
     public Element Element => data.element;
@@ -88,9 +86,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         knockbackTimer = knockbackDuration;
     }
 
-    public void TakeDamage(float damage, Color color, bool doFlash = true)
+    public void TakeDamage(float damage, bool doFlash = true)
     {
-        flashColor = color;
         flash = true;
         currentHealth -= damage;
         if (currentHealth <= 0) Destroy(gameObject);
@@ -102,7 +99,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         {
             flash = false;
             MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-            StartCoroutine(Effects.Flash(renderers, flashColor));
+            StartCoroutine(Effects.Flash(renderers));
         }
     }
 

@@ -10,5 +10,5 @@ public interface IEnemy
     float MaxHealth { get; set; }
     float CurrentHealth { get; set; }
 
-    void TakeDamage(float damage, Color color, bool doFlash);
+    void TakeDamage(float damage, bool doFlash);
 }

@@ -31,7 +31,7 @@ public class PlayerCombat : MonoBehaviour
             enemy.ApplyKnockback(dir, 20f);
         }
 
-        enemy.TakeDamage(damage, Effects.GetEffectColor(crit, eff));
+        enemy.TakeDamage(damage);
     }
 
 
