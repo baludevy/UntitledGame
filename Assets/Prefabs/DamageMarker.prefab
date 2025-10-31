@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3644405522144306674}
-  - component: {fileID: 6107143735885369663}
   - component: {fileID: 5130228989148421300}
   m_Layer: 0
   m_Name: DamageMarker
@@ -28,24 +27,12 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6246628308142777031}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6107143735885369663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7780389980816550722}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd96e0d5ae7e4c24ad90a8b5a02beb9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LookAtPlayer
 --- !u!114 &5130228989148421300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,14 +47,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DamageMarker
   text: {fileID: 6668434846701544101}
   lifetime: 1
-  startScale: {x: 0.65, y: 0.65, z: 0.65}
-  midScale: {x: 0.75, y: 0.75, z: 0.75}
-  endScale: {x: 0.5, y: 0.5, z: 0.5}
-  scaleUpTime: 0.3
-  holdTime: 0.3
+  startScale: {x: 0.5, y: 0.5, z: 0.5}
+  midScale: {x: 0.9, y: 0.9, z: 0.9}
+  endScale: {x: 0.3, y: 0.3, z: 0.3}
+  scaleUpTime: 0.2
+  holdTime: 0.05
   distanceScaleFactor: 0.3
   minDistanceScale: 0.8
   maxDistanceScale: 3
+  floatAmount: 0.15
 --- !u!1 &8178501908587359710
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,17 +81,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8178501908587359710}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3644405522144306674}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1}
-  m_SizeDelta: {x: 0.2155, y: 0.4301}
+  m_AnchoredPosition: {x: 0, y: 0.8}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2940658071433954037
 MeshRenderer:
@@ -125,7 +113,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8647068975548679723, guid: da0d91b4e137d7a4ab1271c8ba5e255f, type: 2}
+  - {fileID: 7542822715371866877, guid: b2b55ccc9101e2645962f882f83b53db, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -167,10 +155,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 67
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: da0d91b4e137d7a4ab1271c8ba5e255f, type: 2}
-  m_sharedMaterial: {fileID: -8647068975548679723, guid: da0d91b4e137d7a4ab1271c8ba5e255f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b2b55ccc9101e2645962f882f83b53db, type: 2}
+  m_sharedMaterial: {fileID: 7542822715371866877, guid: b2b55ccc9101e2645962f882f83b53db, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -201,8 +189,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 4096
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

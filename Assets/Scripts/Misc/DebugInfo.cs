@@ -34,6 +34,6 @@ public class DebugInfo : MonoBehaviour
         GUI.Label(new Rect(10, 10, 800, 30), "FPS: " + Mathf.Ceil(fps), style);
         GUI.Label(new Rect(10, 40, 800, 30),
             "RAM: " + reservedMemory.ToString("F0") + " MB" + "/" + allocatedMemory.ToString("F0") + " MB", style);
-        GUI.Label(new Rect(10, 70, 800, 30), "SPD: " + playerSpeed.ToString("F2"), style);
+        GUI.Label(new Rect(10, 70, 800, 30), "VEL: " + playerSpeed.ToString("F2"), style);
     }
 }

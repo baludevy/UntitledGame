@@ -19,7 +19,7 @@ MonoBehaviour:
   stackable: 0
   floorPrefab: {fileID: 8023892222117748466, guid: 58a2d79a84131e14a9a495ad251df875, type: 3}
   heldPrefab: {fileID: 6499007990128292854, guid: a014d1c42312c954f93eacaa1b43229a, type: 3}
-  damage: 5
+  damage: 6
   cooldown: 1
   type: 2
   maxDurability: 1000

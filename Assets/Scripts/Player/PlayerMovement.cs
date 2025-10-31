@@ -400,18 +400,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        OnPlayerContact();
         int layer = other.gameObject.layer;
         Vector3 normal = other.contacts[0].normal;
+        if (IsFloor(normal)) OnPlayerLanded();
         if (whatIsGround != (whatIsGround | (1 << layer))) return;
         if (IsFloor(normal) && PlayerCamera.Instance != null)
             PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
-
-        if (IsFloor(normal)) OnPlayerLanded();
     }
 
     private void OnPlayerLanded()
     {
         AbilityController.Instance.OnPlayerLanded();
+    }
+
+    private void OnPlayerContact()
+    {
+        AbilityController.Instance.OnPlayerContact();
     }
 
     private void OnCollisionStay(Collision collision)

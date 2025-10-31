@@ -6,5 +6,6 @@ public enum Element
     Rock,
     Grass,
     Ghost,
+    Wind,
     Normal,
 }

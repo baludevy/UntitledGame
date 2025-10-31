@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,9 @@ public class Effects : MonoBehaviour
 {
     public Color critColor = Color.yellow;
     public Color superEffectiveColor = Color.cyan;
-    
+
+    public List<String> critMessages;
+
     public static Effects Instance;
 
     public Material flashMaterial;
@@ -22,10 +25,7 @@ public class Effects : MonoBehaviour
 
     public static IEnumerator Flash(MeshRenderer[] renderers)
     {
-        Color color = Color.white;
-        
         List<Material[]> originalMaterials = new();
-        Instance.flashMaterial.color = color;
 
         foreach (MeshRenderer renderer in renderers)
         {
@@ -72,8 +72,9 @@ public class Effects : MonoBehaviour
         Color color = GetEffectColor(crit, eff);
 
         if (crit)
-            PrefabManager.Instance.SpawnTextMarker(pos + new Vector3(Random.Range(-0.3f, 0.3f), -0.1f, 0f),
-                Quaternion.LookRotation(rot), "CRIT!", color);
+            PrefabManager.Instance.SpawnTextMarker(pos + new Vector3(Random.Range(-0.5f, -0.1f), -0.1f, 0f),
+                Quaternion.LookRotation(rot), Instance.critMessages[Random.Range(0, Instance.critMessages.Count)],
+                color);
 
         PrefabManager.Instance.SpawnDamageMarker(pos, Quaternion.Euler(rot), damage, color);
 

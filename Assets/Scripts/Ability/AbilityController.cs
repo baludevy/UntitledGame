@@ -23,7 +23,7 @@ public class AbilityController : MonoBehaviour
 
         Instance = this;
     }
-    
+
     private void Update()
     {
         primaryTimer = Mathf.Max(0f, primaryTimer - Time.deltaTime);
@@ -33,22 +33,28 @@ public class AbilityController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse3)) ActivatePrimary();
         if (Input.GetKeyDown(KeyCode.C)) ActivateSecondary();
     }
-    
+
     private void ActivatePrimary()
     {
         if (primaryAbility == null || primaryTimer > 0f) return;
         if (primaryAbility.Activate()) primaryTimer = primaryAbility.cooldown;
     }
-    
+
     private void ActivateSecondary()
     {
         if (secondaryAbility == null || secondaryTimer > 0f) return;
         if (secondaryAbility.Activate()) secondaryTimer = secondaryAbility.cooldown;
     }
-    
+
     public void OnPlayerLanded()
     {
         (primaryAbility as GroundSlam)?.OnLand();
         (secondaryAbility as GroundSlam)?.OnLand();
+    }
+
+    public void OnPlayerContact()
+    {
+        (primaryAbility as Dash)?.OnContact();
+        (secondaryAbility as Dash)?.OnContact();
     }
 }
