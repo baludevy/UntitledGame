@@ -1,26 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Effects
+public class Effects : MonoBehaviour
 {
+    public static Effects Instance;
+
+    public Material flashMaterial;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     public static IEnumerator Flash(MeshRenderer[] renderers, Color color)
     {
-        List<Material> originalMaterials = new();
-        Material flashMaterial = new Material(Shader.Find("Unlit/Color"));
-        flashMaterial.color = color;
+        List<Material[]> originalMaterials = new();
+        Instance.flashMaterial.color = color;
 
         foreach (MeshRenderer renderer in renderers)
         {
-            originalMaterials.Add(renderer.material);
-            renderer.material = flashMaterial;
+            originalMaterials.Add(renderer.sharedMaterials);
+            renderer.sharedMaterial = Instance.flashMaterial;
         }
 
         yield return new WaitForSeconds(0.05f);
 
         for (int i = 0; i < renderers.Length; i++)
         {
-            renderers[i].material = originalMaterials[i];
+            renderers[i].sharedMaterials = originalMaterials[i];
         }
     }
 

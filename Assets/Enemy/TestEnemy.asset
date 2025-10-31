@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Test
   description: test
-  maxHealth: 100
+  maxHealth: 1000
   element: 3

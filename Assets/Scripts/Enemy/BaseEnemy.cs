@@ -28,7 +28,11 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     private float currentHealth;
 
-    public float MaxHealth { get; set; }
+    public float MaxHealth
+    {
+        get => data.maxHealth;
+        set => data.maxHealth = value;
+    }
 
     public float CurrentHealth
     {
@@ -110,12 +114,18 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         knockbackTimer = knockbackDuration;
     }
 
-    public void TakeDamage(float damage, Color color)
+    public void TakeDamage(float damage, Color color, bool doFlash = true)
     {
         flashColor = color;
-        flash = true;
+        if(doFlash)
+            flash = true;
 
         Debug.Log($"{data.enemyName} took {damage:F0}");
+        
+        currentHealth -= damage;
+        
+        if(currentHealth <= 0)
+            Destroy(gameObject);
     }
 
     private void Update()

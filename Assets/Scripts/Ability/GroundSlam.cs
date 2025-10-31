@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using EZCameraShake;
 
@@ -52,23 +53,24 @@ public class GroundSlam : Ability
 
         Instantiate(groundSlamFX, player.transform.position, player.transform.rotation);
 
-        FuckTheEnemies(player.transform.position);
+        SlamEnemies(player.transform.position);
 
         CameraShaker.Instance?.ShakeOnce(7f, 3f, 0.1f, 0.5f);
     }
 
-    private void FuckTheEnemies(Vector3 pos)
+    private void SlamEnemies(Vector3 pos)
     {
-        // make a sphere collider to check for collisions with surrounding enemies
         Collider[] colliders = Physics.OverlapSphere(pos, slamRadius);
-        foreach (Collider collider in colliders)
+        List<BaseEnemy> enemies = new List<BaseEnemy>();
+        
+        foreach (var collider in colliders)
         {
-            IDamageable damageable = GetTarget(collider.transform);
-
-            if (damageable is BaseEnemy enemy)
-                PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position,
-                    Vector3.zero, Element.Ground);
+            var damageable = GetTarget(collider.transform);
+            if (damageable is BaseEnemy enemy) enemies.Add(enemy);
         }
+
+        if (enemies.Count > 0)
+            PlayerCombat.DamageEnemies(damage, false, enemies, pos + Vector3.up, Vector3.zero, Element.Ground, true);
     }
 
     private static IDamageable GetTarget(Transform target)

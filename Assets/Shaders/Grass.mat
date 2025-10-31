@@ -34,7 +34,7 @@ Material:
     - _BendHeight: 0.6
     - _Brightness: 1
     - _Contrast: 1
-    - _Cutoff: 0.7
+    - _Cutoff: 0.183
     - _DitherStrength: 0.1
     - _Glossiness: 0
     - _GradientPower: 1
