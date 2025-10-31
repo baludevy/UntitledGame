@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
@@ -15,16 +14,9 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
     private bool flash;
     private Color flashColor;
 
-    #region enemy properties
-
     public string Name => data.name;
     public string Description => data.description;
-    
     public Element Element => data.element;
-
-    #endregion
-    
-    #region damage stuff idk
 
     private float currentHealth;
 
@@ -40,15 +32,11 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
     }
 
-    #endregion
-
     private void Start()
     {
         CurrentHealth = MaxHealth;
-
         rb = GetComponent<Rigidbody>();
         player = PlayerMovement.Instance.transform;
-
         EnemyController.Instance?.RegisterEnemy(this);
     }
 
@@ -60,45 +48,31 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
     public void Tick()
     {
         if (player == null) return;
-
         if (knockbackTimer > 0)
         {
             knockbackTimer -= Time.fixedDeltaTime;
             return;
         }
 
-        Vector3 distanceToPlayer = (player.position - transform.position);
+        Vector3 distanceToPlayer = player.position - transform.position;
         distanceToPlayer.y = 0;
-
         if (distanceToPlayer.sqrMagnitude < 0.01f) return;
-
-        if (distanceToPlayer.sqrMagnitude < 5f)
-        {
-        }
 
         Vector3 targetVelocity = distanceToPlayer.normalized * moveSpeed;
         Vector3 current = rb.velocity;
-        Vector3 change = new Vector3(
-            targetVelocity.x - current.x,
-            0,
-            targetVelocity.z - current.z
-        );
-
+        Vector3 change = new Vector3(targetVelocity.x - current.x, 0, targetVelocity.z - current.z);
         rb.AddForce(change * 6f, ForceMode.Acceleration);
         transform.rotation = Quaternion.LookRotation(distanceToPlayer.normalized);
+
+        DetectWall();
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void DetectWall()
     {
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Player")) return;
-
-        foreach (ContactPoint contact in collision.contacts)
+        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, 1f))
         {
-            if (Vector3.Dot(contact.normal, Vector3.up) < 0.3)
-            {
+            if (!hit.collider.CompareTag("Enemy") && !hit.collider.CompareTag("Player"))
                 Climb();
-                break;
-            }
         }
     }
 
@@ -117,15 +91,9 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
     public void TakeDamage(float damage, Color color, bool doFlash = true)
     {
         flashColor = color;
-        if(doFlash)
-            flash = true;
-
-        Debug.Log($"{data.enemyName} took {damage:F0}");
-        
+        flash = true;
         currentHealth -= damage;
-        
-        if(currentHealth <= 0)
-            Destroy(gameObject);
+        if (currentHealth <= 0) Destroy(gameObject);
     }
 
     private void Update()

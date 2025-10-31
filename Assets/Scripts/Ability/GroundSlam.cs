@@ -60,17 +60,16 @@ public class GroundSlam : Ability
 
     private void SlamEnemies(Vector3 pos)
     {
+        // make a sphere collider to check for collisions with surrounding enemies
         Collider[] colliders = Physics.OverlapSphere(pos, slamRadius);
-        List<BaseEnemy> enemies = new List<BaseEnemy>();
         
-        foreach (var collider in colliders)
+        foreach (Collider collider in colliders)
         {
-            var damageable = GetTarget(collider.transform);
-            if (damageable is BaseEnemy enemy) enemies.Add(enemy);
+            IDamageable damageable = GetTarget(collider.transform);
+            if (damageable is BaseEnemy enemy)
+                PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up, Vector3.zero,
+                    Element.Ground, hitEffect: false);
         }
-
-        if (enemies.Count > 0)
-            PlayerCombat.DamageEnemies(damage, false, enemies, pos + Vector3.up, Vector3.zero, Element.Ground, true);
     }
 
     private static IDamageable GetTarget(Transform target)

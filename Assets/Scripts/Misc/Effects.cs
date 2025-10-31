@@ -1,10 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Effects : MonoBehaviour
 {
+    public Color critColor = Color.yellow;
+    public Color superEffectiveColor = Color.cyan;
+    
     public static Effects Instance;
 
     public Material flashMaterial;
@@ -58,5 +61,30 @@ public class Effects : MonoBehaviour
         }
 
         targetTransform.localScale = start;
+    }
+
+
+    public static void SpawnEffects(Vector3 pos, Vector3 rot, float damage, bool crit, HitEffectiveness eff,
+        bool hitEffect = true)
+    {
+        Color color = GetEffectColor(crit, eff);
+
+        if (crit)
+            PrefabManager.Instance.SpawnTextMarker(pos + new Vector3(Random.Range(-0.3f, 0.3f), -0.1f, 0f),
+                Quaternion.LookRotation(rot), "CRIT!", color);
+
+        PrefabManager.Instance.SpawnDamageMarker(pos, Quaternion.Euler(rot), damage, color);
+
+        if (hitEffect)
+            PrefabManager.Instance.SpawnSparkles(pos, Quaternion.Euler(rot), color);
+    }
+
+    public static Color GetEffectColor(bool crit, HitEffectiveness eff)
+    {
+        if (crit) return Effects.Instance.critColor;
+
+        if (eff == HitEffectiveness.SuperEffective) return Effects.Instance.superEffectiveColor;
+
+        return Color.white;
     }
 }

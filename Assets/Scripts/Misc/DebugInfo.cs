@@ -4,17 +4,17 @@ public class DebugInfo : MonoBehaviour
 {
     private float deltaTime;
     private Vector3 playerPosition;
-    private Vector3 playerVelocity;
+    private float playerSpeed;
     private float allocatedMemory;
     private float reservedMemory;
-    private float monoMemory;
     private GUIStyle style;
 
     private void Start()
     {
-        Application.targetFrameRate = 1000;
+        Application.targetFrameRate = 240;
         style = new GUIStyle();
         style.fontSize = 24;
+        style.fontStyle = FontStyle.Bold;
         style.normal.textColor = Color.white;
     }
 
@@ -22,23 +22,18 @@ public class DebugInfo : MonoBehaviour
     {
         deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         playerPosition = PlayerMovement.Instance.transform.position;
-        playerVelocity = PlayerMovement.Instance.GetRigidbody().velocity;
+        playerSpeed = PlayerMovement.Instance.GetRigidbody().velocity.magnitude;
         allocatedMemory = UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong() / (1024f * 1024f);
         reservedMemory = UnityEngine.Profiling.Profiler.GetTotalReservedMemoryLong() / (1024f * 1024f);
-        monoMemory = UnityEngine.Profiling.Profiler.GetMonoUsedSizeLong() / (1024f * 1024f);
     }
 
     private void OnGUI()
     {
         float fps = 1.0f / deltaTime;
-        float frameTime = deltaTime * 1000.0f;
 
-        GUI.Label(new Rect(10, 10, 800, 30), "fps: " + Mathf.Ceil(fps), style);
-        GUI.Label(new Rect(10, 40, 800, 30), "frametime: " + frameTime.ToString("F2") + " ms", style);
-        GUI.Label(new Rect(10, 70, 800, 30), "mem alloc: " + allocatedMemory.ToString("F2") + " mb", style);
-        GUI.Label(new Rect(10, 100, 800, 30), "mem reserved: " + reservedMemory.ToString("F2") + " mb", style);
-        GUI.Label(new Rect(10, 130, 800, 30), "mono mem: " + monoMemory.ToString("F2") + " mb", style);
-        GUI.Label(new Rect(10, 160, 800, 30), "pos: " + playerPosition.ToString("F2"), style);
-        GUI.Label(new Rect(10, 190, 800, 30), "vel: " + playerVelocity.ToString("F2"), style);
+        GUI.Label(new Rect(10, 10, 800, 30), "FPS: " + Mathf.Ceil(fps), style);
+        GUI.Label(new Rect(10, 40, 800, 30),
+            "RAM: " + reservedMemory.ToString("F0") + " MB" + "/" + allocatedMemory.ToString("F0") + " MB", style);
+        GUI.Label(new Rect(10, 70, 800, 30), "SPD: " + playerSpeed.ToString("F2"), style);
     }
 }

@@ -17,6 +17,7 @@ public class PrefabManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
 
         DontDestroyOnLoad(this);
@@ -24,26 +25,36 @@ public class PrefabManager : MonoBehaviour
 
     public void SpawnDamageMarker(Vector3 pos, Quaternion rot, float damage, Color color)
     {
-        GameObject marker = Instantiate(damageMarker, pos, rot);
-
-        marker.GetComponent<DamageMarker>().ShowDamage(damage, color);
+        GameObject marker = ObjectPool.Instance.Get(damageMarker, pos, rot);
+        
+        HitMarker markerComp = marker.GetComponent<HitMarker>();
+        markerComp.ShowDamage(damage, color);
+        
+        ObjectPool.Instance.Return(marker, damageMarker, 1.5f);
     }
 
     public void SpawnSparkles(Vector3 pos, Quaternion rot, Color color)
     {
-        ParticleSystem ps =
-            Instantiate(hitEffect, pos, rot)
-                .GetComponent<ParticleSystem>();
-
+        GameObject sparkle = ObjectPool.Instance.Get(hitEffect, pos, rot);
+        ParticleSystem ps = sparkle.GetComponent<ParticleSystem>();
         ParticleSystem.MainModule main = ps.main;
         main.startColor = color;
-        ps.transform.GetComponentInChildren<SpriteRenderer>().color = color;
+
+        SpriteRenderer sprite = sparkle.GetComponentInChildren<SpriteRenderer>();
+        if (sprite != null)
+            sprite.color = color;
+
+        ps.Play();
+        ObjectPool.Instance.Return(sparkle, hitEffect, ps.main.duration + ps.main.startLifetime.constantMax);
     }
 
-    public void SpawnTextMarker(Vector3 pos, Quaternion rot, String text, Color color)
+    public void SpawnTextMarker(Vector3 pos, Quaternion rot, string text, Color color)
     {
-        GameObject marker = Instantiate(textMarker, pos, rot);
-
-        marker.GetComponent<DamageMarker>().ShowText(text, color);
+        GameObject marker = ObjectPool.Instance.Get(textMarker, pos, rot);
+        
+        HitMarker markerComp = marker.GetComponent<HitMarker>();
+        markerComp.ShowText(text, color);
+        
+        ObjectPool.Instance.Return(marker, textMarker, 1.5f);
     }
 }

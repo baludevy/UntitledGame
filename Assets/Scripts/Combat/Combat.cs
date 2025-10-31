@@ -42,28 +42,4 @@ public static class Combat
         
         return damage;
     }
-
-    public static Color GetColor(HitEffectiveness eff, bool crit)
-    {
-        Color color = Color.white;
-
-        switch (eff)
-        {
-            case HitEffectiveness.Normal:
-                break;
-            case HitEffectiveness.NotEffective:
-                color = Color.gray;
-                break;
-            case HitEffectiveness.SuperEffective:
-                color = PlayerCombat.Instance.superEffectiveColor;
-                break;
-        }
-
-        if (crit)
-        {
-            color = PlayerCombat.Instance.critColor;
-        }
-        
-        return color;
-    }
 }
