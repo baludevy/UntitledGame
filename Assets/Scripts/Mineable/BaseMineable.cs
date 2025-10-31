@@ -57,7 +57,7 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         {
             flash = false;
             MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-            StartCoroutine(Effects.Flash(renderers));
+            Effects.Flash(renderers);
         }
     }
 

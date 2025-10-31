@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Dash
   m_EditorClassIdentifier: 
   cooldown: 0
+  opposingAbilities: []
   force: 25
   duration: 0.1
   damage: 5
-  radius: 5
+  radius: 3
   recoilForce: 15
+  rayDistance: 2.5
+  rayThickness: 1

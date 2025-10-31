@@ -10,6 +10,8 @@ public class Dash : Ability
     public float damage;
     public float radius;
     public float recoilForce = 15f;
+    public float rayDistance = 5f;
+    public float rayThickness = 0.5f;
 
     private bool dashing;
 
@@ -57,28 +59,36 @@ public class Dash : Ability
         if (!dashing) return;
         PlayerMovement player = PlayerMovement.Instance;
         Rigidbody rb = player.GetRigidbody();
-        Vector3 pos = player.transform.position;
-        Vector3 camForward = PlayerCamera.Instance.transform.forward;
+        Vector3 origin = PlayerCamera.Instance.transform.position;
+        Vector3 dir = PlayerCamera.Instance.transform.forward;
+        Vector3 camForward = dir;
 
-        Collider[] colliders = Physics.OverlapSphere(pos, radius);
-        bool hitEnemy = false;
+        Vector3 point1 = origin - Vector3.up * 0.5f;
+        Vector3 point2 = origin + Vector3.up * 0.5f;
 
-        foreach (Collider collider in colliders)
+        RaycastHit hit;
+        if (Physics.CapsuleCast(point1, point2, rayThickness, dir, out hit, rayDistance))
         {
-            IDamageable damageable = GetTarget(collider.transform);
-            if (damageable is BaseEnemy enemy)
+            Collider[] colliders = Physics.OverlapSphere(hit.point, radius);
+            bool hitEnemy = false;
+
+            foreach (Collider collider in colliders)
             {
-                PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up, Vector3.zero,
-                    Element.Wind, hitEffect: false);
-                hitEnemy = true;
+                IDamageable damageable = GetTarget(collider.transform);
+                if (damageable is BaseEnemy enemy)
+                {
+                    PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up,
+                        Vector3.zero, Element.Wind, hitEffect: false);
+                    hitEnemy = true;
+                }
             }
-        }
 
-        if (hitEnemy)
-        {
-            Vector3 recoilDir = -rb.velocity.normalized;
-            if (camForward.y < -0.3f) recoilDir = Vector3.up;
-            rb.velocity = recoilDir * recoilForce;
+            if (hitEnemy)
+            {
+                Vector3 recoilDir = -rb.velocity.normalized;
+                if (camForward.y < -0.3f) recoilDir = Vector3.up;
+                rb.velocity = recoilDir * recoilForce;
+            }
         }
 
         dashing = false;
@@ -94,5 +104,10 @@ public class Dash : Ability
         }
 
         return null;
+    }
+
+    public override void Cancel()
+    {
+        dashing = false;
     }
 }

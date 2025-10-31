@@ -6,14 +6,20 @@ using Random = UnityEngine.Random;
 
 public class Effects : MonoBehaviour
 {
-    public Color critColor = Color.yellow;
-    public Color superEffectiveColor = Color.cyan;
-
-    public List<String> critMessages;
+    [SerializeField] private Color critColor = Color.yellow;
+    [SerializeField] private Color superEffectiveColor = Color.cyan;
+    [SerializeField] private List<string> critMessages;
+    [SerializeField] private Material flashMaterial;
 
     public static Effects Instance;
 
-    public Material flashMaterial;
+    private class FlashData
+    {
+        public Material[] original;
+        public int activeCount;
+    }
+
+    private static readonly Dictionary<MeshRenderer, FlashData> flashData = new();
 
     private void Awake()
     {
@@ -23,21 +29,37 @@ public class Effects : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public static IEnumerator Flash(MeshRenderer[] renderers)
+    public static void Flash(MeshRenderer[] renderers)
     {
-        List<Material[]> originalMaterials = new();
-
         foreach (MeshRenderer renderer in renderers)
         {
-            originalMaterials.Add(renderer.sharedMaterials);
-            renderer.sharedMaterial = Instance.flashMaterial;
-        }
+            if (!renderer) continue;
 
+            if (!flashData.TryGetValue(renderer, out FlashData data))
+            {
+                data = new FlashData { original = renderer.sharedMaterials, activeCount = 0 };
+                flashData[renderer] = data;
+            }
+
+            data.activeCount++;
+            renderer.sharedMaterial = Instance.flashMaterial;
+            Instance.StartCoroutine(FlashRoutine(renderer));
+        }
+    }
+
+    private static IEnumerator FlashRoutine(MeshRenderer renderer)
+    {
         yield return new WaitForSeconds(0.05f);
 
-        for (int i = 0; i < renderers.Length; i++)
+        if (!renderer || !flashData.ContainsKey(renderer)) yield break;
+
+        FlashData data = flashData[renderer];
+        data.activeCount--;
+
+        if (data.activeCount <= 0)
         {
-            renderers[i].sharedMaterials = originalMaterials[i];
+            renderer.sharedMaterials = data.original;
+            flashData.Remove(renderer);
         }
     }
 
@@ -65,15 +87,16 @@ public class Effects : MonoBehaviour
         targetTransform.localScale = start;
     }
 
-
     public static void SpawnEffects(Vector3 pos, Vector3 rot, float damage, bool crit, HitEffectiveness eff,
         bool hitEffect = true)
     {
         Color color = GetEffectColor(crit, eff);
 
         if (crit)
-            PrefabManager.Instance.SpawnTextMarker(pos + new Vector3(Random.Range(-0.5f, -0.1f), -0.1f, 0f),
-                Quaternion.LookRotation(rot), Instance.critMessages[Random.Range(0, Instance.critMessages.Count)],
+            PrefabManager.Instance.SpawnTextMarker(
+                pos + new Vector3(Random.Range(-0.5f, -0.1f), -0.1f, 0f),
+                Quaternion.LookRotation(rot),
+                Instance.critMessages[Random.Range(0, Instance.critMessages.Count)],
                 color);
 
         PrefabManager.Instance.SpawnDamageMarker(pos, Quaternion.Euler(rot), damage, color);
@@ -84,10 +107,8 @@ public class Effects : MonoBehaviour
 
     public static Color GetEffectColor(bool crit, HitEffectiveness eff)
     {
-        if (crit) return Effects.Instance.critColor;
-
-        if (eff == HitEffectiveness.SuperEffective) return Effects.Instance.superEffectiveColor;
-
+        if (crit) return Instance.critColor;
+        if (eff == HitEffectiveness.SuperEffective) return Instance.superEffectiveColor;
         return Color.white;
     }
 }

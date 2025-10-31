@@ -99,7 +99,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         {
             flash = false;
             MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-            StartCoroutine(Effects.Flash(renderers));
+            Effects.Flash(renderers);
         }
     }
 

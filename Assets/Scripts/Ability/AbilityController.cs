@@ -1,17 +1,14 @@
 using UnityEngine;
 
-
 public class AbilityController : MonoBehaviour
 {
     public Ability primaryAbility;
     public Ability secondaryAbility;
 
-
     private float primaryTimer;
     private float secondaryTimer;
 
     public static AbilityController Instance;
-
 
     private void Awake()
     {
@@ -29,21 +26,31 @@ public class AbilityController : MonoBehaviour
         primaryTimer = Mathf.Max(0f, primaryTimer - Time.deltaTime);
         secondaryTimer = Mathf.Max(0f, secondaryTimer - Time.deltaTime);
 
-
-        if (Input.GetKeyDown(KeyCode.Mouse3)) ActivatePrimary();
-        if (Input.GetKeyDown(KeyCode.C)) ActivateSecondary();
+        if (Input.GetKeyDown(KeyCode.Mouse3)) ActivateAbility(primaryAbility, ref primaryTimer);
+        if (Input.GetKeyDown(KeyCode.C)) ActivateAbility(secondaryAbility, ref secondaryTimer);
     }
 
-    private void ActivatePrimary()
+    private void ActivateAbility(Ability ability, ref float timer)
     {
-        if (primaryAbility == null || primaryTimer > 0f) return;
-        if (primaryAbility.Activate()) primaryTimer = primaryAbility.cooldown;
+        if (ability == null || timer > 0f) return;
+
+        CancelOpposing(ability);
+
+        if (ability.Activate())
+        {
+            timer = ability.cooldown;
+        }
     }
 
-    private void ActivateSecondary()
+    private void CancelOpposing(Ability ability)
     {
-        if (secondaryAbility == null || secondaryTimer > 0f) return;
-        if (secondaryAbility.Activate()) secondaryTimer = secondaryAbility.cooldown;
+        foreach (var opp in ability.opposingAbilities)
+        {
+            if (opp != null)
+            {
+                opp.Cancel();
+            }
+        }
     }
 
     public void OnPlayerLanded()

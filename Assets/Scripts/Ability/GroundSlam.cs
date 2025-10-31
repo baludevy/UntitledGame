@@ -92,4 +92,9 @@ public class GroundSlam : Ability
         return !Physics.Raycast(player.transform.position, Vector3.down, out var hit, 100f) ||
                hit.distance >= minHeight;
     }
+    
+    public override void Cancel()
+    {
+        slamming = false;
+    }
 }
