@@ -11,7 +11,7 @@ public class DebugInfo : MonoBehaviour
 
     private void Start()
     {
-        Application.targetFrameRate = 240;
+        Application.targetFrameRate = 2000;
         style = new GUIStyle();
         style.fontSize = 24;
         style.fontStyle = FontStyle.Bold;
@@ -25,6 +25,16 @@ public class DebugInfo : MonoBehaviour
         playerSpeed = PlayerMovement.Instance.GetRigidbody().velocity.magnitude;
         allocatedMemory = UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong() / (1024f * 1024f);
         reservedMemory = UnityEngine.Profiling.Profiler.GetTotalReservedMemoryLong() / (1024f * 1024f);
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if(QualitySettings.vSyncCount != 0)
+                QualitySettings.vSyncCount = 0;
+            else
+            {
+                QualitySettings.vSyncCount = 1;
+            }
+        }
     }
 
     private void OnGUI()

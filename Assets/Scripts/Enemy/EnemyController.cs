@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public static EnemyController Instance;
-    private readonly List<BaseEnemy> enemies = new List<BaseEnemy>();
+    private readonly List<BaseEnemy> enemies = new();
 
     private void Awake()
     {
@@ -13,7 +13,6 @@ public class EnemyController : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            return;
         }
     }
 

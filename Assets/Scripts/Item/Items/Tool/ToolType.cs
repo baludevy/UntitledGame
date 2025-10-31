@@ -4,4 +4,5 @@ public enum ToolType
     Axe,
     Pickaxe,
     Bow,
+    Neutral
 }

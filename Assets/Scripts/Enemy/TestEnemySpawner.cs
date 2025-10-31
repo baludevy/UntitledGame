@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TestEnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private int enemyCount = 100;
     [SerializeField] private float spacing = 2f;
 
@@ -19,7 +20,7 @@ public class TestEnemySpawner : MonoBehaviour
                 if (index >= enemyCount) return;
 
                 Vector3 spawnPos = startPos + new Vector3(x * spacing, 0, z * spacing);
-                Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+                Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], spawnPos, Quaternion.identity);
             }
         }
     }

@@ -17,9 +17,16 @@ public class PlayerCombat : MonoBehaviour
     }
 
     public static void DamageEnemy(float baseDamage, bool crit, BaseEnemy enemy, Vector3 hitPoint,
-        Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true)
+        Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true,
+        ToolType toolType = ToolType.Neutral)
     {
         HitEffectiveness eff = Combat.CalcEffectiveness(element, enemy.Element);
+
+        if (toolType == ToolType.Pickaxe && enemy.Element == Element.Rock)
+        {
+            eff = HitEffectiveness.SuperEffective;
+        }
+
         float damage = Combat.CalculateDamage(baseDamage, crit, eff);
 
         Effects.SpawnEffects(hitPoint, hitNormal, damage, crit, eff, hitEffect);

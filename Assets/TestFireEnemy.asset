@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb250b97e3b041efa17a04d703e3904a, type: 3}
-  m_Name: TestEnemy
+  m_Name: TestFireEnemy
   m_EditorClassIdentifier: 
   enemyName: Test
   description: test
   maxHealth: 1000
-  element: 3
+  element: 0

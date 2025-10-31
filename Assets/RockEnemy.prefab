@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 7680934354382753588}
   - component: {fileID: 7046177006204534764}
   m_Layer: 17
-  m_Name: Enemy
+  m_Name: RockEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dbc8a5ebb7723804c91d667d15236070, type: 2}
+  - {fileID: 2100000, guid: 20b3c69df40a17248a79eba612ed609e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

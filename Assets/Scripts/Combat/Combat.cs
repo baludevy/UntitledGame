@@ -14,6 +14,8 @@ public static class Combat
         if (attElement == Element.Grass && oppElement == Element.Water) return HitEffectiveness.SuperEffective;
         if (attElement == Element.Ground && oppElement == Element.Rock) return HitEffectiveness.SuperEffective;
         if (attElement == Element.Ghost && oppElement == Element.Ghost) return HitEffectiveness.SuperEffective;
+        if(attElement == Element.Wind && oppElement == Element.Fire) return HitEffectiveness.SuperEffective;
+        if(attElement == Element.Wind && oppElement == Element.Grass) return HitEffectiveness.SuperEffective;
         
         if (attElement == Element.Fire && oppElement == Element.Water) return HitEffectiveness.NotEffective;
         if (attElement == Element.Water && oppElement == Element.Grass) return HitEffectiveness.NotEffective;

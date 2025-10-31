@@ -1,3 +1,4 @@
+using System.Data.Common;
 using UnityEngine;
 using EZCameraShake;
 
@@ -69,7 +70,9 @@ public class MeleeTool : Tool
             if (damageable is BaseMineable mineable)
                 PlayerCombat.DamageMineable(data.damage, crit, mineable, hit.point, hit.normal, data.type);
             else if (damageable is BaseEnemy enemy)
-                PlayerCombat.DamageEnemy(data.damage, crit, enemy, hit.point, hit.normal);
+            {
+                PlayerCombat.DamageEnemy(data.damage, crit, enemy, hit.point, hit.normal, toolType: data.type);
+            }
         }
     }
 

@@ -4765,8 +4765,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7346692f3f6340a89eb7aa47b33a218b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 8814167005587942564, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
-  enemyCount: 500
+  enemyPrefabs:
+  - {fileID: 8814167005587942564, guid: 4a4794d003405b44c8f3a2d61f515f26, type: 3}
+  - {fileID: 8814167005587942564, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
+  enemyCount: 10
   spacing: 1
 --- !u!1 &851627398
 GameObject:
@@ -6470,7 +6472,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1122130
+  m_Name: pb_Mesh1302908
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
