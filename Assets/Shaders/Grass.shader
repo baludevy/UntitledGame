@@ -14,7 +14,7 @@ Shader "Custom/GrassShaderIndirect"
     {
         Tags
         {
-            "Queue"="AlphaTest" "RenderType"="TransparentCutout" "IgnoreProjector"="True"
+            "Queue"="Geometry" "RenderType"="TransparentCutout" "IgnoreProjector"="True"
         }
         LOD 150
         Cull Off

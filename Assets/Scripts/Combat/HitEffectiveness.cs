@@ -1,4 +1,4 @@
-public enum HitEffectiveness
+public enum TypeEffectiveness
 {
     NotEffective,
     Normal,

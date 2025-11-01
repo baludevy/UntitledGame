@@ -60,9 +60,9 @@ public class GroundSlam : Ability
 
     private void SlamEnemies(Vector3 pos)
     {
-        // make a sphere collider to check for collisions with surrounding enemies
-        Collider[] colliders = Physics.OverlapSphere(pos, slamRadius);
-        
+        // make a flat box collider to check for collisions with surrounding enemies
+        Collider[] colliders = Physics.OverlapBox(pos, new Vector3(slamRadius / 2f, 3.5f, slamRadius / 2f));
+
         foreach (Collider collider in colliders)
         {
             IDamageable damageable = GetTarget(collider.transform);
@@ -92,7 +92,7 @@ public class GroundSlam : Ability
         return !Physics.Raycast(player.transform.position, Vector3.down, out var hit, 100f) ||
                hit.distance >= minHeight;
     }
-    
+
     public override void Cancel()
     {
         slamming = false;
