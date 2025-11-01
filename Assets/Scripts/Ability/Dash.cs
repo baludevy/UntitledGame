@@ -27,8 +27,10 @@ public class Dash : Ability
 
     private void PerformDash(Rigidbody rb)
     {
-        dashing = true;
         bool playerGrounded = PlayerMovement.Instance.IsGrounded();
+
+        dashing = !playerGrounded;
+
         Vector2 movingDir = PlayerMovement.Instance.GetInputDirection();
         Vector3 targetDir = PlayerCamera.Instance.transform.forward;
 
@@ -57,6 +59,7 @@ public class Dash : Ability
     public void OnContact()
     {
         if (!dashing) return;
+
         PlayerMovement player = PlayerMovement.Instance;
         Rigidbody rb = player.GetRigidbody();
         Vector3 origin = PlayerCamera.Instance.transform.position;

@@ -20,11 +20,11 @@ public class PlayerCombat : MonoBehaviour
         Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true,
         ToolType toolType = ToolType.Neutral)
     {
-        HitEffectiveness eff = Combat.CalcEffectiveness(element, enemy.Element);
+        TypeEffectiveness eff = Combat.CalcEffectiveness(element, enemy.Element);
 
         if (toolType == ToolType.Pickaxe && enemy.Element == Element.Rock)
         {
-            eff = HitEffectiveness.SuperEffective;
+            eff = TypeEffectiveness.SuperEffective;
         }
 
         float damage = Combat.CalculateDamage(baseDamage, crit, eff);
@@ -51,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
         if (crit)
             damage *= PlayerStatistics.Instance.Combat.GetCritMultiplier();
 
-        Effects.SpawnEffects(hitPoint, hitNormal, damage, crit, HitEffectiveness.Normal);
+        Effects.SpawnEffects(hitPoint, hitNormal, damage, crit, TypeEffectiveness.Normal);
 
         mineable.TakeDamage(damage, crit);
     }

@@ -87,7 +87,7 @@ public class Effects : MonoBehaviour
         targetTransform.localScale = start;
     }
 
-    public static void SpawnEffects(Vector3 pos, Vector3 rot, float damage, bool crit, HitEffectiveness eff,
+    public static void SpawnEffects(Vector3 pos, Vector3 rot, float damage, bool crit, TypeEffectiveness eff,
         bool hitEffect = true)
     {
         Color color = GetEffectColor(crit, eff);
@@ -105,10 +105,10 @@ public class Effects : MonoBehaviour
             PrefabManager.Instance.SpawnSparkles(pos, Quaternion.Euler(rot), color);
     }
 
-    public static Color GetEffectColor(bool crit, HitEffectiveness eff)
+    public static Color GetEffectColor(bool crit, TypeEffectiveness eff)
     {
         if (crit) return Instance.critColor;
-        if (eff == HitEffectiveness.SuperEffective) return Instance.superEffectiveColor;
+        if (eff == TypeEffectiveness.SuperEffective) return Instance.superEffectiveColor;
         return Color.white;
     }
 }

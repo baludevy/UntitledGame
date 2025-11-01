@@ -6,12 +6,12 @@ public class PlayerCamera : MonoBehaviour
     public Transform target;
     public Transform heldItemHolder;
 
-   public float bobSpeed = 15f;
+    public float bobSpeed = 15f;
     public float bobMultiplier = 0.5f;
 
-    public float swayAmount = 0.05f;
-    public float swayPositionAmount = 0.03f;
-    public float swaySmooth = 4f;
+    public float swayAmount = 2f;
+    public float swayPositionAmount = 1f;
+    public float swaySmooth = 10f;
 
     public Camera cam;
 
@@ -20,10 +20,11 @@ public class PlayerCamera : MonoBehaviour
     private Vector3 bobOffset;
     private Vector3 desiredBob;
     private Vector3 speedBob;
-
     private Vector3 startPos;
-
     private Rigidbody rb;
+
+    private Vector2 smoothedInput;
+    private float deltaTime;
 
     private void Awake()
     {
@@ -39,16 +40,18 @@ public class PlayerCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        deltaTime = Time.deltaTime;
+
         if (!target) return;
 
         UpdateBob();
         UpdateSpeedBob();
-        
-        if(PlayerMovement.Instance.GetCanLook())
+
+        if (PlayerMovement.Instance.GetCanLook())
             UpdateWeaponSway();
 
         Vector3 finalPos = startPos + bobOffset;
-        heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, Time.deltaTime * 15f);
+        heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, deltaTime * 15f);
         transform.position = target.position + bobOffset;
     }
 
@@ -60,8 +63,8 @@ public class PlayerCamera : MonoBehaviour
 
     private void UpdateBob()
     {
-        desiredBob = Vector3.Lerp(desiredBob, Vector3.zero, Time.deltaTime * bobSpeed * 0.5f);
-        bobOffset = Vector3.Lerp(bobOffset, desiredBob, Time.deltaTime * bobSpeed);
+        desiredBob = Vector3.Lerp(desiredBob, Vector3.zero, deltaTime * bobSpeed * 0.5f);
+        bobOffset = Vector3.Lerp(bobOffset, desiredBob, deltaTime * bobSpeed);
     }
 
     private void UpdateSpeedBob()
@@ -70,22 +73,36 @@ public class PlayerCamera : MonoBehaviour
         Vector2 relativeVel = PlayerMovement.Instance.FindVelRelativeToLook();
         Vector3 v = new Vector3(relativeVel.x, rb.velocity.y, relativeVel.y) * -0.01f;
         v = Vector3.ClampMagnitude(v, 0.6f);
-        speedBob = Vector3.Lerp(speedBob, v, Time.deltaTime * 10f);
+        speedBob = Vector3.Lerp(speedBob, v, deltaTime * 10f);
     }
 
     private void UpdateWeaponSway()
     {
-        float mouseX = Input.GetAxis("Mouse X") * swayAmount;
-        float mouseY = Input.GetAxis("Mouse Y") * swayAmount * 0.5f;
-        Quaternion targetRot = Quaternion.Euler(mouseY, -mouseX, 0);
+        float mouseX = Input.GetAxisRaw("Mouse X");
+        float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        heldItemHolder.localRotation =
-            Quaternion.Slerp(heldItemHolder.localRotation, targetRot, Time.deltaTime * swaySmooth);
+        Vector2 targetInput = new Vector2(mouseX, mouseY);
+        smoothedInput = Vector2.Lerp(smoothedInput, targetInput, deltaTime * swaySmooth);
 
-        Vector3 targetPos = new Vector3(-mouseX * swayPositionAmount, -mouseY * swayPositionAmount, 0);
+        float frameIndependentFactor = deltaTime * 60f;
+        Quaternion targetRot = Quaternion.Euler(smoothedInput.y * swayAmount, -smoothedInput.x * swayAmount, 0);
+        heldItemHolder.localRotation = Quaternion.Slerp(
+            heldItemHolder.localRotation,
+            targetRot,
+            deltaTime * swaySmooth
+        );
 
-        heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, startPos + targetPos + bobOffset,
-            Time.deltaTime * swaySmooth);
+        Vector3 targetPos = new Vector3(
+            -smoothedInput.x * swayPositionAmount,
+            -smoothedInput.y * swayPositionAmount,
+            0
+        );
+
+        heldItemHolder.localPosition = Vector3.Lerp(
+            heldItemHolder.localPosition,
+            startPos + targetPos + bobOffset,
+            deltaTime * swaySmooth
+        );
     }
 
     private Vector3 ClampVector(Vector3 vec, float min, float max)

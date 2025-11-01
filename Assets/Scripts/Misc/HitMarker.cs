@@ -80,7 +80,9 @@ public class HitMarker : MonoBehaviour
         textTransform.localScale = Vector3.Lerp(textTransform.localScale, targetScale, Time.deltaTime * 20f);
 
         transform.position = startPos + Vector3.up * heightOffset;
-        transform.rotation = Quaternion.LookRotation(transform.position - cam.position, Vector3.up);
+
+        Vector3 toCam = (transform.position - cam.position).normalized;
+        transform.rotation = Quaternion.LookRotation(toCam, Vector3.up);
     }
 
     public void ShowDamage(float damage, Color color)
