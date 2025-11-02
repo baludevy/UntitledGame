@@ -67,7 +67,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     private void DetectWall()
     {
-        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, 1f))
+        if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit, 1f))
         {
             if (!hit.collider.CompareTag("Enemy") && !hit.collider.CompareTag("Player"))
                 Climb();
@@ -76,6 +76,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     private void Climb()
     {
+        Debug.Log("a");
         rb.AddForce(Vector3.up * 0.8f, ForceMode.VelocityChange);
     }
 

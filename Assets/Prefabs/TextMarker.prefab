@@ -63,12 +63,12 @@ MonoBehaviour:
   startScale: {x: 0.5, y: 0.5, z: 0.5}
   midScale: {x: 0.8, y: 0.8, z: 0.8}
   endScale: {x: 0.3, y: 0.3, z: 0.3}
-  scaleUpTime: 0.2
-  holdTime: 0.1
+  scaleUpTime: 0.3
+  holdTime: 0
   distanceScaleFactor: 0.3
   minDistanceScale: 0.8
   maxDistanceScale: 3
-  floatAmount: 0
+  floatAmount: 0.5
 --- !u!1 &8178501908587359710
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.7}
+  m_AnchoredPosition: {x: 0, y: 0.3}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2940658071433954037
