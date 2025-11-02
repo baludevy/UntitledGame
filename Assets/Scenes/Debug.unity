@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 851627399}
+  m_IndirectSpecularColor: {r: 0.18386917, g: 0.2290177, b: 0.30311212, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -66,9 +67,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -258,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   critColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  superEffectiveColor: {r: 0.79171336, g: 0.19241722, b: 0.8679245, a: 1}
+  superEffectiveColor: {r: 0.18609825, g: 0.9622642, b: 0.90859324, a: 1}
   critMessages:
   - damn
   - crazy
@@ -890,8 +888,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1242.6444
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1242.6444
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -1644,8 +1642,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 270400.47
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 270400.47
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -3370,8 +3368,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1242.6444
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1242.6444
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -3696,7 +3694,6 @@ MonoBehaviour:
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
-    serializedVersion: 2
     m_Bits: 4294967295
   m_UseGeometry: 0
   m_DefaultArea: 0
@@ -3710,6 +3707,8 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: d613f91aae0fefc4890d265d98c8500c, type: 2}
   m_BuildHeightMesh: 0
+  m_LastPosition: {x: 0, y: 0, z: 0}
+  m_LastRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &499709598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3900,8 +3899,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 3371.0027
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 3371.0027
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -4371,8 +4370,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1242.6444
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1242.6444
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -4946,8 +4945,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 3277.5403
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 3277.5403
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -5782,8 +5781,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 3277.5403
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 3277.5403
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -7164,8 +7163,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1190.6279
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1190.6279
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -8601,8 +8600,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 2059.4888
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 2059.4888
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -8868,8 +8867,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1242.6444
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1242.6444
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -9710,8 +9709,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 3
-  m_MeshMetrics[1]: 1
+  'm_MeshMetrics[0]': 3
+  'm_MeshMetrics[1]': 1
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -11355,8 +11354,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1242.6444
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1242.6444
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -13614,7 +13613,7 @@ LightingSettings:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 1
   m_EnableBakedLightmaps: 1
   m_EnableRealtimeLightmaps: 0
@@ -13625,6 +13624,7 @@ LightingSettings:
   m_UsingShadowmask: 1
   m_BakeBackend: 1
   m_LightmapMaxSize: 1024
+  m_LightmapSizeFixed: 0
   m_BakeResolution: 40
   m_Padding: 2
   m_LightmapCompression: 3
@@ -13642,9 +13642,6 @@ LightingSettings:
   m_RealtimeResolution: 2
   m_ForceWhiteAlbedo: 0
   m_ForceUpdates: 0
-  m_FinalGather: 0
-  m_FinalGatherRayCount: 256
-  m_FinalGatherFiltering: 1
   m_PVRCulling: 1
   m_PVRSampling: 1
   m_PVRDirectSampleCount: 32
@@ -13669,7 +13666,6 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
   m_PVRTiledBaking: 0
-  m_NumRaysToShootPerTexel: -1
   m_RespectSceneVisibilityWhenBakingGI: 0
 --- !u!1 &1962525205
 GameObject:
@@ -14401,8 +14397,8 @@ Mesh:
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1242.6444
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1242.6444
   m_MeshOptimizationFlags: 1
   m_StreamData:
     serializedVersion: 2
@@ -15120,7 +15116,7 @@ GameObject:
   m_IsActive: 1
 --- !u!95 &4968253240966453067
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -15134,6 +15130,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
