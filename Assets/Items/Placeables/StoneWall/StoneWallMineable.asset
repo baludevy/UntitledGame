@@ -17,6 +17,6 @@ MonoBehaviour:
   canBeMinedWith: 2
   minDropAmount: 10
   maxDropAmount: 10
-  maxHealth: 10
+  maxHealth: 10010
   sound: {fileID: 8300000, guid: 53d962f66110aeb44bfe506cc57dde5f, type: 3}
   droppedItem: {fileID: 11400000, guid: 38c31b3c31720bb4594579214db8ee52, type: 2}

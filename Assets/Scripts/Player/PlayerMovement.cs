@@ -94,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
     {
         fallSpeed = rb.velocity.y;
         GetInput();
-        HandleDrag();
         HandleLook();
         WalkBob();
     }
@@ -168,6 +167,14 @@ public class PlayerMovement : MonoBehaviour
         float yVelLook = mag.y;
 
         CounterMovement(xInput, yInput, mag);
+
+        if (grounded && xInput == 0 && yInput == 0 && !sliding)
+        {
+            Vector3 v = rb.velocity;
+            v.x = Mathf.Lerp(v.x, 0, Time.fixedDeltaTime * 8f);
+            v.z = Mathf.Lerp(v.z, 0, Time.fixedDeltaTime * 8f);
+            rb.velocity = v;
+        }
 
         float maxSpeed = 25f;
         float moveSpeed = walkSpeed;
@@ -276,11 +283,6 @@ public class PlayerMovement : MonoBehaviour
         float mag = new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
         return new Vector2(y: mag * Mathf.Cos(deltaAngle * Mathf.Deg2Rad),
             x: mag * Mathf.Cos(sideAngle * Mathf.Deg2Rad));
-    }
-
-    private void HandleDrag()
-    {
-        rb.drag = grounded ? drag : 0f;
     }
 
     #endregion
