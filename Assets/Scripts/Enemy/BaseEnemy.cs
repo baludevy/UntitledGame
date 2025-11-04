@@ -61,11 +61,9 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         Vector3 change = new Vector3(targetVelocity.x - current.x, 0, targetVelocity.z - current.z);
         rb.AddForce(change * 6f, ForceMode.Acceleration);
         transform.rotation = Quaternion.LookRotation(distanceToPlayer.normalized);
-
-        DetectWall();
     }
 
-    private void DetectWall()
+    public void DetectWall()
     {
         if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit, 1f))
         {
@@ -77,7 +75,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
     private void Climb()
     {
         Debug.Log("a");
-        rb.AddForce(Vector3.up * 0.8f, ForceMode.VelocityChange);
+        rb.AddForce(Vector3.up * 1f, ForceMode.VelocityChange);
     }
 
     public void ApplyKnockback(Vector3 direction, float force)

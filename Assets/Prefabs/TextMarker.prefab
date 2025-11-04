@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3644405522144306674}
   - component: {fileID: 6107143735885369663}
   - component: {fileID: 5130228989148421300}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: TextMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 6246628308142777031}
   - component: {fileID: 2940658071433954037}
   - component: {fileID: 6668434846701544101}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}

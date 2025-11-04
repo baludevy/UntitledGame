@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3644405522144306674}
   - component: {fileID: 5130228989148421300}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: DamageMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 6246628308142777031}
   - component: {fileID: 2940658071433954037}
   - component: {fileID: 6668434846701544101}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.2}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2940658071433954037

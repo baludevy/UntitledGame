@@ -69,7 +69,7 @@ public class Effects : MonoBehaviour
         float t = 0f;
         while (t < 1f)
         {
-            t += Time.deltaTime / 0.2f;
+            t += Time.deltaTime / 0.1f;
             float eased = t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
             targetTransform.localScale = Vector3.Lerp(start, target, eased);
             yield return null;
@@ -78,7 +78,7 @@ public class Effects : MonoBehaviour
         t = 0f;
         while (t < 1f)
         {
-            t += Time.deltaTime / 0.2f;
+            t += Time.deltaTime / 0.5f;
             float eased = t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
             targetTransform.localScale = Vector3.Lerp(target, start, eased);
             yield return null;

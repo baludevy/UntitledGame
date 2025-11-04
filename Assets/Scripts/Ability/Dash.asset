@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 0
   opposingAbilities: []
-  force: 25
+  force: 35
   duration: 0.1
   damage: 5
   radius: 3

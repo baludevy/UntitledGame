@@ -27,7 +27,7 @@ public class MeleeTool : Tool
 
         if (isSwinging && toolController.useTimer <= 0 && !swingingThisFrame)
         {
-            float baseLength = 1f;
+            float baseLength = 1.2f;
             float speedMultiplier = baseLength / data.cooldown;
 
             toolAnimator.speed = speedMultiplier;

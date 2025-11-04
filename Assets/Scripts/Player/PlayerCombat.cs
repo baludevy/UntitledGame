@@ -53,6 +53,8 @@ public class PlayerCombat : MonoBehaviour
 
         Effects.SpawnEffects(hitPoint, hitNormal, damage, crit, TypeEffectiveness.Normal);
 
+        if(type != mineable.CanBeMinedWith) return;
+        
         mineable.TakeDamage(damage, crit);
     }
 }

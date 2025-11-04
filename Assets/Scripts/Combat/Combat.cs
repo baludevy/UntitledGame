@@ -41,7 +41,9 @@ public static class Combat
                 damage *= 1.2f;
                 break;
         }
+
+        damage *= Random.Range(PlayerStatistics.Instance.Combat.randomDamageMultiplier, 1f + 1f - PlayerStatistics.Instance.Combat.randomDamageMultiplier);
         
-        return damage;
+        return Mathf.FloorToInt(damage);
     }
 }

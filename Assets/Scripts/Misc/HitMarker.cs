@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using TMPro;
+using Random = UnityEngine.Random;
 
 public class HitMarker : MonoBehaviour
 {
@@ -23,6 +25,11 @@ public class HitMarker : MonoBehaviour
     [SerializeField] private float floatAmount = 0.5f;
     private Vector3 startPos;
     private Transform textTransform;
+
+    private void Start()
+    {
+        text.GetComponent<MeshRenderer>().sortingLayerName = "HitMarker";
+    }
 
     private void OnEnable()
     {
