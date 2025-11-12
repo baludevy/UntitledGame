@@ -26,11 +26,6 @@ public class HitMarker : MonoBehaviour
     private Vector3 startPos;
     private Transform textTransform;
 
-    private void Start()
-    {
-        text.GetComponent<MeshRenderer>().sortingLayerName = "HitMarker";
-    }
-
     private void OnEnable()
     {
         cam = PlayerCamera.Instance.transform;

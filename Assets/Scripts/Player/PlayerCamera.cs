@@ -38,6 +38,11 @@ public class PlayerCamera : MonoBehaviour
         rb = PlayerMovement.Instance.GetRigidbody();
     }
 
+    private void Update()
+    {
+        DamageableInfo();
+    }
+
     private void LateUpdate()
     {
         deltaTime = Time.deltaTime;
@@ -112,6 +117,37 @@ public class PlayerCamera : MonoBehaviour
             Mathf.Clamp(vec.y, min, max),
             Mathf.Clamp(vec.z, min, max)
         );
+    }
+
+    IDamageable current;
+
+    private void DamageableInfo()
+    {
+        if (current != null && current.Equals(null))
+            current = null;
+
+        var origin = cam.transform.position;
+        var direction = cam.transform.forward;
+
+        float radius = 0.5f;
+        float distance = 20f;
+
+        if (Physics.SphereCast(origin, radius, direction, out var hit, distance))
+        {
+            var damageable = hit.collider.GetComponent<IDamageable>();
+
+            if (damageable != current)
+            {
+                if (current != null) current.HideCanvas();
+                if (damageable != null) damageable.ShowCanvas();
+                current = damageable;
+            }
+        }
+        else
+        {
+            if (current != null) current.HideCanvas();
+            current = null;
+        }
     }
 
     public static Ray GetRay()
