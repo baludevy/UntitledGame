@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 {
@@ -6,6 +7,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     private Rigidbody rb;
     private Transform player;
+    [SerializeField] private GameObject damageableInfo;
+    [SerializeField] private Image healthBar;
     public float moveSpeed = 3f;
 
     private float knockbackTimer;
@@ -74,7 +77,6 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     private void Climb()
     {
-        Debug.Log("a");
         rb.AddForce(Vector3.up * 1f, ForceMode.VelocityChange);
     }
 
@@ -89,6 +91,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
     {
         flash = true;
         currentHealth -= damage;
+        healthBar.fillAmount = currentHealth / MaxHealth;
         if (currentHealth <= 0) Destroy(gameObject);
     }
 
@@ -100,6 +103,16 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
             MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
             Effects.Flash(renderers);
         }
+    }
+    
+    public void ShowCanvas()
+    {
+        damageableInfo.SetActive(true);
+    }
+    
+    public void HideCanvas()
+    {
+        damageableInfo.SetActive(false);
     }
 
     public Rigidbody GetRigidbody() => rb;

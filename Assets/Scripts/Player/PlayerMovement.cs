@@ -215,6 +215,14 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.down * (Time.deltaTime * 3000f));
             return;
         }
+        
+        if (sliding && grounded)
+        {
+            rb.AddForce(-normalVector * 300f, ForceMode.Acceleration); // ground stick
+            rb.AddForce(-rb.velocity.normalized * (moveSpeed * Time.deltaTime * slideCounterMovement));
+            rb.AddForce(Vector3.down * (Time.deltaTime * 3000f));
+            return;
+        }
 
         rb.AddForce(orientation.forward * (yInput * moveSpeed * Time.deltaTime * sideMultiplier * forwardMultiplier));
         rb.AddForce(orientation.right * (xInput * moveSpeed * Time.deltaTime * sideMultiplier));

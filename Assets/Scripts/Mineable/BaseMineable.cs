@@ -101,4 +101,14 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
         Destroy(gameObject);
     }
+
+    public void ShowCanvas()
+    {
+        
+    }
+    
+    public void HideCanvas()
+    {
+        
+    }
 }
