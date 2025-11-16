@@ -21,6 +21,6 @@ MonoBehaviour:
   force: 20
   slowDuration: 0.4
   slowMultiplier: 0.2
-  minHeight: 5
+  minHeight: 3
   maxHeight: 10
   groundSlamFX: {fileID: 6673457738025371535, guid: 80a60d3bdf7a82440b39b3f6b6882e78, type: 3}

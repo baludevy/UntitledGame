@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class HeldItemController : MonoBehaviour
@@ -29,7 +28,10 @@ public class HeldItemController : MonoBehaviour
             Destroy(currentItemObject);
             currentItemObject = null;
             lastItem = null;
+
             ToolController.Instance.SetTool(null);
+            PlaceableController.Instance.SetPlaceable(null);
+            GunController.Instance.SetGun(null);
         }
     }
 
@@ -55,23 +57,34 @@ public class HeldItemController : MonoBehaviour
             currentItemObject = Instantiate(item.data.heldPrefab, itemRootAnimator.transform);
 
             foreach (Transform child in currentItemObject.transform)
-            {
                 child.gameObject.layer = LayerMask.NameToLayer("HeldItem");
-            }
 
             if (item.data is ToolData)
             {
                 Tool tool = currentItemObject.GetComponent<Tool>();
                 tool.instance = (ToolInstance)item;
+
                 ToolController.Instance.SetTool(tool);
                 PlaceableController.Instance.SetPlaceable(null);
+                GunController.Instance.SetGun(null);
             }
             else if (item.data is PlaceableData)
             {
                 Placeable placeable = currentItemObject.GetComponent<Placeable>();
                 placeable.instance = (PlaceableInstance)item;
+
                 PlaceableController.Instance.SetPlaceable(placeable);
                 ToolController.Instance.SetTool(null);
+                GunController.Instance.SetGun(null);
+            }
+            else if (item.data is GunData)
+            {
+                Gun gun = currentItemObject.GetComponent<Gun>();
+                gun.instance = (GunInstance)item;
+
+                GunController.Instance.SetGun(gun);
+                ToolController.Instance.SetTool(null);
+                PlaceableController.Instance.SetPlaceable(null);
             }
         }
     }

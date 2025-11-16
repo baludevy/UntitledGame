@@ -17,6 +17,7 @@ Material:
   - _MK_ENVIRONMENT_REFLECTIONS_AMBIENT
   - _MK_WRAPPED_DIFFUSE
   m_InvalidKeywords:
+  - _EMISSION
   - _FRESNELHIGHLIGHTS_ON
   - _GLOSSYREFLECTIONS_OFF
   - _MK_DETAIL_BLEND_MIX
@@ -274,7 +275,7 @@ Material:
     - _GlossyReflections: 0
     - _GoochRampIntensity: 0.5
     - _HatchingMapScale: 1
-    - _IndirectFade: 1
+    - _IndirectFade: 0.247
     - _Initialized: 0
     - _InputTab: 1
     - _Iridescence: 0

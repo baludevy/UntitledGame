@@ -53,9 +53,8 @@ public class GroundSlam : Ability
         rb.velocity = new Vector3(0f, rb.velocity.y * 0.5f, 0f);
 
         //slow down the player for some time
-        player.ChangeSprintSpeed(player.GetSprintSpeed() * slowMultiplier, slowDuration);
-        player.ChangeWalkSpeed(player.GetWalkSpeed() * slowMultiplier, slowDuration);
-
+        player.ChangeSpeed(player.GetSpeed() * slowMultiplier, slowDuration);
+        
         Instantiate(groundSlamFX, player.transform.position, player.transform.rotation);
 
         SlamEnemies(player.transform.position);
