@@ -6,6 +6,8 @@ public class PlayerCamera : MonoBehaviour
     public Transform target;
     public Transform heldItemHolder;
 
+    public Vector3 offset;
+    
     public float bobSpeed = 15f;
     public float bobMultiplier = 0.5f;
 
@@ -57,7 +59,7 @@ public class PlayerCamera : MonoBehaviour
 
         Vector3 finalPos = startPos + bobOffset;
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, deltaTime * 15f);
-        transform.position = target.position + bobOffset;
+        transform.position = target.position + bobOffset + offset;
     }
 
     public void BobOnce(Vector3 bobDirection)
