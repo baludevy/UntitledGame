@@ -16,6 +16,8 @@ public class DroppedItem : MonoBehaviour
             itemInstance = new ToolInstance(tool);
         else if(itemData is PlaceableData placeable)
             itemInstance = new PlaceableInstance(placeable);
+        else if (itemData is GunData gun)
+            itemInstance = new GunInstance(gun);
         else
             itemInstance = new ItemInstance(itemData);
     }

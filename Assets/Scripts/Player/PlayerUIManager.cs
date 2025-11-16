@@ -61,27 +61,10 @@ public class PlayerUIManager : MonoBehaviour
     {
         if(statistics == null)
             statistics = PlayerStatistics.Instance;
-            
-        UpdateStamina();
+        
         UpdateHealth();
     }
-
-
-    private void UpdateStamina()
-    {
-        if (staminaBar == null || staminaText == null)
-        {
-            Debug.LogWarning("No stamina bar or text assigned");
-            return;
-        }
-
-        float stamina = statistics.Stamina.GetStamina();
-        float maxStamina = statistics.Stamina.GetMaxStamina();
-        
-        staminaText.text = $"{stamina:F0}/{maxStamina:F0}";
-        staminaBar.fillAmount = stamina / maxStamina;
-    }
-
+    
     private void UpdateHealth()
     {
         if (healthBar == null || healthText == null)

@@ -5,17 +5,15 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
-
-    [SerializeField] private float walkSpeed = 1250f;
-    [SerializeField] private float sprintSpeed = 3000f;
+    
+    [SerializeField] private float speed = 3000f;
     [SerializeField] private float jumpForce = 350f;
     [SerializeField] private float groundDrag = 3f;
     [SerializeField] private float slideDrag = 0.5f;
     [SerializeField] private float airMultiplier = 0.7f;
     [SerializeField] private LayerMask whatIsGround;
 
-    private float startWalkSpeed;
-    private float startSprintSpeed;
+    private float startSpeed;
 
     private bool readyToJump = true;
     private bool grounded;
@@ -30,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slideForce = 400f;
 
     [SerializeField] private float slideCounterMovement = 0.2f;
-    [SerializeField] private Vector3 crouchScale = new Vector3(2f, 2.25f, 2f);
+    [SerializeField] private Vector3 crouchScale = new (2f, 2.25f, 2f);
     [SerializeField] private float slideCooldown = 0.2f;
     private Vector3 playerScale;
 
@@ -62,8 +60,6 @@ public class PlayerMovement : MonoBehaviour
     private ParticleSystem.EmissionModule emission;
     private float drag;
 
-    private PlayerStamina stamina;
-
     public static PlayerMovement Instance;
 
     private void Awake()
@@ -75,8 +71,7 @@ public class PlayerMovement : MonoBehaviour
         else
             Destroy(gameObject);
 
-        startWalkSpeed = walkSpeed;
-        startSprintSpeed = sprintSpeed;
+        startSpeed = speed;
     }
 
     private void Start()
@@ -87,7 +82,6 @@ public class PlayerMovement : MonoBehaviour
         CursorManager.LockCursor();
 
         emission = ps.emission;
-        stamina = PlayerStatistics.Instance.Stamina;
     }
 
     private void Update()
@@ -140,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         jumping = Input.GetButton("Jump");
         sprinting = Input.GetButton("Sprint");
 
-        if (readyToJump && grounded && jumping && stamina.GetStamina() >= stamina.GetJumpStaminaLoss())
+        if (readyToJump && grounded && jumping)
         {
             readyToJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);
@@ -177,22 +171,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float maxSpeed = 25f;
-        float moveSpeed = walkSpeed;
+        float moveSpeed = speed;
 
         bool isMoving = xInput != 0 || yInput != 0;
-        bool isSprinting = sprinting && isMoving && stamina.GetStamina() > 0f;
-
-        if (isSprinting)
-        {
-            moveSpeed = sprintSpeed;
-            stamina.UseStamina(stamina.GetStaminaLoss() * Time.deltaTime);
-            SpeedLines();
-            FovEffect();
-        }
-        else
-        {
-            ResetSprintingEffects();
-        }
 
         if (xInput > 0f && xVelLook > maxSpeed) xInput = 0f;
         if (xInput < 0f && xVelLook < -maxSpeed) xInput = 0f;
@@ -232,7 +213,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (grounded || surfing)
         {
-            stamina.UseJumpStamina();
             Vector3 velocity = rb.velocity;
             rb.AddForce(Vector3.up * (jumpForce * 1.5f));
             rb.AddForce(normalVector * (jumpForce * 0.5f));
@@ -249,7 +229,7 @@ public class PlayerMovement : MonoBehaviour
         if (!grounded || jumping) return;
         const float threshold = 0.09f;
         const float multiplier = 0.07f;
-        float moveSpeed = walkSpeed;
+        float moveSpeed = speed;
         const float runSpeed = 20f;
 
         if (crouching)
@@ -376,34 +356,6 @@ public class PlayerMovement : MonoBehaviour
         return null;
     }
 
-
-    private void ResetSprintingEffects()
-    {
-        emission.rateOverTimeMultiplier = 0;
-        if (!sprinting)
-        {
-            Camera cam = PlayerCamera.Instance.cam;
-            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, defaultFOV, 5f * Time.deltaTime);
-        }
-    }
-
-    private void FovEffect()
-    {
-        //smooth transition between fov when sprinting
-        Camera cam = PlayerCamera.Instance.cam;
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, sprintFOV, 5f * Time.deltaTime);
-    }
-
-    private void SpeedLines()
-    {
-        //speed lines based on velocity and camera angle
-        float angle = Vector3.Angle(rb.velocity, PlayerCamera.Instance.transform.forward);
-        float angleFactor = Mathf.Max(angle, 0.1f);
-        float targetRate = rb.velocity.magnitude / angleFactor * 10f;
-        targetRate = Mathf.Min(targetRate, 30f);
-        emission.rateOverTimeMultiplier = Mathf.Lerp(emission.rateOverTimeMultiplier, targetRate, Time.deltaTime * 2f);
-    }
-
     #endregion
 
     private bool IsFloor(Vector3 v) => Vector3.Angle(Vector3.up, v) < maxSlopeAngle;
@@ -449,42 +401,24 @@ public class PlayerMovement : MonoBehaviour
     public bool GetCanLook() => canLook;
     public Rigidbody GetRigidbody() => rb;
 
-    public float GetWalkSpeed() => walkSpeed;
-    public float GetSprintSpeed() => sprintSpeed;
+    public float GetSpeed() => speed;
 
-    public void ChangeWalkSpeed(float newWalkSpeed, float time)
+    public void ChangeSpeed(float newWalkSpeed, float time)
     {
-        StartCoroutine(ChangeWalkSpeedTemporarily(newWalkSpeed, time));
+        StartCoroutine(ChangeSpeedTemporarily(newWalkSpeed, time));
     }
 
-    private IEnumerator ChangeWalkSpeedTemporarily(float newWalkSpeed, float time)
+    private IEnumerator ChangeSpeedTemporarily(float newWalkSpeed, float time)
     {
-        float originalSpeed = walkSpeed;
-        walkSpeed = newWalkSpeed;
+        float originalSpeed = speed;
+        speed = newWalkSpeed;
         yield return new WaitForSeconds(time);
-        walkSpeed = originalSpeed;
+        speed = originalSpeed;
     }
 
-    public void ChangeWalkSpeed(float newWalkSpeed) => walkSpeed = newWalkSpeed;
+    public void ChangeSpeed(float newSpeed) => speed = newSpeed;
 
-    public void ResetWalkSpeed() => walkSpeed = startWalkSpeed;
-
-    public void ChangeSprintSpeed(float newSprintSpeed, float time)
-    {
-        StartCoroutine(ChangeSprintSpeedTemporarily(newSprintSpeed, time));
-    }
-
-    private IEnumerator ChangeSprintSpeedTemporarily(float newSprintSpeed, float time)
-    {
-        float originalSpeed = sprintSpeed;
-        sprintSpeed = newSprintSpeed;
-        yield return new WaitForSeconds(time);
-        sprintSpeed = originalSpeed;
-    }
-
-    public void ChangeSprintSpeed(float newSprintSpeed) => walkSpeed = newSprintSpeed;
-
-    public void ResetSprintSpeed() => sprintSpeed = startSprintSpeed;
+    public void ResetSpeed() => speed = startSpeed;
 
     public Vector2 GetInputDirection()
     {

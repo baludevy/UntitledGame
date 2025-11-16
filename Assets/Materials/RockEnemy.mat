@@ -8,17 +8,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: RockEnemy
-  m_Shader: {fileID: 4800000, guid: 851f2d9f112af2f4390a3d702e3e6553, type: 3}
+  m_Shader: {fileID: 4800000, guid: 418a1adfe2e75f34da8aaf192ff8e296, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _MK_ARTISTIC_ANIMATION_STUTTER
   - _MK_ENVIRONMENT_REFLECTIONS_AMBIENT
-  - _MK_OUTLINE_HULL_CLIP
   - _MK_WRAPPED_DIFFUSE
   m_InvalidKeywords:
+  - _EMISSION
   - _GLOSSYREFLECTIONS_OFF
   - _MK_DETAIL_BLEND_MIX
+  - _MK_OUTLINE_HULL_CLIP
   - _MK_RECEIVE_SHADOWS
   - _RECEIVESHADOWS_ON
   - _WRAPPEDLIGHTING_ON
@@ -271,7 +272,7 @@ Material:
     - _GlossyReflections: 0
     - _GoochRampIntensity: 0.5
     - _HatchingMapScale: 1
-    - _IndirectFade: 1
+    - _IndirectFade: 0.247
     - _Initialized: 0
     - _InputTab: 1
     - _Iridescence: 0
@@ -350,10 +351,10 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Toon_Ramp_Tint: {r: 0.51174796, g: 0.6007921, b: 0.8679245, a: 1}
-    - _AlbedoColor: {r: 0.4245282, g: 0.4245282, b: 0.4245282, a: 1}
+    - _AlbedoColor: {r: 0.42452815, g: 0.42452815, b: 0.42452815, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.42452818, g: 0.42452818, b: 0.42452818, a: 1}
+    - _Color: {r: 0.42452812, g: 0.42452812, b: 0.42452812, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _DetailColor: {r: 1, g: 1, b: 1, a: 1}
     - _DissolveBorderColor: {r: 1, g: 1, b: 1, a: 1}
