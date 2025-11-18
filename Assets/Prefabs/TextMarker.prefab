@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3644405522144306674}
   - component: {fileID: 6107143735885369663}
   - component: {fileID: 5130228989148421300}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: TextMarker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,12 +62,12 @@ MonoBehaviour:
   lifetime: 1
   startScale: {x: 0.5, y: 0.5, z: 0.5}
   midScale: {x: 0.8, y: 0.8, z: 0.8}
-  endScale: {x: 0.3, y: 0.3, z: 0.3}
+  endScale: {x: 0.2, y: 0.2, z: 0.2}
   scaleUpTime: 0.3
   holdTime: 0
-  distanceScaleFactor: 0.3
+  distanceScaleFactor: 0.2
   minDistanceScale: 0.8
-  maxDistanceScale: 3
+  maxDistanceScale: 2.5
   floatAmount: 0.5
 --- !u!1 &8178501908587359710
 GameObject:
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 6246628308142777031}
   - component: {fileID: 2940658071433954037}
   - component: {fileID: 6668434846701544101}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}

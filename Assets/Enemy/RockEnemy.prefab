@@ -466,7 +466,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8814167005587942564}
-  m_Material: {fileID: 13400000, guid: 6eb857fef159b95419019c62cc332c68, type: 2}
+  m_Material: {fileID: 13400000, guid: 21a7a6c381b72544fa79f8e1c575be8b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -524,4 +524,4 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 08fd0202e5dc19f46a49a0546897090a, type: 2}
   damageableInfo: {fileID: 3281098401156601569}
   healthBar: {fileID: 5090237307760053775}
-  moveSpeed: 7
+  moveSpeed: 10

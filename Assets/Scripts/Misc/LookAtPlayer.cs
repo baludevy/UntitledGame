@@ -6,7 +6,7 @@ public class LookAtPlayer : MonoBehaviour
 
     private void Start()
     {
-        target = PlayerMovement.Instance.transform;
+        target = PlayerCamera.Instance.transform;
     }
 
     private void Update()

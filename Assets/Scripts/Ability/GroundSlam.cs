@@ -78,7 +78,7 @@ public class GroundSlam : Ability
         {
             IDamageable damageable = GetTarget(collider.transform);
             if (damageable is BaseEnemy enemy)
-                PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up, Vector3.zero,
+                PlayerCombat.DamageEnemy(damage, enemy, collider.transform.position + Vector3.up, Vector3.zero,
                     Element.Ground, hitEffect: false);
         }
     }

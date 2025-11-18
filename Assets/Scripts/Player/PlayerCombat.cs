@@ -16,11 +16,13 @@ public class PlayerCombat : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public static void DamageEnemy(float baseDamage, bool crit, BaseEnemy enemy, Vector3 hitPoint,
+    public static void DamageEnemy(float baseDamage, BaseEnemy enemy, Vector3 hitPoint,
         Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true,
         ToolType toolType = ToolType.Neutral)
     {
         TypeEffectiveness eff = Combat.CalcEffectiveness(element, enemy.Element);
+
+        bool crit = Combat.RollCrit();
 
         if (toolType == ToolType.Pickaxe && enemy.Element == Element.Rock)
         {

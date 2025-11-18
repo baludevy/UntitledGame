@@ -80,7 +80,7 @@ public class Dash : Ability
                 IDamageable damageable = GetTarget(collider.transform);
                 if (damageable is BaseEnemy enemy)
                 {
-                    PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up,
+                    PlayerCombat.DamageEnemy(damage, enemy, collider.transform.position + Vector3.up,
                         Vector3.zero, Element.Wind, hitEffect: false);
                     hitEnemy = true;
                 }
