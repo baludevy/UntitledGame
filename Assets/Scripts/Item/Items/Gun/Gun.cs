@@ -12,5 +12,4 @@ public abstract class Gun : MonoBehaviour
 
     public abstract void HandleInput();
     public abstract void UpdateGun();
-    public void Break() {}
 }

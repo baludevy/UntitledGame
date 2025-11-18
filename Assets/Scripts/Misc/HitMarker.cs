@@ -25,6 +25,7 @@ public class HitMarker : MonoBehaviour
     [SerializeField] private float floatAmount = 0.5f;
     private Vector3 startPos;
     private Transform textTransform;
+    private Transform target;
 
     private void OnEnable()
     {
@@ -48,6 +49,9 @@ public class HitMarker : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
+
+        if (target != null)
+            startPos = target.position;
 
         float t = timer / rLifetime;
         float scaleUpEnd = scaleUpTime / rLifetime;
@@ -76,7 +80,7 @@ public class HitMarker : MonoBehaviour
             heightOffset = Mathf.Lerp(floatAmount, 0f, s);
         }
 
-        float dist = Vector3.Distance(transform.position, cam.position);
+        float dist = Vector3.Distance(startPos, cam.position);
         float distanceScale = Mathf.Clamp(dist * distanceScaleFactor, minDistanceScale, maxDistanceScale);
         Vector3 targetScale = baseScale * distanceScale;
         textTransform.localScale = Vector3.Lerp(textTransform.localScale, targetScale, Time.deltaTime * 20f);
@@ -97,5 +101,12 @@ public class HitMarker : MonoBehaviour
     {
         text.text = message;
         text.color = color;
+    }
+
+
+    public void SetTarget(Transform targetTransform)
+    {
+        target = targetTransform;
+        startPos = target.position;
     }
 }

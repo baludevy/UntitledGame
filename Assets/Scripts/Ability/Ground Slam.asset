@@ -15,8 +15,8 @@ MonoBehaviour:
   cooldown: 1
   opposingAbilities:
   - {fileID: 11400000, guid: 1e5c5c776334925408d4fafba87c18f9, type: 2}
-  minDamage: 50
-  maxDamage: 100
+  minDamage: 20
+  maxDamage: 50
   slamRadius: 10
   force: 20
   slowDuration: 0.4

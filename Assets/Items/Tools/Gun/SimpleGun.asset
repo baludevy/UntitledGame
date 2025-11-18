@@ -19,6 +19,7 @@ MonoBehaviour:
   stackable: 0
   floorPrefab: {fileID: 8023892222117748466, guid: ccff0deb7be8b0b42a03007aeca47467, type: 3}
   heldPrefab: {fileID: 6499007990128292854, guid: 034fdfe12a5bfb14e9f45d0ac8e519c9, type: 3}
+  damage: 10
   recoilAmount: 30
   cooldown: 0.2
-  shootAudio: {fileID: 8300000, guid: 53d962f66110aeb44bfe506cc57dde5f, type: 3}
+  shootAudio: {fileID: 8300000, guid: 853489e0c8fbfce4a809a10932e47e38, type: 3}
