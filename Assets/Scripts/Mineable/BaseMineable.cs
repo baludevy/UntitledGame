@@ -23,8 +23,7 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
         get => data.description;
         set => data.description = value;
     }
-
-    public ToolType CanBeMinedWith => data.canBeMinedWith;
+    
     public int MinDropAmount => data.minDropAmount;
     public int MaxDropAmount => data.maxDropAmount;
     public ItemData DroppedItem => data.droppedItem;
@@ -64,7 +63,7 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
     public void TakeDamage(float damage, bool crit)
     {
         currentHealth -= damage;
-        
+
         flash = true;
 
         StopAllCoroutines();
@@ -85,18 +84,8 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
                 Instantiate(DroppedItem.floorPrefab, transform.position + Vector3.up * 1.5f, transform.rotation)
                     .GetComponent<DroppedItem>();
 
-            if (dropped.itemData is ToolData toolData)
-            {
-                dropped.Initialize(new ToolInstance(toolData, amount), false);
-            }
-            else if (dropped.itemData is PlaceableData placeableData)
-            {
-                dropped.Initialize(new PlaceableInstance(placeableData, amount), false);
-            }
-            else
-            {
-                dropped.Initialize(new ItemInstance(dropped.itemData, amount), true);
-            }
+
+            dropped.Initialize(new ItemInstance(dropped.itemData, amount), true);
         }
 
         Destroy(gameObject);
@@ -104,11 +93,9 @@ public class BaseMineable : MonoBehaviour, IMineable, IDamageable
 
     public void ShowCanvas()
     {
-        
     }
-    
+
     public void HideCanvas()
     {
-        
     }
 }

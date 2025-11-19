@@ -11,12 +11,9 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private int columns = 6;
     private ItemInstance[,] grid;
 
-    private int HotbarRow => rows - 1;
-    public ItemInstance ActiveItem => grid[HotbarRow, activeHotbarSlot];
     public int TotalSlots => rows * columns;
-    public int activeHotbarSlot;
     public bool inventoryOpen;
-    
+
     public List<ItemData> startingItems;
 
     private void Awake()
@@ -30,37 +27,22 @@ public class PlayerInventory : MonoBehaviour
     private void Start()
     {
         UIManager = PlayerUIManager.Instance;
-        SwitchToHotbarSlot(0);
         AddStartingItems();
     }
 
     private void AddStartingItems()
     {
-        if(startingItems.Count == 0) return;
+        if (startingItems.Count == 0) return;
 
         foreach (ItemData item in startingItems)
         {
-            if (item is ToolData tool)
-            {
-                AddItem(new ToolInstance(tool));
-
-                continue;
-            }
-            
             AddItem(new ItemInstance(item, 64));
         }
     }
 
     private void Update()
     {
-        HeldItemController.Instance.UpdateHeldItem(ActiveItem);
-
         if (Input.GetButtonDown("Inventory")) ToggleInventory();
-        if (Input.GetKeyDown(KeyCode.Q)) DropActiveItem();
-
-        for (int i = 0; i < columns; i++)
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-                SwitchToHotbarSlot(i);
     }
 
     private void ToggleInventory()
@@ -71,23 +53,9 @@ public class PlayerInventory : MonoBehaviour
         PlayerMovement.Instance.SetCanLook(!inventoryOpen);
     }
 
-    private void SwitchToHotbarSlot(int slot)
-    {
-        activeHotbarSlot = slot;
-        for (int i = 0; i < UIManager.hotbarSlots.Count; i++)
-            UIManager.hotbarSlots[i].SetActive(i == activeHotbarSlot);
-    }
-
-    private HotbarSlot GetHotbarSlot(int index) => UIManager.hotbarSlots[index].GetComponent<HotbarSlot>();
-    public HotbarSlot GetActiveHotbarSlot() => GetHotbarSlot(activeHotbarSlot);
-
     public void AddItem(ItemInstance item)
     {
-        if (item == null)
-        {
-            Debug.Log("a");
-            return;
-        }
+        if (item == null) return;
 
         if (!TryStackItem(item)) TryAddToEmptySlot(item);
     }
@@ -110,7 +78,7 @@ public class PlayerInventory : MonoBehaviour
     public ItemInstance GetArrow()
     {
         ItemInstance arrowInstance = null;
-        
+
         /* for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < columns; col++)
@@ -125,7 +93,7 @@ public class PlayerInventory : MonoBehaviour
                     }
                 }
             }
-        } */ 
+        } */
 
         return arrowInstance;
     }
@@ -134,17 +102,14 @@ public class PlayerInventory : MonoBehaviour
     {
         if (newItem == null) return false;
 
-        // add new iteminstances until the leftover is under the item's stack cap
         while (newItem.stackAmount > newItem.data.MaxStack && newItem.data.Stackable)
         {
             int leftover = newItem.stackAmount - newItem.data.MaxStack;
-
             newItem.stackAmount = newItem.data.MaxStack;
-
             AddItem(new ItemInstance(newItem.data, leftover));
         }
 
-        for (int row = HotbarRow; row >= 0; row--)
+        for (int row = rows - 1; row >= 0; row--)
         for (int col = 0; col < columns; col++)
         {
             var existingItem = grid[row, col];
@@ -168,7 +133,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (item == null) return;
 
-        for (int row = HotbarRow; row >= 0; row--)
+        for (int row = rows - 1; row >= 0; row--)
         for (int col = 0; col < columns; col++)
             if (grid[row, col] == null)
             {
@@ -177,17 +142,14 @@ public class PlayerInventory : MonoBehaviour
             }
     }
 
-    // this sets the slot's item strictly, without trying to merge, overwriting the existing item
     public void SetItemStrict(ItemInstance item, int row, int col)
     {
         grid[row, col] = item;
-
         UpdateSlotUI(row, col);
     }
 
     public void SetItem(ItemInstance item, int row, int col)
     {
-        // the existing item if there is any
         var target = grid[row, col];
 
         if (target == null)
@@ -207,10 +169,8 @@ public class PlayerInventory : MonoBehaviour
     {
         if (newItem == null) return;
 
-        // the item we're swapping to the newitem
         var targetItem = grid[toSlot.row, toSlot.col];
 
-        // first try merging
         if (CanMergeItem(newItem, targetItem))
         {
             AddAmountToItem(targetItem, newItem.stackAmount);
@@ -219,10 +179,7 @@ public class PlayerInventory : MonoBehaviour
         }
         else
         {
-            // couldnt merge, move the item from the target slot to the slot we dragged the item from
             grid[fromSlot.row, fromSlot.col] = targetItem;
-
-            // move the new item to the target slot
             grid[toSlot.row, toSlot.col] = newItem;
         }
 
@@ -234,11 +191,6 @@ public class PlayerInventory : MonoBehaviour
     public void RemoveItem(int row, int col)
     {
         SetItemStrict(null, row, col);
-
-        if (row == HotbarRow)
-        {
-            UpdateSlotUI(row, col);
-        }
     }
 
     public void DropItem(ItemInstance item, bool removeFromInventory = true)
@@ -266,22 +218,13 @@ public class PlayerInventory : MonoBehaviour
             }
     }
 
-    private void DropActiveItem() => DropItem(ActiveItem);
-
     public void UpdateSlotUI(int row, int col)
     {
         int index = row * columns + col;
 
-
         if (index < UIManager.inventorySlots.Count)
         {
             UIManager.inventorySlots[index].SetItem(grid[row, col]);
-        }
-
-
-        if (row == HotbarRow && col < UIManager.hotbarSlots.Count)
-        {
-            UIManager.hotbarSlots[col].SetItem(grid[row, col]);
         }
     }
 
