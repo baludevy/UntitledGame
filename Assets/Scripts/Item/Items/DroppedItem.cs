@@ -10,16 +10,9 @@ public class DroppedItem : MonoBehaviour
 
     private void Awake()
     {
-        if(itemInstance != null) return;
-        
-        if (itemData is ToolData tool)
-            itemInstance = new ToolInstance(tool);
-        else if(itemData is PlaceableData placeable)
-            itemInstance = new PlaceableInstance(placeable);
-        else if (itemData is GunData gun)
-            itemInstance = new GunInstance(gun);
-        else
-            itemInstance = new ItemInstance(itemData);
+        if (itemInstance != null) return;
+
+        itemInstance = new ItemInstance(itemData);
     }
 
     public void Initialize(ItemInstance instance, bool ignore, Collider dropperCollider = null)

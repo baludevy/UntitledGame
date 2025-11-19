@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    [Header("HUD")] [Header("Stats")] [SerializeField]
+    [Header("HUD")]
+    [Header("Stats")]
+    [SerializeField]
     private TMP_Text staminaText;
 
     [SerializeField] private Image staminaBar;
@@ -16,15 +16,13 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
 
-    [Header("Hotbar")] public List<HotbarSlot> hotbarSlots;
-    [SerializeField] private Transform hotbarSlotsParent;
-
-    [Header("Inventory")] [SerializeField] public CanvasGroup inventoryHolder;
+    [Header("Inventory")]
+    [SerializeField] public CanvasGroup inventoryHolder;
     public Transform inventorySlotsHolder;
     [NonSerialized] public List<InventorySlot> inventorySlots;
 
     private PlayerStatistics statistics;
-    
+
     public static PlayerUIManager Instance;
 
     private void Awake()
@@ -34,13 +32,7 @@ public class PlayerUIManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        hotbarSlots = new List<HotbarSlot>();
         inventorySlots = new List<InventorySlot>();
-
-        for (int i = 0; i < hotbarSlotsParent.childCount; i++)
-        {
-            hotbarSlots.Add(hotbarSlotsParent.GetChild(i).GetComponent<HotbarSlot>());
-        }
 
         for (int i = 0; i < inventorySlotsHolder.childCount; i++)
         {
@@ -59,27 +51,23 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
-        if(statistics == null)
+        if (statistics == null)
             statistics = PlayerStatistics.Instance;
-        
+
         UpdateHealth();
     }
-    
+
     private void UpdateHealth()
     {
-        if (healthBar == null || healthText == null)
-        {
-            Debug.LogWarning("No health bar or text assigned");
-            return;
-        }
+        if (healthBar == null || healthText == null) return;
 
         float health = statistics.Health.GetHealth();
         float maxHealth = statistics.Health.GetMaxHealth();
-        
+
         healthText.text = $"{health:F0}/{maxHealth:F0}";
         healthBar.fillAmount = health / maxHealth;
     }
-    
+
     public void SetInventoryState(bool state)
     {
         inventoryHolder.alpha = state ? 1f : 0f;
