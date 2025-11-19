@@ -77,7 +77,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     private void Climb()
     {
-        rb.AddForce(Vector3.up * 1.75f, ForceMode.VelocityChange);
+        rb.AddForce(Vector3.up * 1.25f, ForceMode.VelocityChange);
     }
 
     public void ApplyKnockback(Vector3 direction, float force)

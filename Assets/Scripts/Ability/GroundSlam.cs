@@ -67,7 +67,7 @@ public class GroundSlam : Ability
         PlayerMovement player = PlayerMovement.Instance;
 
         // make a flat box collider to check for collisions with surrounding enemies
-        Collider[] colliders = Physics.OverlapBox(pos, new Vector3(slamRadius / 2f, 3.5f, slamRadius / 2f));
+        Collider[] colliders = Physics.OverlapBox(pos, new Vector3(slamRadius / 2f, 4f, slamRadius / 2f));
 
         float currentHeight = GetHeight(player);
 
@@ -78,7 +78,7 @@ public class GroundSlam : Ability
         {
             IDamageable damageable = GetTarget(collider.transform);
             if (damageable is BaseEnemy enemy)
-                PlayerCombat.DamageEnemy(damage, enemy, collider.transform.position + Vector3.up, Vector3.zero,
+                PlayerCombat.DamageEnemy(damage, 15f, enemy, collider.transform.position + Vector3.up, Vector3.zero,
                     Element.Ground, hitEffect: false);
         }
     }

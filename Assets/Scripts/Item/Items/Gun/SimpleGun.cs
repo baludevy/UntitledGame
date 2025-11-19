@@ -1,10 +1,13 @@
+using System.Collections;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class SimpleGun : Gun
 {
     [SerializeField] private LineRenderer shotLine;
     [SerializeField] private Transform muzzle;
-    [SerializeField] private float shotDuration = 0.05f;
+
+    private float shotDuration;
 
     private float shotTimer;
 
@@ -22,7 +25,7 @@ public class SimpleGun : Gun
         if (Input.GetMouseButtonDown(0) && GunController.Instance.useTimer <= 0)
         {
             GunController.Instance.AddRecoil(data.recoilAmount);
-            AudioManager.Play(data.shootAudio, Vector3.zero, 0.9f, 1.1f, 0.3f, false);
+            AudioManager.Play(data.shootAudio, Vector3.zero, 0.9f, 1.1f, 1f, false);
             Shoot();
             GunController.Instance.useTimer = data.cooldown;
         }
@@ -39,18 +42,24 @@ public class SimpleGun : Gun
             {
                 if (hit.collider.TryGetComponent(out BaseEnemy enemy))
                 {
-                    PlayerCombat.DamageEnemy(data.damage, enemy, hit.point, hit.normal, toolType: ToolType.Neutral);
+                    PlayerCombat.DamageEnemy(data.damage, data.knockbackAmount, enemy, hit.point, hit.normal,
+                        toolType: ToolType.Neutral);
                 }
 
                 endPoint = hit.point;
             }
         }
 
-
         shotLine.SetPosition(0, muzzle.position);
         shotLine.SetPosition(1, endPoint);
         shotLine.enabled = true;
-        shotTimer = shotDuration;
+        StartCoroutine(DisableShotLineNextFrame());
+    }
+
+    private IEnumerator DisableShotLineNextFrame()
+    {
+        yield return null;
+        shotLine.enabled = false;
     }
 
     public override void UpdateGun()

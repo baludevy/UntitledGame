@@ -71,7 +71,7 @@ public class MeleeTool : Tool
                 PlayerCombat.DamageMineable(data.damage, crit, mineable, hit.point, hit.normal, data.type);
             else if (damageable is BaseEnemy enemy)
             {
-                PlayerCombat.DamageEnemy(data.damage, enemy, hit.point, hit.normal, toolType: data.type);
+                PlayerCombat.DamageEnemy(data.damage, 20f, enemy, hit.point, hit.normal, toolType: data.type);
             }
         }
     }

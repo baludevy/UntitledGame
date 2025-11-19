@@ -16,7 +16,7 @@ public class PlayerCombat : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public static void DamageEnemy(float baseDamage, BaseEnemy enemy, Vector3 hitPoint,
+    public static void DamageEnemy(float baseDamage, float knockbackForce, BaseEnemy enemy, Vector3 hitPoint,
         Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true,
         ToolType toolType = ToolType.Neutral)
     {
@@ -37,7 +37,7 @@ public class PlayerCombat : MonoBehaviour
         if (enemyRb != null)
         {
             Vector3 dir = (enemy.transform.position - PlayerCamera.Instance.transform.position).normalized;
-            enemy.ApplyKnockback(dir, 20f);
+            enemy.ApplyKnockback(dir, knockbackForce);
         }
 
         enemy.TakeDamage(damage);
