@@ -205,10 +205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906042ca51554f598ea3b44090a747a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: b694520551b463e42a36e2ed739d2ac0, type: 2}
+  weaponAnimator: {fileID: 0}
   shotLine: {fileID: 110366581742606817}
   muzzle: {fileID: 8712287703547956711}
-  shotDuration: 0.02
+  data: {fileID: 11400000, guid: 087a5f80285ac534d88f1b6b012b7561, type: 2}
 --- !u!1001 &4628602852852447645
 PrefabInstance:
   m_ObjectHideFlags: 0
