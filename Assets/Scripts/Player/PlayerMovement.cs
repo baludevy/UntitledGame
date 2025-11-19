@@ -72,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
             Destroy(gameObject);
 
         startSpeed = speed;
+        
+        
     }
 
     private void Start()
@@ -365,7 +367,7 @@ public class PlayerMovement : MonoBehaviour
         OnPlayerContact();
         int layer = other.gameObject.layer;
         Vector3 normal = other.contacts[0].normal;
-        if (IsFloor(normal)) OnPlayerLanded();
+        if (IsFloor(normal) || other.collider.CompareTag("Enemy")) OnPlayerLanded();
         if (whatIsGround != (whatIsGround | (1 << layer))) return;
         if (IsFloor(normal) && PlayerCamera.Instance != null)
             PlayerCamera.Instance.BobOnce(new Vector3(0f, fallSpeed, 0f));
