@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    [Header("HUD")]
-    [Header("Stats")]
-    [SerializeField]
+    [Header("HUD")] [Header("Stats")] [SerializeField]
     private TMP_Text staminaText;
 
     [SerializeField] private Image staminaBar;
@@ -16,10 +14,12 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
 
-    [Header("Inventory")]
-    [SerializeField] public CanvasGroup inventoryHolder;
+    [Header("Inventory")] [SerializeField] public CanvasGroup inventoryHolder;
     public Transform inventorySlotsHolder;
     [NonSerialized] public List<InventorySlot> inventorySlots;
+
+    [Header("Weapon stuff")] [SerializeField]
+    private Image weaponIcon;
 
     private PlayerStatistics statistics;
 
@@ -66,6 +66,11 @@ public class PlayerUIManager : MonoBehaviour
 
         healthText.text = $"{health:F0}/{maxHealth:F0}";
         healthBar.fillAmount = health / maxHealth;
+    }
+
+    public void SetCurrentWeaponIcon(Sprite sprite)
+    {
+        weaponIcon.sprite = sprite;
     }
 
     public void SetInventoryState(bool state)

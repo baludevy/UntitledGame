@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class WeaponController : MonoBehaviour
 {
-    public Weapon currentGun;
+    public Weapon currentWeapon;
     public float useTimer;
 
     [SerializeField] private float recoilReturnSpeed = 10f;
@@ -23,11 +24,11 @@ public class WeaponController : MonoBehaviour
         if (useTimer > 0)
             useTimer -= Time.deltaTime;
 
-        if (!PlayerInventory.Instance.inventoryOpen && currentGun != null)
-            currentGun.HandleInput();
+        if (!PlayerInventory.Instance.inventoryOpen && currentWeapon != null)
+            currentWeapon.HandleInput();
 
-        if (currentGun != null)
-            currentGun.UpdateWeapon();
+        if (currentWeapon != null)
+            currentWeapon.UpdateWeapon();
 
         UpdateRecoil();
     }
@@ -45,8 +46,8 @@ public class WeaponController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(recoilRotation);
     }
 
-    public void SetGun(Weapon gun)
+    public void SetGun(Weapon weapon)
     {
-        currentGun = gun;
+        currentWeapon = weapon;
     }
 }

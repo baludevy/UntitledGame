@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class HeldWeaponController : MonoBehaviour
 {
     public Transform heldItemHolder;
-    private GameObject currentItemObject;
-    private ItemInstance lastItem;
+    private GameObject currentWeaponObject;
+    private WeaponData lastWeapon;
 
     private Animator itemRootAnimator;
 
@@ -23,37 +24,41 @@ public class HeldWeaponController : MonoBehaviour
 
     private void ClearHeldItem()
     {
-        if (currentItemObject != null)
+        if (currentWeaponObject != null)
         {
-            Destroy(currentItemObject);
-            currentItemObject = null;
-            lastItem = null;
+            Destroy(currentWeaponObject);
+            currentWeaponObject = null;
+            lastWeapon = null;
         }
     }
 
-    public void UpdateHeldItem(ItemInstance item)
+    public void UpdateHeldItem(WeaponData weapon)
     {
-        if (item == null)
+        if (weapon == null)
         {
-            lastItem = null;
+            lastWeapon = null;
             ClearHeldItem();
             return;
         }
 
-        if (lastItem == item) return;
+        if (lastWeapon == weapon) return;
 
-        if (currentItemObject != null)
-            Destroy(currentItemObject);
+        if (currentWeaponObject != null)
+            Destroy(currentWeaponObject);
 
-        lastItem = item;
+        lastWeapon = weapon;
 
-        if (item.data.heldPrefab != null && heldItemHolder.childCount > 0)
+        if (weapon.prefab != null && heldItemHolder.childCount > 0)
         {
             itemRootAnimator.SetTrigger("Equip");
-            currentItemObject = Instantiate(item.data.heldPrefab, itemRootAnimator.transform);
+            currentWeaponObject = Instantiate(weapon.prefab, itemRootAnimator.transform);
 
-            foreach (Transform child in currentItemObject.transform)
+            foreach (Transform child in currentWeaponObject.transform)
                 child.gameObject.layer = LayerMask.NameToLayer("HeldItem");
+
+            WeaponController.Instance.SetGun(currentWeaponObject.GetComponent<Weapon>());
+
+            PlayerUIManager.Instance.SetCurrentWeaponIcon(weapon.icon);
         }
     }
 }
