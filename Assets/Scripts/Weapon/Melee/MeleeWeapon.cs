@@ -60,7 +60,7 @@ public class MeleeWeapon : Weapon
         checkAfterFrame = true;
     }
 
-    protected virtual void Use()
+    private void Use()
     {
         if (Physics.Raycast(PlayerCamera.GetRay(), out RaycastHit hit, 5f))
         {
