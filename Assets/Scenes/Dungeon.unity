@@ -2225,7 +2225,7 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 8814167005587942564, guid: 4a4794d003405b44c8f3a2d61f515f26, type: 3}
   - {fileID: 8814167005587942564, guid: 353552fa879dc6648b8ff374deb7e0fa, type: 3}
-  enemyCount: 1
+  enemyCount: 5
   spacing: 1
 --- !u!4 &340732673
 Transform:
@@ -17777,10 +17777,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3665d6a6bec54d199e4aa637a3b84ad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 11400000, guid: 56a96512ed6f8e64aa7f7bfd98402bb1, type: 2}
-  - {fileID: 11400000, guid: 4ba8945eece7160489d3dc32efe3aa8e, type: 2}
+  startingWeapons:
   - {fileID: 11400000, guid: 087a5f80285ac534d88f1b6b012b7561, type: 2}
+  - {fileID: 11400000, guid: 4ba8945eece7160489d3dc32efe3aa8e, type: 2}
 --- !u!4 &9198728855431493963
 Transform:
   m_ObjectHideFlags: 0

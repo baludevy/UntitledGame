@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Sword : MeleeWeapon
 {
-    protected override void Use()
+    protected void Use()
     {
         Vector3 origin = PlayerCamera.Instance.transform.position;
         Vector3 direction = PlayerCamera.Instance.transform.forward;

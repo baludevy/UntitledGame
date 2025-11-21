@@ -6,18 +6,15 @@ public class HeldWeaponController : MonoBehaviour
 {
     public Transform heldItemHolder;
     private GameObject currentWeaponObject;
-    private WeaponData lastWeapon;
-
+    private WeaponInstance lastWeapon;
     private Animator itemRootAnimator;
 
     public static HeldWeaponController Instance;
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
 
         itemRootAnimator = transform.GetChild(0).GetComponent<Animator>();
     }
@@ -32,7 +29,7 @@ public class HeldWeaponController : MonoBehaviour
         }
     }
 
-    public void UpdateHeldItem(WeaponData weapon)
+    public void UpdateHeldItem(WeaponInstance weapon)
     {
         if (weapon == null)
         {
@@ -43,22 +40,21 @@ public class HeldWeaponController : MonoBehaviour
 
         if (lastWeapon == weapon) return;
 
-        if (currentWeaponObject != null)
-            Destroy(currentWeaponObject);
+        if (currentWeaponObject != null) Destroy(currentWeaponObject);
 
         lastWeapon = weapon;
 
-        if (weapon.prefab != null && heldItemHolder.childCount > 0)
+        if (weapon.data.prefab != null)
         {
-            itemRootAnimator.SetTrigger("Equip");
-            currentWeaponObject = Instantiate(weapon.prefab, itemRootAnimator.transform);
+            currentWeaponObject = Instantiate(weapon.data.prefab, heldItemHolder);
 
-            foreach (Transform child in currentWeaponObject.transform)
-                child.gameObject.layer = LayerMask.NameToLayer("HeldItem");
-
-            WeaponController.Instance.SetGun(currentWeaponObject.GetComponent<Weapon>());
-
-            PlayerUIManager.Instance.SetCurrentWeaponIcon(weapon.icon);
+            if (currentWeaponObject.TryGetComponent(out Weapon weaponScript))
+            {
+                weaponScript.SetInstance(weapon);
+                WeaponController.Instance.SetGun(weaponScript);
+            }
+            
+            PlayerUIManager.Instance.SetCurrentWeaponIcon(weapon.data.icon);
         }
     }
 }

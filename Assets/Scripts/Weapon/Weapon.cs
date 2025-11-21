@@ -1,9 +1,14 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public abstract class Weapon : MonoBehaviour
 {
-    public Animator weaponAnimator;
+    protected WeaponInstance instance;
+    [SerializeField] protected Animator weaponAnimator;
+
+    public void SetInstance(WeaponInstance inst)
+    {
+        instance = inst;
+    }
 
     public abstract void HandleInput();
     public abstract void UpdateWeapon();
