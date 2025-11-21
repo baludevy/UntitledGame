@@ -11,15 +11,9 @@ public class WeaponInventory : MonoBehaviour
     {
         foreach (WeaponData weaponData in startingWeapons)
         {
-            WeaponInstance weapon = weaponData is GunData gunData
-                ? new GunInstance(gunData)
-                : new WeaponInstance(weaponData);
-            
-
-            
-            weapons.Add(weapon);
+            AddWeapon(weaponData);
         }
-
+        
         if (weapons.Count > 0)
         {
             currentWeaponIndex = 0;
@@ -44,5 +38,16 @@ public class WeaponInventory : MonoBehaviour
     {
         if (index >= 0 && index < weapons.Count)
             HeldWeaponController.Instance.UpdateHeldItem(weapons[index]);
+    }
+
+    public void AddWeapon(WeaponData weaponData)
+    {
+        WeaponInstance weapon = weaponData is GunData gunData
+            ? new GunInstance(gunData)
+            : new WeaponInstance(weaponData);
+
+        weapons.Add(weapon);
+        
+        PlayerUIManager.Instance.AddWeaponToUI(weapon);
     }
 }

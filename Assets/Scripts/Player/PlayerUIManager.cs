@@ -10,7 +10,6 @@ public class PlayerUIManager : MonoBehaviour
     private TMP_Text staminaText;
 
     [SerializeField] private Image staminaBar;
-
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image healthBar;
 
@@ -19,18 +18,20 @@ public class PlayerUIManager : MonoBehaviour
     [NonSerialized] public List<InventorySlot> inventorySlots;
 
     [Header("Weapon stuff")] [SerializeField]
-    private Image weaponIcon;
+    private Transform weaponListHolder;
 
+    [SerializeField] private GameObject weaponListItemPrefab;
+
+    private List<WeaponListItem> weaponListItems = new List<WeaponListItem>();
+    private WeaponInstance currentWeaponInstance;
     private PlayerStatistics statistics;
 
     public static PlayerUIManager Instance;
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
 
         inventorySlots = new List<InventorySlot>();
 
@@ -40,10 +41,8 @@ public class PlayerUIManager : MonoBehaviour
             for (int j = 0; j < row.childCount; j++)
             {
                 InventorySlot slot = row.GetChild(j).GetComponent<InventorySlot>();
-
                 slot.row = i;
                 slot.col = j;
-
                 inventorySlots.Add(slot);
             }
         }
@@ -51,9 +50,7 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (statistics == null)
-            statistics = PlayerStatistics.Instance;
-
+        if (statistics == null) statistics = PlayerStatistics.Instance;
         UpdateHealth();
     }
 
@@ -68,9 +65,31 @@ public class PlayerUIManager : MonoBehaviour
         healthBar.fillAmount = health / maxHealth;
     }
 
-    public void SetCurrentWeaponIcon(Sprite sprite)
+    public void AddWeaponToUI(WeaponInstance instance)
     {
-        weaponIcon.sprite = sprite;
+        GameObject createdItem = Instantiate(weaponListItemPrefab, weaponListHolder);
+        WeaponListItem item = createdItem.GetComponent<WeaponListItem>();
+
+        bool isFirst = weaponListItems.Count == 0;
+
+        item.Initialize(isFirst, instance.data.icon, instance);
+
+        weaponListItems.Add(item);
+
+        if (isFirst)
+            currentWeaponInstance = instance;
+    }
+
+
+    public void SetCurrentWeapon(WeaponInstance instance)
+    {
+        currentWeaponInstance = instance;
+
+        for (int i = 0; i < weaponListItems.Count; i++)
+        {
+            bool isActive = weaponListItems[i].Matches(instance);
+            weaponListItems[i].SetState(isActive);
+        }
     }
 
     public void SetInventoryState(bool state)

@@ -3,9 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Weapons/GunData")]
 public class GunData : WeaponData
 {
-    public int magSize;
-    public int startingMags;
+    public int magSize = 10;
+    public int startingMags = 1;
+    public float reloadTime = 1f;
     public float knockbackAmount;
-    public float recoilAmount;
+    public float recoilAmount = 30;
     public AudioClip shootAudio;
 }
