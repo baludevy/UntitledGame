@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SimpleGun : Weapon
@@ -33,7 +34,11 @@ public class SimpleGun : Weapon
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            StartCoroutine(Reload());
+            int needed = gun.data.magSize - gun.currentAmmo;
+            if (needed > 0 && gun.currentMagCount > 0)
+            {
+                StartCoroutine(Reload());
+            }
         }
     }
 
@@ -79,10 +84,10 @@ public class SimpleGun : Weapon
     }
 
 
-    private System.Collections.IEnumerator Reload()
+    private IEnumerator Reload()
     {
         reloading = true;
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(gun.data.reloadTime);
 
         int needed = gun.data.magSize - gun.currentAmmo;
         if (gun.currentMagCount > 0 && needed > 0)

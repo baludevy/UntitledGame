@@ -46,7 +46,8 @@ public class HeldWeaponController : MonoBehaviour
 
         if (weapon.data.prefab != null)
         {
-            currentWeaponObject = Instantiate(weapon.data.prefab, heldItemHolder);
+            itemRootAnimator.SetTrigger("Equip");
+            currentWeaponObject = Instantiate(weapon.data.prefab, heldItemHolder.transform.GetChild(0));
 
             if (currentWeaponObject.TryGetComponent(out Weapon weaponScript))
             {
@@ -54,7 +55,7 @@ public class HeldWeaponController : MonoBehaviour
                 WeaponController.Instance.SetGun(weaponScript);
             }
             
-            PlayerUIManager.Instance.SetCurrentWeaponIcon(weapon.data.icon);
+            PlayerUIManager.Instance.SetCurrentWeapon(weapon);
         }
     }
 }
