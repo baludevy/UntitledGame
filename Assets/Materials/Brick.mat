@@ -42,7 +42,7 @@ Material:
     - _AlbedoMap:
         m_Texture: {fileID: 2800000, guid: 1a9f0a5da3201594db7b1bffea0c19f9, type: 3}
         m_Scale: {x: 0.125, y: 0.125}
-        m_Offset: {x: -0.25, y: 0}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 3636c27b3140ac14aa86b3cf4328e8a3, type: 3}
         m_Scale: {x: 0.5, y: 0.5}

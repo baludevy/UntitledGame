@@ -20,7 +20,7 @@ public class SimpleGun : Weapon
         if (gun == null) gun = (GunInstance)instance;
         if (reloading) return;
 
-        if (Input.GetMouseButtonDown(0) && WeaponController.Instance.useTimer <= 0)
+        if (((Input.GetMouseButton(0) && gun.data.automatic) || Input.GetMouseButtonDown(0)) && WeaponController.Instance.useTimer <= 0)
         {
             if (gun.currentAmmo > 0)
             {
@@ -35,7 +35,7 @@ public class SimpleGun : Weapon
         if (Input.GetKeyDown(KeyCode.R))
         {
             int needed = gun.data.magSize - gun.currentAmmo;
-            if (needed > 0 && gun.currentMagCount > 0)
+            if (needed > 0 && gun.totalReserveAmmo > 0)
             {
                 StartCoroutine(Reload());
             }
@@ -86,15 +86,19 @@ public class SimpleGun : Weapon
 
     private IEnumerator Reload()
     {
+        if (reloading || gun.currentAmmo == gun.data.magSize || gun.totalReserveAmmo <= 0)
+        {
+            yield break;
+        }
+
         reloading = true;
         yield return new WaitForSeconds(gun.data.reloadTime);
 
         int needed = gun.data.magSize - gun.currentAmmo;
-        if (gun.currentMagCount > 0 && needed > 0)
-        {
-            gun.currentMagCount--;
-            gun.currentAmmo = gun.data.magSize;
-        }
+        int bulletsToTransfer = Mathf.Min(needed, gun.totalReserveAmmo);
+
+        gun.currentAmmo += bulletsToTransfer;
+        gun.totalReserveAmmo -= bulletsToTransfer;
 
         reloading = false;
     }
