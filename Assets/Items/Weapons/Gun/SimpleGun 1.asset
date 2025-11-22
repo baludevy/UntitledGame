@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbdb422a865347cf96a3245821a148a5, type: 3}
-  m_Name: SimpleGun
+  m_Name: SimpleGun 1
   m_EditorClassIdentifier: 
-  damage: 15
-  cooldown: 0.2
+  damage: 7
+  cooldown: 0.1
   prefab: {fileID: 6499007990128292854, guid: 034fdfe12a5bfb14e9f45d0ac8e519c9, type: 3}
   icon: {fileID: 0}
-  magSize: 6
-  startingMags: 15
-  reloadTime: 0.5
-  automatic: 0
+  magSize: 20
+  startingMags: 50
+  reloadTime: 0.7
+  automatic: 1
   knockbackAmount: 20
   recoilAmount: 30
   shootAudio: {fileID: 8300000, guid: 853489e0c8fbfce4a809a10932e47e38, type: 3}

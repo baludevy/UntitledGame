@@ -1,13 +1,19 @@
+using UnityEngine;
+
 public class GunInstance : WeaponInstance
 {
     public int currentAmmo;
-    public int currentMagCount;
+    public int totalReserveAmmo; 
 
     public new GunData data => base.data as GunData;
 
     public GunInstance(GunData gunData) : base(gunData)
     {
         currentAmmo = gunData.magSize;
-        currentMagCount = gunData.startingMags - 1; // subtract 1 to account for the already loaded mag
+        
+        int spareMags = Mathf.Max(0, gunData.startingMags - 1); 
+        totalReserveAmmo = spareMags * gunData.magSize;
     }
+
+    public int CurrentTotalAmmo => currentAmmo + totalReserveAmmo;
 }
