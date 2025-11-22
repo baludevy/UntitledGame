@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbdb422a865347cf96a3245821a148a5, type: 3}
   m_Name: SimpleGun
   m_EditorClassIdentifier: 
-  damage: 15
-  cooldown: 0.2
+  damage: 30
+  cooldown: 0.15
   prefab: {fileID: 6499007990128292854, guid: 034fdfe12a5bfb14e9f45d0ac8e519c9, type: 3}
-  icon: {fileID: 0}
-  magSize: 6
+  icon: {fileID: 21300000, guid: 80c9070846ecbde43a9b2f2325b933a6, type: 3}
+  magSize: 10
   startingMags: 15
   reloadTime: 0.5
   automatic: 0
