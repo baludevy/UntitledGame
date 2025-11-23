@@ -9,6 +9,7 @@ public class GunData : WeaponData
     public bool automatic;
     public float knockbackAmount;
     public float recoilAmount = 30;
+    public AudioClip reloadAudio;
     public AudioClip shootAudio;
 
     public int TotalAmmo => magSize * startingMags;

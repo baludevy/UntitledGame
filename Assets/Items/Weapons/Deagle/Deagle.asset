@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbdb422a865347cf96a3245821a148a5, type: 3}
-  m_Name: SimpleGun
+  m_Name: Deagle
   m_EditorClassIdentifier: 
   damage: 30
   cooldown: 0.15
@@ -22,4 +22,5 @@ MonoBehaviour:
   automatic: 0
   knockbackAmount: 20
   recoilAmount: 30
+  reloadAudio: {fileID: 8300000, guid: a01fae5d88f31f343a66875601f78cd4, type: 3}
   shootAudio: {fileID: 8300000, guid: 853489e0c8fbfce4a809a10932e47e38, type: 3}

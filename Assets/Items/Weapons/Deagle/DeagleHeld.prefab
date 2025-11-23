@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 6937003651539921330}
   - component: {fileID: -4596844555117100471}
   m_Layer: 7
-  m_Name: GunHeld
+  m_Name: DeagleHeld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906042ca51554f598ea3b44090a747a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponAnimator: {fileID: 0}
+  weaponAnimator: {fileID: 6937003651539921330}
   shotLine: {fileID: 110366581742606817}
   muzzle: {fileID: 8712287703547956711}
 --- !u!1001 &6172419348939800401

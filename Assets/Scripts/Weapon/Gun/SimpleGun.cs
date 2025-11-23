@@ -92,6 +92,9 @@ public class SimpleGun : Weapon
         }
 
         reloading = true;
+        WeaponController.Instance.SpinWeapon(gun.data.reloadTime);
+        AudioManager.Play(gun.data.reloadAudio, Vector3.zero, 0.9f, 1.1f, 1f, false);
+        
         yield return new WaitForSeconds(gun.data.reloadTime);
 
         int needed = gun.data.magSize - gun.currentAmmo;

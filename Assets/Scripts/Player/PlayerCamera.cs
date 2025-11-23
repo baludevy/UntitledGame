@@ -7,7 +7,7 @@ public class PlayerCamera : MonoBehaviour
     public Transform heldItemHolder;
 
     public Vector3 offset;
-    
+
     public float bobSpeed = 15f;
     public float bobMultiplier = 0.5f;
 
@@ -24,6 +24,11 @@ public class PlayerCamera : MonoBehaviour
     private Vector3 speedBob;
     private Vector3 startPos;
     private Rigidbody rb;
+
+    [SerializeField] private float cameraTiltAmount = 5f;
+    [SerializeField] private float cameraTiltSmooth = 8f;
+    private float cameraTilt;
+
 
     private Vector2 smoothedInput;
     private float deltaTime;
@@ -56,6 +61,8 @@ public class PlayerCamera : MonoBehaviour
 
         if (PlayerMovement.Instance.GetCanLook())
             UpdateWeaponSway();
+
+        UpdateCameraTilt();
 
         Vector3 finalPos = startPos + bobOffset;
         heldItemHolder.localPosition = Vector3.Lerp(heldItemHolder.localPosition, finalPos, deltaTime * 15f);
@@ -111,6 +118,17 @@ public class PlayerCamera : MonoBehaviour
             deltaTime * swaySmooth
         );
     }
+
+    private void UpdateCameraTilt()
+    {
+        Vector2 move = PlayerMovement.Instance.GetInputDirection();
+        float targetTilt = -move.x * cameraTiltAmount;
+        cameraTilt = Mathf.Lerp(cameraTilt, targetTilt, deltaTime * cameraTiltSmooth);
+
+        Vector3 e = cam.transform.localEulerAngles;
+        cam.transform.localRotation = Quaternion.Euler(e.x, e.y, cameraTilt);
+    }
+
 
     private Vector3 ClampVector(Vector3 vec, float min, float max)
     {
