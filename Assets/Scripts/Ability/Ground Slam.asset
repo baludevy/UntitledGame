@@ -17,7 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e5c5c776334925408d4fafba87c18f9, type: 2}
   minDamage: 20
   maxDamage: 50
-  slamRadius: 10
+  slamRadius: 15
   force: 20
   slowDuration: 0.4
   slowMultiplier: 0.2

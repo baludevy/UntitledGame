@@ -54,7 +54,7 @@ public class GroundSlam : Ability
 
         //slow down the player for some time
         player.ChangeSpeed(player.GetSpeed() * slowMultiplier, slowDuration);
-        
+
         Instantiate(groundSlamFX, player.transform.position, player.transform.rotation);
 
         SlamEnemies(player.transform.position);
@@ -73,13 +73,13 @@ public class GroundSlam : Ability
 
         float fallHeight = startHeight - currentHeight;
         float damage = Mathf.Lerp(minDamage, maxDamage, Mathf.InverseLerp(0f, maxHeight, fallHeight));
-            
+
         foreach (Collider collider in colliders)
         {
             IDamageable damageable = GetTarget(collider.transform);
             if (damageable is BaseEnemy enemy)
-                PlayerCombat.DamageEnemy(damage, 15f, enemy, collider.transform.position + Vector3.up, Vector3.zero,
-                    Element.Ground, hitEffect: false);
+                PlayerCombat.DamageEnemy(damage, force, enemy, collider.transform.position + Vector3.up, Vector3.zero,
+                    Element.Ground, hitEffect: false, flingUp: true);
         }
     }
 

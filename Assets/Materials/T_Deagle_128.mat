@@ -15,10 +15,13 @@ Material:
   - _MK_ALBEDO_MAP
   - _MK_ARTISTIC_ANIMATION_STUTTER
   - _MK_ENVIRONMENT_REFLECTIONS_AMBIENT
+  - _MK_LIGHT_CEL
   - _MK_OUTLINE_HULL_CLIP
+  - _MK_WRAPPED_DIFFUSE
   m_InvalidKeywords:
   - _MK_RECEIVE_SHADOWS
   - _RECEIVESHADOWS_ON
+  - _WRAPPEDLIGHTING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -159,7 +162,7 @@ Material:
     - _Contrast: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DiffuseSmoothness: 0
+    - _DiffuseSmoothness: 1
     - _DiffuseThresholdOffset: 0.25
     - _Dissolve: 0
     - _DissolveAmount: 0.5
@@ -182,10 +185,10 @@ Material:
     - _IridescenceSize: 1
     - _IridescenceSmoothness: 0.5
     - _IridescenceThresholdOffset: 0
-    - _Light: 0
-    - _LightBands: 4
-    - _LightBandsScale: 0.5
-    - _LightThreshold: 1
+    - _Light: 1
+    - _LightBands: 3
+    - _LightBandsScale: 0
+    - _LightThreshold: 0
     - _Metallic: 0
     - _Mode: 0
     - _NormalMapIntensity: 1
@@ -231,7 +234,7 @@ Material:
     - _VertexAnimation: 0
     - _VertexAnimationIntensity: 0.05
     - _VertexAnimationStutter: 0
-    - _WrappedLighting: 0
+    - _WrappedLighting: 1
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:

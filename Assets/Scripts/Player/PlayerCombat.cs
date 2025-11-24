@@ -17,7 +17,7 @@ public class PlayerCombat : MonoBehaviour
     }
 
     public static void DamageEnemy(float baseDamage, float knockbackForce, BaseEnemy enemy, Vector3 hitPoint,
-        Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true)
+        Vector3 hitNormal, Element element = Element.Normal, bool hitEffect = true, bool flingUp = false)
     {
         TypeEffectiveness eff = Combat.CalcEffectiveness(element, enemy.Element);
 
@@ -32,6 +32,8 @@ public class PlayerCombat : MonoBehaviour
         {
             Vector3 dir = (enemy.transform.position - PlayerCamera.Instance.transform.position).normalized;
             enemy.ApplyKnockback(dir, knockbackForce);
+            if(flingUp)
+                enemy.ApplyKnockback(Vector3.up, knockbackForce);
         }
 
         enemy.TakeDamage(damage);

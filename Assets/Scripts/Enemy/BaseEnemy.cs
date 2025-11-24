@@ -82,10 +82,10 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
     public void ApplyKnockback(Vector3 direction, float force)
     {
-        direction.y = 0;
         rb.AddForce(direction.normalized * force, ForceMode.VelocityChange);
         knockbackTimer = knockbackDuration;
     }
+    
 
     public void TakeDamage(float damage, bool doFlash = true)
     {
