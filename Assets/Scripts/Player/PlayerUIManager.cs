@@ -32,6 +32,7 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private Transform magHolder;
     [SerializeField] private Sprite bulletSprite;
     [SerializeField] private Sprite emptySprite;
+    [SerializeField] private GameObject infiniteIcon;
 
     public static PlayerUIManager Instance;
 
@@ -110,12 +111,13 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
 
-    public void SetupAmmoUI(GunInstance gun)
+    private void SetupAmmoUI(GunInstance gun)
     {
         for (int i = 0; i < magHolder.childCount; i++)
             Destroy(magHolder.GetChild(i).gameObject);
 
         magIcons.Clear();
+        infiniteIcon.SetActive(gun.hasInfiniteMags);
 
         for (int i = 0; i < gun.data.magSize; i++)
         {
@@ -129,16 +131,18 @@ public class PlayerUIManager : MonoBehaviour
             magIcons.Add(img);
         }
 
+
         UpdateAmmoUI(gun);
     }
 
     public void UpdateAmmoUI(GunInstance gun)
     {
-        totalAmmoText.text = $"{gun.CurrentTotalAmmo}/{gun.data.TotalAmmo}";
+        totalAmmoText.text = gun.hasInfiniteMags ? "" : $"{gun.CurrentTotalAmmo}/{gun.data.TotalAmmo}";
 
         for (int i = 0; i < magIcons.Count; i++)
             magIcons[i].sprite = i < gun.currentAmmo ? bulletSprite : emptySprite;
     }
+
 
     public void SetInventoryState(bool state)
     {

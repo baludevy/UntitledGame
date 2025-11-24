@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 1
   opposingAbilities: []
-  force: 35
+  force: 50
   duration: 0.1
   damage: 5
   radius: 3
   recoilForce: 15
-  rayDistance: 5
-  rayThickness: 3
+  rayDistance: 100
+  rayThickness: 100

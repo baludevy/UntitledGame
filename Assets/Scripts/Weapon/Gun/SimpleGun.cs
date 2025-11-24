@@ -20,7 +20,8 @@ public class SimpleGun : Weapon
         if (gun == null) gun = (GunInstance)instance;
         if (reloading) return;
 
-        if (((Input.GetMouseButton(0) && gun.data.automatic) || Input.GetMouseButtonDown(0)) && WeaponController.Instance.useTimer <= 0)
+        if (((Input.GetMouseButton(0) && gun.data.automatic) || Input.GetMouseButtonDown(0)) &&
+            WeaponController.Instance.useTimer <= 0)
         {
             if (gun.currentAmmo > 0)
             {
@@ -34,11 +35,7 @@ public class SimpleGun : Weapon
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            int needed = gun.data.magSize - gun.currentAmmo;
-            if (needed > 0 && gun.totalReserveAmmo > 0)
-            {
-                StartCoroutine(Reload());
-            }
+            StartCoroutine(Reload());
         }
     }
 
@@ -86,22 +83,21 @@ public class SimpleGun : Weapon
 
     private IEnumerator Reload()
     {
-        if (reloading || gun.currentAmmo == gun.data.magSize || gun.totalReserveAmmo <= 0)
-        {
+        if (reloading || gun.currentAmmo == gun.data.magSize || (!gun.hasInfiniteMags && gun.totalReserveAmmo <= 0))
             yield break;
-        }
 
         reloading = true;
         WeaponController.Instance.SpinWeapon(gun.data.reloadTime);
         AudioManager.Play(gun.data.reloadAudio, Vector3.zero, 0.9f, 1.1f, 1f, false);
-        
+
         yield return new WaitForSeconds(gun.data.reloadTime);
 
         int needed = gun.data.magSize - gun.currentAmmo;
-        int bulletsToTransfer = Mathf.Min(needed, gun.totalReserveAmmo);
+        int bulletsToTransfer = gun.hasInfiniteMags ? needed : Mathf.Min(needed, gun.totalReserveAmmo);
 
         gun.currentAmmo += bulletsToTransfer;
-        gun.totalReserveAmmo -= bulletsToTransfer;
+        if (!gun.hasInfiniteMags)
+            gun.totalReserveAmmo -= bulletsToTransfer;
 
         reloading = false;
     }

@@ -6,7 +6,7 @@ using EZCameraShake;
 public class Dash : Ability
 {
     public float force = 30f;
-    public float duration = 0.15f;
+    public float duration = 0.1f;
     public float damage;
     public float radius;
     public float recoilForce = 15f;
@@ -24,7 +24,7 @@ public class Dash : Ability
         CameraShaker.Instance?.ShakeOnce(2f, 2f, 0.05f, 0.3f);
         return true;
     }
-
+    
     private void PerformDash(Rigidbody rb)
     {
         bool playerGrounded = PlayerMovement.Instance.IsGrounded();
