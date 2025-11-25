@@ -29,7 +29,6 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float cameraTiltSmooth = 8f;
     private float cameraTilt;
 
-
     private Vector2 smoothedInput;
     private float deltaTime;
 
@@ -47,7 +46,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        DamageableInfo();
+        InteractHint();
     }
 
     private void LateUpdate()
@@ -139,36 +138,34 @@ public class PlayerCamera : MonoBehaviour
         );
     }
 
-    IDamageable current;
+    IInteractable current;
 
-    private void DamageableInfo()
+    private void InteractHint()
     {
-        if (current != null && current.Equals(null))
-            current = null;
-
         var origin = cam.transform.position;
         var direction = cam.transform.forward;
 
-        float radius = 0.5f;
-        float distance = 20f;
+        float radius = 0.2f;
+        float distance = 5f;
 
         if (Physics.SphereCast(origin, radius, direction, out var hit, distance))
         {
-            var damageable = hit.collider.GetComponent<IDamageable>();
+            var interactable = hit.collider.GetComponent<IInteractable>();
 
-            if (damageable != current)
+            if (interactable != null)
             {
-                if (current != null) current.HideCanvas();
-                if (damageable != null) damageable.ShowCanvas();
-                current = damageable;
+                Vector3 pos = hit.collider.transform.position + Vector3.up * 1.3f;
+                Quaternion rot = Quaternion.LookRotation(cam.transform.forward);
+
+                PrefabManager.Instance.SpawnInteractHint(pos, rot, interactable.InteractHint, "E");
             }
         }
         else
         {
-            if (current != null) current.HideCanvas();
-            current = null;
+            PrefabManager.Instance.HideInteractHint();
         }
     }
+
 
     public static Ray GetRay()
     {

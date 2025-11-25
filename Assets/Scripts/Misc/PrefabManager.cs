@@ -9,6 +9,7 @@ public class PrefabManager : MonoBehaviour
     public GameObject damageMarker;
     public GameObject textMarker;
     public GameObject audioPrefab;
+    public GameObject interactHint;
 
     private void Awake()
     {
@@ -26,10 +27,10 @@ public class PrefabManager : MonoBehaviour
     public void SpawnDamageMarker(Vector3 pos, Quaternion rot, float damage, Color color)
     {
         GameObject marker = ObjectPool.Instance.Get(damageMarker, pos, rot);
-        
+
         HitMarker markerComp = marker.GetComponent<HitMarker>();
         markerComp.ShowDamage(damage, color);
-        
+
         ObjectPool.Instance.Return(marker, damageMarker, 1.5f);
     }
 
@@ -51,10 +52,35 @@ public class PrefabManager : MonoBehaviour
     public void SpawnTextMarker(Vector3 pos, Quaternion rot, string text, Color color)
     {
         GameObject marker = ObjectPool.Instance.Get(textMarker, pos, rot);
-        
+
         HitMarker markerComp = marker.GetComponent<HitMarker>();
         markerComp.ShowText(text, color);
-        
+
         ObjectPool.Instance.Return(marker, textMarker, 1.5f);
+    }
+
+    [SerializeField] private GameObject activeInteractHint;
+
+    public void SpawnInteractHint(Vector3 position, Quaternion rotation, string hint, string key)
+    {
+        if (activeInteractHint == null)
+            activeInteractHint = ObjectPool.Instance.Get(interactHint, position, rotation);
+        else
+        {
+            activeInteractHint.SetActive(true);
+            activeInteractHint.transform.position = position;
+            activeInteractHint.transform.rotation = rotation;
+        }
+
+        InteractUI ui = activeInteractHint.GetComponent<InteractUI>();
+        ui.Initialize(hint, key);
+    }
+
+    public void HideInteractHint()
+    {
+        if (activeInteractHint == null) return;
+
+        InteractUI ui = activeInteractHint.GetComponent<InteractUI>();
+        ui.Hide();
     }
 }
