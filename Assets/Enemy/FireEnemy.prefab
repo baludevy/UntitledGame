@@ -449,7 +449,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 554f7c7f85e51f14b94c3197431428b7, type: 2}
   damageableInfo: {fileID: 702023198053833850}
   healthBar: {fileID: 1639121611172056535}
-  moveSpeed: 10
+  moveSpeed: 8
 --- !u!1 &9210609544065996950
 GameObject:
   m_ObjectHideFlags: 0

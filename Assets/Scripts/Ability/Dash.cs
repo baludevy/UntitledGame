@@ -17,92 +17,121 @@ public class Dash : Ability
 
     public override bool Activate()
     {
-        PlayerMovement player = PlayerMovement.Instance;
-        Rigidbody rb = player.GetRigidbody();
-        rb.velocity = Vector3.zero;
-        PerformDash(rb);
+        PlayerMovement playerMovement = PlayerMovement.Instance;
+        Rigidbody rigidbody = playerMovement.GetRigidbody();
+        rigidbody.velocity = Vector3.zero;
+        PerformDash(rigidbody);
         CameraShaker.Instance?.ShakeOnce(2f, 2f, 0.05f, 0.3f);
         return true;
     }
-    
-    private void PerformDash(Rigidbody rb)
-    {
-        bool playerGrounded = PlayerMovement.Instance.IsGrounded();
 
+    private void PerformDash(Rigidbody rigidbody)
+    {
+        PlayerMovement playerMovement = PlayerMovement.Instance;
+        bool playerGrounded = playerMovement.IsGrounded();
         dashing = !playerGrounded;
 
-        Vector2 movingDir = PlayerMovement.Instance.GetInputDirection();
-        Vector3 targetDir = PlayerCamera.Instance.transform.forward;
+        Vector2 inputDirection = playerMovement.GetInputDirection();
+        Transform cameraTransform = PlayerCamera.Instance.transform;
+        Vector3 targetDirection = GetDashDirection(inputDirection, cameraTransform, playerGrounded);
 
-        if (movingDir.x > 0)
+        targetDirection = NormalizeDashDirection(targetDirection);
+
+        float scaledForce = playerGrounded ? force * playerMovement.GetDrag() : force;
+        rigidbody.velocity = targetDirection * scaledForce;
+    }
+
+    private Vector3 GetDashDirection(Vector2 inputDirection, Transform cameraTransform, bool playerGrounded)
+    {
+        Vector3 direction = cameraTransform.forward;
+
+        if (inputDirection.x > 0)
         {
-            targetDir = PlayerCamera.Instance.transform.right;
-            if (!playerGrounded) targetDir += Vector3.up * 0.3f;
+            direction = cameraTransform.right;
         }
-        else if (movingDir.x < 0)
+        else if (inputDirection.x < 0)
         {
-            targetDir = -PlayerCamera.Instance.transform.right;
-            if (!playerGrounded) targetDir += Vector3.up * 0.3f;
+            direction = -cameraTransform.right;
         }
-        else if (movingDir.y < 0)
+        else if (inputDirection.y < 0)
         {
-            targetDir = -PlayerCamera.Instance.transform.forward;
+            direction = -cameraTransform.forward;
         }
 
-        targetDir.y = playerGrounded ? 0f : targetDir.y;
-        targetDir = targetDir.normalized;
-        float adjustedForce = playerGrounded ? force * PlayerMovement.Instance.GetDrag() : force;
-        Vector3 dashVelocity = targetDir * adjustedForce;
-        rb.velocity = dashVelocity;
+        direction.y = playerGrounded ? 0f : direction.y;
+        return direction.normalized;
+    }
+
+    private Vector3 NormalizeDashDirection(Vector3 direction)
+    {
+        Vector3 horizontal = new Vector3(direction.x, 0f, direction.z).normalized;
+        float vertical = Mathf.Clamp(direction.y, -1f, 1f);
+        Vector3 finalDirection = new Vector3(horizontal.x, vertical, horizontal.z).normalized;
+        return finalDirection;
     }
 
     public void OnContact()
     {
         if (!dashing) return;
 
-        PlayerMovement player = PlayerMovement.Instance;
-        Rigidbody rb = player.GetRigidbody();
-        Vector3 origin = PlayerCamera.Instance.transform.position;
-        Vector3 dir = PlayerCamera.Instance.transform.forward;
-        Vector3 camForward = dir;
+        PlayerMovement playerMovement = PlayerMovement.Instance;
+        Rigidbody rigidbody = playerMovement.GetRigidbody();
 
-        Vector3 point1 = origin - Vector3.up * 0.5f;
-        Vector3 point2 = origin + Vector3.up * 0.5f;
+        Transform cameraTransform = PlayerCamera.Instance.transform;
+        Vector3 origin = cameraTransform.position;
+        Vector3 forwardDirection = cameraTransform.forward;
 
-        RaycastHit hit;
-        if (Physics.CapsuleCast(point1, point2, rayThickness, dir, out hit, rayDistance))
+        Vector3 capsuleStart = origin - Vector3.up * 0.5f;
+        Vector3 capsuleEnd = origin + Vector3.up * 0.5f;
+
+        if (Physics.CapsuleCast(capsuleStart, capsuleEnd, rayThickness, forwardDirection, out RaycastHit hit,
+                rayDistance))
         {
-            Collider[] colliders = Physics.OverlapSphere(hit.point, radius);
-            bool hitEnemy = false;
-
-            foreach (Collider collider in colliders)
-            {
-                IDamageable damageable = GetTarget(collider.transform);
-                if (damageable is BaseEnemy enemy)
-                {
-                    PlayerCombat.DamageEnemy(damage, 15f, enemy, collider.transform.position + Vector3.up,
-                        Vector3.zero, Element.Wind, hitEffect: false);
-                    hitEnemy = true;
-                }
-            }
+            bool hitEnemy = ApplyAreaDamage(hit.point);
 
             if (hitEnemy)
             {
-                Vector3 recoilDir = -rb.velocity.normalized;
-                if (camForward.y < -0.3f) recoilDir = Vector3.up;
-                rb.velocity = recoilDir * recoilForce;
+                Vector3 recoilDirection = GetRecoilDirection(rigidbody.velocity, cameraTransform.right);
+                recoilDirection.y *= 1.3f;
+                rigidbody.velocity = recoilDirection * recoilForce;
             }
         }
 
         dashing = false;
     }
 
+    private bool ApplyAreaDamage(Vector3 hitPoint)
+    {
+        Collider[] colliders = Physics.OverlapSphere(hitPoint, radius);
+        bool hitEnemy = false;
+
+        foreach (Collider collider in colliders)
+        {
+            IDamageable damageable = GetTarget(collider.transform);
+            if (damageable is BaseEnemy enemy)
+            {
+                PlayerCombat.DamageEnemy(damage, 15f, enemy, collider.transform.position + Vector3.up,
+                    Vector3.zero, Element.Wind, hitEffect: false);
+                hitEnemy = true;
+            }
+        }
+
+        return hitEnemy;
+    }
+
+    private Vector3 GetRecoilDirection(Vector3 velocity, Vector3 forwardDirection)
+    {
+        Vector3 recoilDirection = -velocity.normalized;
+        if (forwardDirection.y < -0.3f) recoilDirection = Vector3.up;
+        return recoilDirection;
+    }
+
     private static IDamageable GetTarget(Transform target)
     {
         while (target != null)
         {
-            var m = target.GetComponent<IDamageable>();
-            if (m != null) return m;
+            IDamageable damageable = target.GetComponent<IDamageable>();
+            if (damageable != null) return damageable;
             target = target.parent;
         }
 

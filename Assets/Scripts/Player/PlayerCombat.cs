@@ -31,9 +31,13 @@ public class PlayerCombat : MonoBehaviour
         if (enemyRb != null)
         {
             Vector3 dir = (enemy.transform.position - PlayerCamera.Instance.transform.position).normalized;
-            enemy.ApplyKnockback(dir, knockbackForce);
-            if(flingUp)
+            if (flingUp)
+            {
                 enemy.ApplyKnockback(Vector3.up, knockbackForce);
+                knockbackForce *= 1.2f;
+            }
+
+            enemy.ApplyKnockback(dir, knockbackForce);
         }
 
         enemy.TakeDamage(damage);

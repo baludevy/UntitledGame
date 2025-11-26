@@ -9,15 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ad4a669487941f3befef638754dc620, type: 3}
-  m_Name: Dash
+  m_Script: {fileID: 11500000, guid: cb250b97e3b041efa17a04d703e3904a, type: 3}
+  m_Name: TestEnemy
   m_EditorClassIdentifier: 
-  cooldown: 1
-  opposingAbilities: []
-  force: 40
-  duration: 0.1
-  damage: 5
-  radius: 3
-  recoilForce: 20
-  rayDistance: 5
-  rayThickness: 0.5
+  enemyName: Test
+  description: test
+  maxHealth: 1000
+  element: 7

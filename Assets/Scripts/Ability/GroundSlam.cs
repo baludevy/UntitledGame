@@ -11,6 +11,8 @@ public class GroundSlam : Ability
     public float maxDamage = 100f;
     public float slamRadius = 25f;
     public float force = 25f;
+    public float minKnockbackForce = 15f;
+    public float maxKnockbackForce = 30f;
     public float slowDuration = 0.4f;
     public float slowMultiplier = 0.2f;
     public float minHeight = 10f;
@@ -67,18 +69,21 @@ public class GroundSlam : Ability
         PlayerMovement player = PlayerMovement.Instance;
 
         // make a flat box collider to check for collisions with surrounding enemies
-        Collider[] colliders = Physics.OverlapBox(pos, new Vector3(slamRadius / 2f, 4f, slamRadius / 2f));
+        Collider[] colliders = Physics.OverlapBox(pos, new Vector3(slamRadius, 2f, slamRadius));
 
         float currentHeight = GetHeight(player);
 
         float fallHeight = startHeight - currentHeight;
         float damage = Mathf.Lerp(minDamage, maxDamage, Mathf.InverseLerp(0f, maxHeight, fallHeight));
+        float knockbackForce = Mathf.Lerp(minKnockbackForce, maxKnockbackForce,
+            Mathf.InverseLerp(0f, maxHeight, fallHeight));
 
         foreach (Collider collider in colliders)
         {
             IDamageable damageable = GetTarget(collider.transform);
             if (damageable is BaseEnemy enemy)
-                PlayerCombat.DamageEnemy(damage, force, enemy, collider.transform.position + Vector3.up, Vector3.zero,
+                PlayerCombat.DamageEnemy(damage, knockbackForce, enemy, collider.transform.position + Vector3.up,
+                    Vector3.zero,
                     Element.Ground, hitEffect: false, flingUp: true);
         }
     }
