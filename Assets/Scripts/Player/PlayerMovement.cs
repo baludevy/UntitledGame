@@ -1,11 +1,12 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
-    
+
     [SerializeField] private float speed = 3000f;
     [SerializeField] private float jumpForce = 350f;
     [SerializeField] private float groundDrag = 3f;
@@ -28,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float slideForce = 400f;
 
     [SerializeField] private float slideCounterMovement = 0.2f;
-    [SerializeField] private Vector3 crouchScale = new (2f, 2.25f, 2f);
+    [SerializeField] private Vector3 crouchScale = new(2f, 2.25f, 2f);
     [SerializeField] private float slideCooldown = 0.2f;
     private Vector3 playerScale;
 
@@ -45,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform orientation;
     public Transform camTransform;
     public bool canLook = true;
+    [FormerlySerializedAs("movementLock")] public bool movementLocked;
 
     public float defaultFOV = 90f;
     public float sprintFOV = 100f;
@@ -72,8 +74,6 @@ public class PlayerMovement : MonoBehaviour
             Destroy(gameObject);
 
         startSpeed = speed;
-        
-        
     }
 
     private void Start()
@@ -96,7 +96,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Movement();
+        if (!movementLocked)
+            Movement();
     }
 
     #region input
@@ -198,7 +199,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.down * (Time.deltaTime * 3000f));
             return;
         }
-        
+
         if (sliding && grounded)
         {
             rb.AddForce(-normalVector * 300f, ForceMode.Acceleration); // ground stick
@@ -421,6 +422,12 @@ public class PlayerMovement : MonoBehaviour
     public void ChangeSpeed(float newSpeed) => speed = newSpeed;
 
     public void ResetSpeed() => speed = startSpeed;
+
+
+    public void SetMovementLocked(bool state)
+    {
+        movementLocked = state;
+    }
 
     public Vector2 GetInputDirection()
     {

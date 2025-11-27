@@ -14,6 +14,7 @@ public class Dash : Ability
     public float rayThickness = 0.5f;
 
     private bool dashing;
+    private float dashContactUnlockTime;
 
     public override bool Activate()
     {
@@ -29,16 +30,29 @@ public class Dash : Ability
     {
         PlayerMovement playerMovement = PlayerMovement.Instance;
         bool playerGrounded = playerMovement.IsGrounded();
-        dashing = !playerGrounded;
+
+        dashing = true;
+
+        float groundedForceScale = playerGrounded ? 1.5f : 1f;
+
+        dashContactUnlockTime = Time.time + duration;
+        playerMovement.SetMovementLocked(true);
 
         Vector2 inputDirection = playerMovement.GetInputDirection();
         Transform cameraTransform = PlayerCamera.Instance.transform;
         Vector3 targetDirection = GetDashDirection(inputDirection, cameraTransform, playerGrounded);
 
         targetDirection = NormalizeDashDirection(targetDirection);
+        rigidbody.velocity = targetDirection * (force * groundedForceScale);
 
-        float scaledForce = playerGrounded ? force * playerMovement.GetDrag() : force;
-        rigidbody.velocity = targetDirection * scaledForce;
+        PlayerMovement.Instance.StartCoroutine(DashEndRoutine());
+    }
+
+    private IEnumerator DashEndRoutine()
+    {
+        yield return new WaitForSeconds(duration * 2);
+        dashing = false;
+        PlayerMovement.Instance.SetMovementLocked(false);
     }
 
     private Vector3 GetDashDirection(Vector2 inputDirection, Transform cameraTransform, bool playerGrounded)
@@ -46,17 +60,13 @@ public class Dash : Ability
         Vector3 direction = cameraTransform.forward;
 
         if (inputDirection.x > 0)
-        {
             direction = cameraTransform.right;
-        }
         else if (inputDirection.x < 0)
-        {
             direction = -cameraTransform.right;
-        }
+        else if (inputDirection.y > 0)
+            direction = cameraTransform.forward;
         else if (inputDirection.y < 0)
-        {
             direction = -cameraTransform.forward;
-        }
 
         direction.y = playerGrounded ? 0f : direction.y;
         return direction.normalized;
@@ -92,12 +102,10 @@ public class Dash : Ability
             if (hitEnemy)
             {
                 Vector3 recoilDirection = GetRecoilDirection(rigidbody.velocity, cameraTransform.right);
-                recoilDirection.y *= 1.3f;
+                recoilDirection.y *= 1.2f;
                 rigidbody.velocity = recoilDirection * recoilForce;
             }
         }
-
-        dashing = false;
     }
 
     private bool ApplyAreaDamage(Vector3 hitPoint)
@@ -110,8 +118,8 @@ public class Dash : Ability
             IDamageable damageable = GetTarget(collider.transform);
             if (damageable is BaseEnemy enemy)
             {
-                PlayerCombat.DamageEnemy(damage, 15f, enemy, collider.transform.position + Vector3.up,
-                    Vector3.zero, Element.Wind, hitEffect: false);
+                PlayerCombat.DamageEnemy(damage, 15f, enemy, collider.transform.position + Vector3.up, Vector3.zero,
+                    Element.Wind, hitEffect: false);
                 hitEnemy = true;
             }
         }
@@ -141,5 +149,6 @@ public class Dash : Ability
     public override void Cancel()
     {
         dashing = false;
+        PlayerMovement.Instance.SetMovementLocked(false);
     }
 }

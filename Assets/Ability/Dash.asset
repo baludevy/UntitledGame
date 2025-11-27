@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 1
   opposingAbilities: []
-  force: 40
+  force: 35
   duration: 0.1
-  damage: 5
+  damage: 10
   radius: 3
   recoilForce: 20
   rayDistance: 5

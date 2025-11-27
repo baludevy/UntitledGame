@@ -73,9 +73,9 @@ public class SimpleGun : Weapon
             endPoint = hit.point;
         }
 
-        shotLine.SetPosition(0, muzzle.position);
-        shotLine.SetPosition(1, endPoint);
-        shotLine.enabled = true;
+        // shotLine.SetPosition(0, muzzle.position);
+        // shotLine.SetPosition(1, endPoint);
+        // shotLine.enabled = true;
 
         shotTimer = 0.03f;
     }
