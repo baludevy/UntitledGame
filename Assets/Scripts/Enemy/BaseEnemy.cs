@@ -4,21 +4,17 @@ using UnityEngine.UI;
 public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 {
     public EnemyData data;
-
     private Rigidbody rb;
     private Transform player;
     [SerializeField] private GameObject damageableInfo;
     [SerializeField] private Image healthBar;
     public float moveSpeed = 3f;
-
-    private float knockbackTimer;
+    protected float knockbackTimer;
     private readonly float knockbackDuration = 0.2f;
-
     private bool flash;
     public string Name => data.name;
     public string Description => data.description;
     public Element Element => data.element;
-
     private float currentHealth;
 
     public float MaxHealth
@@ -33,7 +29,7 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         CurrentHealth = MaxHealth;
         rb = GetComponent<Rigidbody>();
@@ -46,9 +42,10 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         EnemyController.Instance?.UnregisterEnemy(this);
     }
 
-    public void Tick()
+    public virtual void Tick()
     {
         if (player == null) return;
+
         if (knockbackTimer > 0)
         {
             knockbackTimer -= Time.fixedDeltaTime;
@@ -57,12 +54,15 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
 
         Vector3 distanceToPlayer = player.position - transform.position;
         distanceToPlayer.y = 0;
+
         if (distanceToPlayer.sqrMagnitude < 0.01f) return;
 
         Vector3 targetVelocity = distanceToPlayer.normalized * moveSpeed;
         Vector3 current = rb.velocity;
         Vector3 change = new Vector3(targetVelocity.x - current.x, 0, targetVelocity.z - current.z);
+
         rb.AddForce(change * 6f, ForceMode.Acceleration);
+
         transform.rotation = Quaternion.LookRotation(distanceToPlayer.normalized);
     }
 
@@ -85,13 +85,13 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         rb.AddForce(direction.normalized * force, ForceMode.VelocityChange);
         knockbackTimer = knockbackDuration;
     }
-    
 
     public void TakeDamage(float damage, bool doFlash = true)
     {
         flash = true;
         currentHealth -= damage;
         healthBar.fillAmount = currentHealth / MaxHealth;
+
         if (currentHealth <= 0) Destroy(gameObject);
     }
 
@@ -104,12 +104,12 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
             Effects.Flash(renderers);
         }
     }
-    
+
     public void ShowCanvas()
     {
         damageableInfo.SetActive(true);
     }
-    
+
     public void HideCanvas()
     {
         damageableInfo.SetActive(false);

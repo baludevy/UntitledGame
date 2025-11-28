@@ -10,6 +10,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float regenDelay = 10f;
     [SerializeField] private float regenRate = 5f;
 
+    private bool canTakeDamage = true;
+
     private float regenTimer;
 
     private void Update()
@@ -29,6 +31,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (!canTakeDamage) return;
+
         health = Mathf.Max(health - amount, 0f);
         regenTimer = regenDelay;
 
@@ -53,9 +57,11 @@ public class PlayerHealth : MonoBehaviour
     {
         health = newHealth;
     }
-    
+
     public float GetHealth() => health;
     public float GetMaxHealth() => maxHealth;
     public float GetRegenDelay() => regenDelay;
     public float GetRegenRate() => regenRate;
+
+    public void SetImmune(bool isImmune) => canTakeDamage = !isImmune;
 }

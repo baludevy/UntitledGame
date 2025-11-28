@@ -10,6 +10,7 @@ public class PrefabManager : MonoBehaviour
     public GameObject textMarker;
     public GameObject audioPrefab;
     public GameObject interactHint;
+    public GameObject auraVisualPrefab;
 
     private void Awake()
     {
@@ -27,10 +28,8 @@ public class PrefabManager : MonoBehaviour
     public void SpawnDamageMarker(Vector3 pos, Quaternion rot, float damage, Color color)
     {
         GameObject marker = ObjectPool.Instance.Get(damageMarker, pos, rot);
-
         HitMarker markerComp = marker.GetComponent<HitMarker>();
         markerComp.ShowDamage(damage, color);
-
         ObjectPool.Instance.Return(marker, damageMarker, 1.5f);
     }
 
@@ -46,17 +45,26 @@ public class PrefabManager : MonoBehaviour
             sprite.color = color;
 
         ps.Play();
+
         ObjectPool.Instance.Return(sparkle, hitEffect, ps.main.duration + ps.main.startLifetime.constantMax);
     }
 
     public void SpawnTextMarker(Vector3 pos, Quaternion rot, string text, Color color)
     {
         GameObject marker = ObjectPool.Instance.Get(textMarker, pos, rot);
-
         HitMarker markerComp = marker.GetComponent<HitMarker>();
         markerComp.ShowText(text, color);
-
         ObjectPool.Instance.Return(marker, textMarker, 1.5f);
+    }
+
+    public GameObject SpawnAuraVisual(Vector3 pos)
+    {
+        return ObjectPool.Instance.Get(auraVisualPrefab, pos, Quaternion.identity);
+    }
+
+    public void ReturnAuraVisual(GameObject visual)
+    {
+        ObjectPool.Instance.Return(visual, auraVisualPrefab, 0f);
     }
 
     [SerializeField] private GameObject activeInteractHint;

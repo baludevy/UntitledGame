@@ -65,8 +65,6 @@ public class Dash : Ability
             direction = -cameraTransform.right;
         else if (inputDirection.y > 0)
             direction = cameraTransform.forward;
-        else if (inputDirection.y < 0)
-            direction = -cameraTransform.forward;
 
         direction.y = playerGrounded ? 0f : direction.y;
         return direction.normalized;

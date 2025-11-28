@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 8970375398778150331}
   - component: {fileID: 6144488953632729098}
   - component: {fileID: 7680934354382753588}
-  - component: {fileID: 7046177006204534764}
+  - component: {fileID: -4944751016403579931}
   m_Layer: 17
   m_Name: Enemy
   m_TagString: Enemy
@@ -434,7 +434,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &7046177006204534764
+--- !u!114 &-4944751016403579931
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -443,13 +443,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8814167005587942564}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fed68ee3ac4a6e89d47ef982e683ac, type: 3}
+  m_Script: {fileID: 11500000, guid: c94a93ba2c59411191e3fc4bd384e4d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e5bb692607c860449ae05383abc62827, type: 2}
   damageableInfo: {fileID: 702023198053833850}
   healthBar: {fileID: 1639121611172056535}
   moveSpeed: 8
+  attackDistance: 15
+  attackInterval: 1
+  bulletPrefab: {fileID: 118103888402688670, guid: 7af174ad56484994181b77654e612fc0, type: 3}
+  sightLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &9210609544065996950
 GameObject:
   m_ObjectHideFlags: 0
