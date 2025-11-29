@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SimpleGun : Weapon
+public class HitscanGun : Weapon
 {
     [SerializeField] private LineRenderer shotLine;
     [SerializeField] private Transform muzzle;
@@ -55,27 +55,35 @@ public class SimpleGun : Weapon
         gun.currentAmmo--;
 
         Ray ray = PlayerCamera.GetRay();
-        Vector3 endPoint = ray.origin + ray.direction * 100f;
+        RaycastHit hit;
+        bool didHit = Physics.Raycast(ray, out hit, 100f);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (didHit && !hit.collider.CompareTag("Player") && hit.collider.TryGetComponent(out BaseEnemy enemy))
         {
-            if (!hit.collider.CompareTag("Player") && hit.collider.TryGetComponent(out BaseEnemy enemy))
-            {
-                PlayerCombat.DamageEnemy(
-                    gun.data.damage,
-                    gun.data.knockbackAmount,
-                    enemy,
-                    hit.point,
-                    hit.normal
-                );
-            }
-
-            endPoint = hit.point;
+            PlayerCombat.DamageEnemy(
+                gun.data.damage,
+                gun.data.knockbackAmount,
+                enemy,
+                hit.point,
+                hit.normal
+            );
         }
 
-        // shotLine.SetPosition(0, muzzle.position);
-        // shotLine.SetPosition(1, endPoint);
-        // shotLine.enabled = true;
+        Vector3 hitPoint = didHit ? hit.point : ray.origin + ray.direction * 100f;
+
+        Vector3 muzzlePos = muzzle.position;
+        Vector3 camToMuzzle = muzzlePos - ray.origin;
+        float t = Vector3.Dot(camToMuzzle, ray.direction);
+        if (t < 0) t = 0;
+        Vector3 muzzleOnRay = ray.origin + ray.direction * t;
+
+        float hitT = Vector3.Dot(hitPoint - ray.origin, ray.direction);
+        Vector3 clampedEnd = hitT < t ? muzzleOnRay : hitPoint;
+
+        shotLine.positionCount = 2;
+        shotLine.SetPosition(0, muzzlePos);
+        shotLine.SetPosition(1, clampedEnd);
+        shotLine.enabled = true;
 
         shotTimer = 0.03f;
     }

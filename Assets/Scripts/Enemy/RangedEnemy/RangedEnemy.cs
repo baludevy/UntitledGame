@@ -1,30 +1,31 @@
 using UnityEngine;
 
-public class TestEnemy : BaseEnemy
+public class RangedEnemy : BaseEnemy
 {
-    public float attackDistance = 3f;
-    public float attackInterval = 1.5f;
     public GameObject bulletPrefab;
     public LayerMask sightLayerMask;
 
     private float attackTimer;
     private Rigidbody playerRb;
 
-    private float AttackDamage => ((EnemyData)data).attackDamage;
-    private float ProjectileSpeed => ((EnemyData)data).projectileSpeed;
-    private float Accuracy => ((EnemyData)data).accuracy;
+    private RangedEnemyData RangedData => (RangedEnemyData)data;
+
+    private float AttackDistance => RangedData.attackDistance;
+    private float AttackInterval => RangedData.attackInterval;
+    private float AttackDamage => RangedData.attackDamage;
+    private float ProjectileSpeed => RangedData.projectileSpeed;
+    private float Accuracy => RangedData.accuracy;
 
     protected override void Start()
     {
         base.Start();
-        attackTimer = attackInterval;
+        attackTimer = AttackInterval;
         playerRb = PlayerMovement.Instance.GetRigidbody();
     }
 
     public override void Tick()
     {
         Transform playerTransform = PlayerMovement.Instance.transform;
-
         if (playerTransform == null || playerRb == null) return;
 
         if (knockbackTimer > 0)
@@ -37,8 +38,7 @@ public class TestEnemy : BaseEnemy
         distanceToPlayer.y = 0;
 
         float sqrDistance = distanceToPlayer.sqrMagnitude;
-        bool inAttackRange = sqrDistance <= attackDistance * attackDistance;
-
+        bool inAttackRange = sqrDistance <= AttackDistance * AttackDistance;
         bool playerVisible = CheckLineOfSight(playerTransform.position);
 
         transform.rotation = Quaternion.LookRotation(distanceToPlayer.normalized);
@@ -66,12 +66,15 @@ public class TestEnemy : BaseEnemy
 
         Rigidbody rb = GetRigidbody();
 
-        Vector3 targetVelocity = distanceToPlayer.normalized * moveSpeed;
+        Vector3 targetVelocity = distanceToPlayer.normalized * MoveSpeed;
         Vector3 current = rb.velocity;
-        Vector3 change = new Vector3(targetVelocity.x - current.x, 0, targetVelocity.z - current.z);
+        Vector3 change = new Vector3(
+            targetVelocity.x - current.x,
+            0,
+            targetVelocity.z - current.z
+        );
 
         rb.AddForce(change * 6f, ForceMode.Acceleration);
-
         DetectWall();
     }
 
@@ -82,9 +85,7 @@ public class TestEnemy : BaseEnemy
         float distance = Vector3.Distance(origin, targetPosition);
 
         if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, sightLayerMask))
-        {
             return hit.collider.CompareTag("Player");
-        }
 
         return true;
     }
@@ -96,7 +97,7 @@ public class TestEnemy : BaseEnemy
         if (attackTimer <= 0)
         {
             Attack();
-            attackTimer = attackInterval;
+            attackTimer = AttackInterval;
         }
     }
 
@@ -106,27 +107,29 @@ public class TestEnemy : BaseEnemy
 
         Transform playerTransform = PlayerMovement.Instance.transform;
 
-        Vector3 spawnPos = transform.position + transform.forward * 1.0f + Vector3.up * 1.0f;
+        Vector3 spawnPos = transform.position
+                           + transform.forward * 1f
+                           + Vector3.up * 1f;
 
-        Vector3 targetPosition = PredictPlayerPosition(playerTransform.position, playerRb.velocity);
+        Vector3 targetPosition = PredictPlayerPosition(
+            playerTransform.position,
+            playerRb.velocity
+        );
+
         Vector3 idealDirection = (targetPosition - spawnPos).normalized;
-
         Vector3 fireDirection = ApplyAccuracySpread(idealDirection, Accuracy);
 
         GameObject bulletGO = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
-        Bullet bulletComp = bulletGO.GetComponent<Bullet>();
 
+        Bullet bulletComp = bulletGO.GetComponent<Bullet>();
         if (bulletComp != null)
-        {
             bulletComp.Launch(fireDirection, ProjectileSpeed, AttackDamage);
-        }
     }
 
     private Vector3 PredictPlayerPosition(Vector3 playerPos, Vector3 playerVelocity)
     {
         Vector3 displacement = playerPos - transform.position;
         float dist = displacement.magnitude;
-
         float timeToHit = dist / ProjectileSpeed;
 
         Vector3 predictedMovement = playerVelocity * timeToHit;
@@ -141,7 +144,6 @@ public class TestEnemy : BaseEnemy
         float maxAngle = (1f - accuracy) * 15f;
 
         Quaternion look = Quaternion.LookRotation(direction);
-
         Quaternion randomSpread = Quaternion.Euler(
             Random.Range(-maxAngle, maxAngle),
             Random.Range(-maxAngle, maxAngle),

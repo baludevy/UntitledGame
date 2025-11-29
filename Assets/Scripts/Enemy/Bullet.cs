@@ -19,14 +19,14 @@ public class Bullet : MonoBehaviour
         rb.velocity = direction * speed;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             ApplyDamageToPlayer();
             Destroy(gameObject);
         }
-        else if (!other.CompareTag("Enemy"))
+        else if (!collision.gameObject.CompareTag("Enemy"))
         {
             Destroy(gameObject);
         }

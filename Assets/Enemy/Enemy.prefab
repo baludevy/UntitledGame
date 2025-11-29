@@ -446,12 +446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94a93ba2c59411191e3fc4bd384e4d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: e5bb692607c860449ae05383abc62827, type: 2}
+  data: {fileID: 11400000, guid: def8a0f8e5c7c504da081618f50150ce, type: 2}
   damageableInfo: {fileID: 702023198053833850}
   healthBar: {fileID: 1639121611172056535}
-  moveSpeed: 8
-  attackDistance: 15
-  attackInterval: 1
   bulletPrefab: {fileID: 118103888402688670, guid: 7af174ad56484994181b77654e612fc0, type: 3}
   sightLayerMask:
     serializedVersion: 2
