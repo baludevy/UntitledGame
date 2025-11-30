@@ -130,9 +130,12 @@ public class RangedEnemy : BaseEnemy
     {
         Vector3 displacement = playerPos - transform.position;
         float dist = displacement.magnitude;
-        float timeToHit = dist / ProjectileSpeed;
 
-        Vector3 predictedMovement = playerVelocity * timeToHit;
+        float baseLeadTime = 0.05f;
+        float extraLeadTime = Mathf.Clamp(dist / ProjectileSpeed, 0f, 0.4f);
+        float timeToHit = baseLeadTime + extraLeadTime;
+
+        Vector3 predictedMovement = playerVelocity * timeToHit * 0.25f;
 
         return playerPos + predictedMovement;
     }
@@ -141,14 +144,17 @@ public class RangedEnemy : BaseEnemy
     {
         if (accuracy >= 1f) return direction;
 
-        float maxAngle = (1f - accuracy) * 15f;
+        float dist = Vector3.Distance(transform.position, PlayerMovement.Instance.transform.position);
+
+        float baseAngle = (1f - accuracy) * 4f;
+        float distFactor = Mathf.InverseLerp(5f, 30f, dist);
+        float maxAngle = Mathf.Lerp(baseAngle, baseAngle * 1.5f, distFactor);
+
+        float yaw = Random.Range(-maxAngle, maxAngle);
+        float pitch = Random.Range(-maxAngle * 0.5f, maxAngle * 0.5f);
 
         Quaternion look = Quaternion.LookRotation(direction);
-        Quaternion randomSpread = Quaternion.Euler(
-            Random.Range(-maxAngle, maxAngle),
-            Random.Range(-maxAngle, maxAngle),
-            0
-        );
+        Quaternion randomSpread = Quaternion.Euler(pitch, yaw, 0f);
 
         return (look * randomSpread) * Vector3.forward;
     }

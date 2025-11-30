@@ -1,4 +1,4 @@
-Shader "Custom/TileRandomizerFixed"
+Shader "Custom/TileRandomizer"
 {
     Properties
     {

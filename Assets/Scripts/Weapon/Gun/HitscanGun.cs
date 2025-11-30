@@ -55,8 +55,12 @@ public class HitscanGun : Weapon
         gun.currentAmmo--;
 
         Ray ray = PlayerCamera.GetRay();
+        
+        int enemyBulletLayer = LayerMask.NameToLayer("EnemyBullet");
+        int layerMask = ~ (1 << enemyBulletLayer);
+
         RaycastHit hit;
-        bool didHit = Physics.Raycast(ray, out hit, 100f);
+        bool didHit = Physics.Raycast(ray, out hit, 100f, layerMask, QueryTriggerInteraction.Ignore);
 
         if (didHit && !hit.collider.CompareTag("Player") && hit.collider.TryGetComponent(out BaseEnemy enemy))
         {

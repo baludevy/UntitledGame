@@ -17,8 +17,8 @@ MonoBehaviour:
   element: 7
   maxHealth: 100
   moveSpeed: 12
-  attackDistance: 20
-  attackInterval: 1
+  attackDistance: 30
+  attackInterval: 2.5
   attackDamage: 10
   projectileSpeed: 40
   accuracy: 1
