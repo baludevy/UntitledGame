@@ -105,7 +105,7 @@ public class RangedEnemy : BaseEnemy
     {
         if (bulletPrefab == null) return;
 
-        Transform playerTransform = PlayerMovement.Instance.transform;
+        Transform playerTransform = PlayerCamera.Instance.transform;
 
         Vector3 spawnPos = transform.position
                            + transform.forward * 1f

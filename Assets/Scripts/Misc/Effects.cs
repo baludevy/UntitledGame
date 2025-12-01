@@ -111,4 +111,21 @@ public class Effects : MonoBehaviour
         if (eff == TypeEffectiveness.SuperEffective) return Instance.superEffectiveColor;
         return Color.white;
     }
+
+    public void FreezeFrame()
+    {
+        StartCoroutine(FreezeFrameRoutine());
+    }
+
+    private IEnumerator FreezeFrameRoutine()
+    {
+        float freezeDurationSeconds = 0.15f;
+
+        yield return new WaitForEndOfFrame();
+        Time.timeScale = 0;
+
+        yield return new WaitForSecondsRealtime(freezeDurationSeconds);
+
+        Time.timeScale = 1;
+    }
 }
