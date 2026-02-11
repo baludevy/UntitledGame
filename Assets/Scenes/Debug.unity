@@ -14607,7 +14607,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1973497606
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14628,7 +14628,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 450, y: 130}
+  m_AnchoredPosition: {x: 450, y: 270}
   m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1978693872
@@ -16078,12 +16078,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d998fce2badfad1469a4659bb656d653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1250
-  sprintSpeed: 3500
+  walkSpeed: 2000
+  sprintSpeed: 5000
   jumpForce: 350
   groundDrag: 1
-  slideDrag: 0.5
-  airMultiplier: 0.5
+  slideDrag: 0.2
+  airMultiplier: 0.4
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
@@ -16091,10 +16091,6 @@ MonoBehaviour:
   slideCounterMovement: 0.1
   crouchScale: {x: 2, y: 2.25, z: 2}
   slideCooldown: 0.2
-  slideSnapMaxDistance: 0.6
-  slideSnapProbeRadius: 0.25
-  slideSnapMaxUpwardSpeed: 2
-  slideSnapExtraAngle: 10
   sensitivity: 1
   sensMultiplier: 1
   orientation: {fileID: 4095111981818045733}
@@ -16503,7 +16499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxStamina: 500
-  staminaLoss: 0
+  staminaLoss: 100
   jumpStaminaLoss: 0
   staminaRegen: 6
   regenDelay: 1.5
