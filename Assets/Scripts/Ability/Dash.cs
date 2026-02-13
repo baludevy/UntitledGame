@@ -68,7 +68,7 @@ public class Dash : Ability {
 
             foreach (Collider collider in colliders) {
                 IDamageable damageable = GetTarget(collider.transform);
-                if (damageable is BaseEnemy enemy) {
+                if (damageable is IEnemy enemy) {
                     PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up,
                         Vector3.zero, Element.Wind, hitEffect: false);
                     hitEnemy = true;

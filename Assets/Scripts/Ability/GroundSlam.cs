@@ -5,8 +5,7 @@ using EZCameraShake;
 
 
 [CreateAssetMenu(menuName = "Ability/Ground Slam")]
-public class GroundSlam : Ability
-{
+public class GroundSlam : Ability {
     public float minDamage = 50f;
     public float maxDamage = 100f;
     public float slamRadius = 25f;
@@ -21,8 +20,7 @@ public class GroundSlam : Ability
 
     public GameObject groundSlamFX;
 
-    public override bool Activate()
-    {
+    public override bool Activate() {
         PlayerMovement player = PlayerMovement.Instance;
         Rigidbody rb = player.GetRigidbody();
 
@@ -42,8 +40,7 @@ public class GroundSlam : Ability
     }
 
 
-    public void OnLand()
-    {
+    public void OnLand() {
         if (!slamming) return;
         slamming = false;
 
@@ -63,8 +60,7 @@ public class GroundSlam : Ability
         CameraShaker.Instance?.ShakeOnce(7f, 3f, 0.1f, 0.5f);
     }
 
-    private void SlamEnemies(Vector3 pos)
-    {
+    private void SlamEnemies(Vector3 pos) {
         PlayerMovement player = PlayerMovement.Instance;
 
         // make a flat box collider to check for collisions with surrounding enemies
@@ -74,20 +70,17 @@ public class GroundSlam : Ability
 
         float fallHeight = startHeight - currentHeight;
         float damage = Mathf.Lerp(minDamage, maxDamage, Mathf.InverseLerp(0f, maxHeight, fallHeight));
-            
-        foreach (Collider collider in colliders)
-        {
+
+        foreach (Collider collider in colliders) {
             IDamageable damageable = GetTarget(collider.transform);
-            if (damageable is BaseEnemy enemy)
+            if (damageable is IEnemy enemy)
                 PlayerCombat.DamageEnemy(damage, false, enemy, collider.transform.position + Vector3.up, Vector3.zero,
                     Element.Ground, hitEffect: false);
         }
     }
 
-    private static IDamageable GetTarget(Transform target)
-    {
-        while (target != null)
-        {
+    private static IDamageable GetTarget(Transform target) {
+        while (target != null) {
             var m = target.GetComponent<IDamageable>();
             if (m != null)
                 return m;
@@ -98,22 +91,19 @@ public class GroundSlam : Ability
         return null;
     }
 
-    private bool IsHighEnough(PlayerMovement player)
-    {
+    private bool IsHighEnough(PlayerMovement player) {
         // shoot a raycast down to determine the height
         return !Physics.Raycast(player.transform.position, Vector3.down, out var hit, 100f) ||
                hit.distance >= minHeight;
     }
 
-    private float GetHeight(PlayerMovement player)
-    {
+    private float GetHeight(PlayerMovement player) {
         Physics.Raycast(player.transform.position, Vector3.down, out var hit, 100f);
 
         return hit.distance;
     }
 
-    public override void Cancel()
-    {
+    public override void Cancel() {
         slamming = false;
     }
 }

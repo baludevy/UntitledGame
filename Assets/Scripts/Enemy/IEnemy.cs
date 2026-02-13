@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public interface IEnemy
-{
+public interface IEnemy {
     string Name { get; }
     string Description { get; }
 
@@ -11,4 +10,10 @@ public interface IEnemy
     float CurrentHealth { get; set; }
 
     void TakeDamage(float damage, bool doFlash);
+
+    void ApplyKnockback(Vector3 knockback, float force);
+
+    void Tick();
+
+    Rigidbody GetRigidbody();
 }

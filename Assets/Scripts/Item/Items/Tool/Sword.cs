@@ -9,7 +9,7 @@ public class Sword : MeleeTool {
 
         Collider[] hits = Physics.OverlapSphere(origin + direction * slashRange * 0.5f, slashRadius);
         foreach (var hit in hits) {
-            if (hit.TryGetComponent(out BaseEnemy enemy)) {
+            if (hit.TryGetComponent(out IEnemy enemy)) {
                 bool crit = Combat.RollCrit();
                 float damage = data.damage;
 

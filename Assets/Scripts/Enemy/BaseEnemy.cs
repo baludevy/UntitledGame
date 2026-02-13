@@ -64,6 +64,8 @@ public class BaseEnemy : MonoBehaviour, IDamageable, IEnemy
         Vector3 change = new Vector3(targetVelocity.x - current.x, 0, targetVelocity.z - current.z);
         rb.AddForce(change * 6f, ForceMode.Acceleration);
         transform.rotation = Quaternion.LookRotation(distanceToPlayer.normalized);
+        
+        DetectWall();
     }
 
     public void DetectWall()
