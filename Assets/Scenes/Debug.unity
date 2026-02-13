@@ -5247,7 +5247,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22670
+  m_Name: pb_Mesh22688
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -8925,7 +8925,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22708
+  m_Name: pb_Mesh22726
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12001,7 +12001,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22608
+  m_Name: pb_Mesh22612
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -15301,7 +15301,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22656
+  m_Name: pb_Mesh22660
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -16078,12 +16078,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d998fce2badfad1469a4659bb656d653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 2000
+  walkSpeed: 5000
   sprintSpeed: 5000
-  jumpForce: 350
-  groundDrag: 1
-  slideDrag: 0.2
-  airMultiplier: 0.4
+  jumpForce: 325
+  airMultiplier: 0.7
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
@@ -16100,6 +16098,13 @@ MonoBehaviour:
   sprintFOV: 100
   footstepInterval: 0.4
   ps: {fileID: 8298269594920238252}
+  walkMaxSpeed: 15
+  sprintMaxSpeed: 25
+  walkInputMax: 25
+  sprintInputMax: 40
+  walkCounterMultiplier: 0.07
+  sprintCounterMultiplier: 0.14
+  sprintTurnBrake: 2
 --- !u!20 &4692589708366088623
 Camera:
   m_ObjectHideFlags: 0
@@ -16498,8 +16503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34b9765824244edb46d22984faf7a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxStamina: 500
-  staminaLoss: 100
+  maxStamina: 100
+  staminaLoss: 20
   jumpStaminaLoss: 0
   staminaRegen: 6
   regenDelay: 1.5
