@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 3953291998485534233}
   - component: {fileID: 2329670796684313321}
   - component: {fileID: 5090237307760053775}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,13 +193,13 @@ GameObject:
   - component: {fileID: 4482385161559463288}
   - component: {fileID: 3122566091417158954}
   - component: {fileID: 8194986881766779516}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5344639159968051111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 59963925583426620}
   - component: {fileID: 4962285510402354186}
   - component: {fileID: 5306017811548328714}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: Element
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -421960850, guid: e6c6e3804d1d289449e176000ea57715, type: 3}
+  m_Sprite: {fileID: 322474002, guid: e6c6e3804d1d289449e176000ea57715, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -383,7 +383,7 @@ GameObject:
   - component: {fileID: 7588035566634658682}
   - component: {fileID: 2976384477251036116}
   - component: {fileID: 49110744557375650}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: HealthBarBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}

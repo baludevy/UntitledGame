@@ -13,13 +13,13 @@ GameObject:
   - component: {fileID: 6857031741696119146}
   - component: {fileID: 440952499110320202}
   - component: {fileID: 7340451926800266286}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &685342369466609505
 RectTransform:
   m_ObjectHideFlags: 0
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 1579366589596544911}
   - component: {fileID: 6171082805508695665}
   - component: {fileID: 7545504171114145630}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: Element
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 4934742099411341744}
   - component: {fileID: 9182725007356575863}
   - component: {fileID: 7798416989034454857}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: HealthBarBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -537,7 +537,7 @@ GameObject:
   - component: {fileID: 5409915185424853211}
   - component: {fileID: 6251525973631645542}
   - component: {fileID: 1639121611172056535}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
