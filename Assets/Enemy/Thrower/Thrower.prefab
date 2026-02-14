@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 7680934354382753588}
   - component: {fileID: 154064813863459343}
   m_Layer: 17
-  m_Name: FireEnemy
+  m_Name: Thrower
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

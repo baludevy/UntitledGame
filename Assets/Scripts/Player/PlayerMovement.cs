@@ -374,4 +374,17 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public bool IsGrounded() => grounded;
+
+    public void ApplyKnockback(Vector3 direction, float force, float upForce = 0f, float disableControlTime = 0.25f) {
+        Vector3 vel = rb.velocity;
+        vel.x = 0f;
+        vel.z = 0f;
+        rb.velocity = vel;
+
+        Vector3 knockDir = direction.normalized;
+        rb.AddForce(knockDir * force, ForceMode.VelocityChange);
+        if (upForce > 0f) {
+            rb.AddForce(Vector3.up * upForce, ForceMode.VelocityChange);
+        }
+    }
 }

@@ -8,4 +8,5 @@ public enum Element
     Ghost,
     Wind,
     Normal,
+    Cryo,
 }

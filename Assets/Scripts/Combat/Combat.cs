@@ -1,37 +1,34 @@
 using UnityEngine;
 
-public static class Combat
-{
-    public static bool RollCrit()
-    {
+public static class Combat {
+    public static bool RollCrit() {
         return Random.value <= PlayerStatistics.Instance.Combat.critChance;
     }
 
-    public static TypeEffectiveness CalcEffectiveness(Element attElement, Element oppElement)
-    {
+    public static TypeEffectiveness CalcEffectiveness(Element attElement, Element oppElement) {
         if (attElement == Element.Fire && oppElement == Element.Grass) return TypeEffectiveness.SuperEffective;
         if (attElement == Element.Water && oppElement == Element.Fire) return TypeEffectiveness.SuperEffective;
         if (attElement == Element.Grass && oppElement == Element.Water) return TypeEffectiveness.SuperEffective;
         if (attElement == Element.Ground && oppElement == Element.Rock) return TypeEffectiveness.SuperEffective;
         if (attElement == Element.Ghost && oppElement == Element.Ghost) return TypeEffectiveness.SuperEffective;
-        if(attElement == Element.Wind && oppElement == Element.Fire) return TypeEffectiveness.SuperEffective;
-        if(attElement == Element.Wind && oppElement == Element.Grass) return TypeEffectiveness.SuperEffective;
-        
+        if (attElement == Element.Wind && oppElement == Element.Fire) return TypeEffectiveness.SuperEffective;
+        if (attElement == Element.Wind && oppElement == Element.Grass) return TypeEffectiveness.SuperEffective;
+        if (attElement == Element.Fire && oppElement == Element.Cryo) return TypeEffectiveness.SuperEffective;
+
         if (attElement == Element.Fire && oppElement == Element.Water) return TypeEffectiveness.NotEffective;
         if (attElement == Element.Water && oppElement == Element.Grass) return TypeEffectiveness.NotEffective;
         if (attElement == Element.Grass && oppElement == Element.Fire) return TypeEffectiveness.NotEffective;
         if (attElement == Element.Rock && oppElement == Element.Ground) return TypeEffectiveness.NotEffective;
+        if (attElement == Element.Cryo && oppElement == Element.Grass) return TypeEffectiveness.NotEffective;
 
         return TypeEffectiveness.Normal;
     }
 
-    public static float CalculateDamage(float damage, bool crit, TypeEffectiveness hitEffectiveness)
-    {
-        if(crit)
+    public static float CalculateDamage(float damage, bool crit, TypeEffectiveness hitEffectiveness) {
+        if (crit)
             damage *= PlayerStatistics.Instance.Combat.critMultiplier;
 
-        switch (hitEffectiveness)
-        {
+        switch (hitEffectiveness) {
             case TypeEffectiveness.Normal:
                 break;
             case TypeEffectiveness.NotEffective:
@@ -42,8 +39,9 @@ public static class Combat
                 break;
         }
 
-        damage *= Random.Range(PlayerStatistics.Instance.Combat.randomDamageMultiplier, 1f + 1f - PlayerStatistics.Instance.Combat.randomDamageMultiplier);
-        
+        damage *= Random.Range(PlayerStatistics.Instance.Combat.randomDamageMultiplier,
+            1f + 1f - PlayerStatistics.Instance.Combat.randomDamageMultiplier);
+
         return Mathf.FloorToInt(damage);
     }
 }
