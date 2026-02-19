@@ -5,6 +5,9 @@ public class AbilityController : MonoBehaviour
     public Ability primaryAbility;
     public Ability secondaryAbility;
 
+    [SerializeField] private AbilitySlot primarySlot;
+    [SerializeField] private AbilitySlot secondarySlot;
+
     private float primaryTimer;
     private float secondaryTimer;
 
@@ -26,8 +29,25 @@ public class AbilityController : MonoBehaviour
         primaryTimer = Mathf.Max(0f, primaryTimer - Time.deltaTime);
         secondaryTimer = Mathf.Max(0f, secondaryTimer - Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.Mouse3)) ActivateAbility(primaryAbility, ref primaryTimer);
+        UpdateUI();
+
+        if (Input.GetKeyDown(KeyCode.E)) ActivateAbility(primaryAbility, ref primaryTimer);
         if (Input.GetKeyDown(KeyCode.C)) ActivateAbility(secondaryAbility, ref secondaryTimer);
+    }
+
+    private void UpdateUI()
+    {
+        if (primarySlot != null)
+        {
+            float cd = primaryAbility != null ? primaryAbility.cooldown : 0f;
+            primarySlot.SetCooldown(primaryTimer, cd);
+        }
+
+        if (secondarySlot != null)
+        {
+            float cd = secondaryAbility != null ? secondaryAbility.cooldown : 0f;
+            secondarySlot.SetCooldown(secondaryTimer, cd);
+        }
     }
 
     private void ActivateAbility(Ability ability, ref float timer)
@@ -39,6 +59,7 @@ public class AbilityController : MonoBehaviour
         if (ability.Activate())
         {
             timer = ability.cooldown;
+            UpdateUI();
         }
     }
 

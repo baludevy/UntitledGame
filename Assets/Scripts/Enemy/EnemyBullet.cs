@@ -20,7 +20,7 @@ public class EnemyBullet : MonoBehaviour {
         // Destroy(fx.gameObject, 3f);
 
         if (collision.collider.CompareTag("Player")) {
-            PlayerStatistics.Instance.Health.TakeDamage(5f);
+            PlayerStatistics.Instance.Health.TakeDamage(20f);
         }
 
         Destroy(gameObject);
