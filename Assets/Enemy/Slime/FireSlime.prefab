@@ -381,13 +381,13 @@ MonoBehaviour:
   groundCheckRadius: 0.25
   groundCheckDown: 0.35
   knockbackDuration: 1
-  wallStickForce: 5
+  wallStickForce: 30
   maxClimbAngle: 85
   climbableMask:
     serializedVersion: 2
     m_Bits: 8
-  climbAssistUpForce: 20
-  climbDetectDistance: 2
+  climbAssistUpForce: 5
+  climbDetectDistance: 4
 --- !u!1 &9210609544065996950
 GameObject:
   m_ObjectHideFlags: 0

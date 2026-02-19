@@ -23,6 +23,7 @@ public class EnemyWaveSpawner : MonoBehaviour {
 
     private int wave;
     private bool running;
+    private int aliveEnemies;
 
     private void Start() {
         wave = Mathf.Max(1, startWave);
@@ -44,8 +45,15 @@ public class EnemyWaveSpawner : MonoBehaviour {
         while (running) {
             if (waveText != null) waveText.text = $"Wave {wave}";
             int count = Mathf.Max(0, baseEnemiesPerWave + (wave - 1) * enemiesAddedPerWave);
+
+            aliveEnemies = 0;
             yield return StartCoroutine(SpawnWave(count));
+
+            while (running && aliveEnemies > 0) yield return null;
+
             wave++;
+            if (!running) yield break;
+
             if (timeBetweenWaves > 0f) yield return new WaitForSeconds(timeBetweenWaves);
             else yield return null;
         }
@@ -61,7 +69,13 @@ public class EnemyWaveSpawner : MonoBehaviour {
 
             if (TryFindSpawnPoint(center.position, out Vector3 pos)) {
                 var prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
-                Instantiate(prefab, pos, Quaternion.identity);
+                var go = Instantiate(prefab, pos, Quaternion.identity);
+
+                aliveEnemies++;
+
+                var tracker = go.GetComponent<EnemyLifeTracker>();
+                if (tracker == null) tracker = go.AddComponent<EnemyLifeTracker>();
+                tracker.Init(this);
             }
 
             yield return null;
@@ -81,5 +95,24 @@ public class EnemyWaveSpawner : MonoBehaviour {
 
         pos = default;
         return false;
+    }
+
+    public void NotifyEnemyDestroyed() {
+        aliveEnemies = Mathf.Max(0, aliveEnemies - 1);
+    }
+}
+
+public class EnemyLifeTracker : MonoBehaviour {
+    private EnemyWaveSpawner spawner;
+    private bool notified;
+
+    public void Init(EnemyWaveSpawner spawner) {
+        this.spawner = spawner;
+    }
+
+    private void OnDestroy() {
+        if (notified) return;
+        notified = true;
+        if (spawner != null) spawner.NotifyEnemyDestroyed();
     }
 }
