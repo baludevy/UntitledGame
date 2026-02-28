@@ -8,30 +8,30 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Prototype 1
-  m_Shader: {fileID: 4800000, guid: 851f2d9f112af2f4390a3d702e3e6553, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _MK_ALBEDO_MAP
-  - _MK_ARTISTIC_ANIMATION_STUTTER
-  - _MK_ENVIRONMENT_REFLECTIONS_AMBIENT
-  - _MK_OUTLINE_HULL_CLIP
-  - _MK_WRAPPED_DIFFUSE
+  - _EMISSION
+  - _GLOSSYREFLECTIONS_OFF
   m_InvalidKeywords:
   - _FRESNELHIGHLIGHTS_ON
-  - _GLOSSYREFLECTIONS_OFF
+  - _MK_ALBEDO_MAP
+  - _MK_ARTISTIC_ANIMATION_STUTTER
   - _MK_DETAIL_BLEND_MIX
+  - _MK_ENVIRONMENT_REFLECTIONS_AMBIENT
   - _MK_FRESNEL_HIGHLIGHTS
+  - _MK_OUTLINE_HULL_CLIP
   - _MK_RECEIVE_SHADOWS
+  - _MK_WRAPPED_DIFFUSE
   - _RECEIVESHADOWS_ON
   - _WRAPPEDLIGHTING_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap:
     IGNOREPROJECTOR: False
-    RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 
